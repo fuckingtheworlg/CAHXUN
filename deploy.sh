@@ -16,12 +16,26 @@ echo "========================================="
 # ─── 1. 系统依赖 ───
 echo "[1/7] 安装系统依赖..."
 if command -v dnf &>/dev/null; then
-    dnf install -y python3 python3-pip python3-devel gcc redis nginx git
+    dnf install -y python39 python39-pip python39-devel gcc redis nginx git
 elif command -v yum &>/dev/null; then
-    yum install -y python3 python3-pip python3-devel gcc redis nginx git
+    yum install -y python39 python39-pip python39-devel gcc redis nginx git
 elif command -v apt &>/dev/null; then
     apt update && apt install -y python3 python3-pip python3-venv python3-dev gcc redis-server nginx git
 fi
+
+# 选择可用的 Python >= 3.9
+PYTHON_BIN=""
+for py in python3.12 python3.11 python3.10 python3.9; do
+    if command -v "$py" &>/dev/null; then
+        PYTHON_BIN="$py"
+        break
+    fi
+done
+if [ -z "$PYTHON_BIN" ]; then
+    echo "错误: 未找到 Python 3.9+，请手动安装"
+    exit 1
+fi
+echo "  使用 Python: $PYTHON_BIN ($($PYTHON_BIN --version))"
 
 # ─── 2. 启动 Redis ───
 echo "[2/7] 启动 Redis..."
@@ -47,7 +61,19 @@ fi
 # ─── 4. Python 虚拟环境 & 依赖 ───
 echo "[4/7] 安装 Python 依赖..."
 cd "$APP_DIR/backend"
-python3 -m venv venv 2>/dev/null || python3 -m venv --without-pip venv
+if [ -d "venv" ]; then
+    # 检查现有 venv 的 Python 版本是否够新
+    VENV_PY_VER=$(./venv/bin/python --version 2>&1 | grep -oP '\d+\.\d+' | head -1)
+    if python3 -c "v='$VENV_PY_VER'; exit(0 if tuple(map(int,v.split('.'))) >= (3,9) else 1)" 2>/dev/null; then
+        echo "  现有 venv Python $VENV_PY_VER 满足要求"
+    else
+        echo "  现有 venv Python $VENV_PY_VER 过低，重新创建..."
+        rm -rf venv
+    fi
+fi
+if [ ! -d "venv" ]; then
+    $PYTHON_BIN -m venv venv
+fi
 source venv/bin/activate
 pip install --upgrade pip
 pip install -r requirements.txt

@@ -2,7 +2,10 @@
 Redis sliding-window rate limiter.
 """
 
+from __future__ import annotations
+
 import time
+from typing import Optional
 
 from redis.asyncio import Redis
 
@@ -32,7 +35,7 @@ async def check_rate_limit(redis: Redis, openid: str) -> bool:
     return current_count <= max_requests
 
 
-async def get_openid_from_token(redis: Redis, token: str) -> str | None:
+async def get_openid_from_token(redis: Redis, token: str) -> Optional[str]:
     """Resolve session token to openid."""
     if not token:
         return None

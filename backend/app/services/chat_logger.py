@@ -3,6 +3,8 @@ Chat query logger — stores recent Q&A records in Redis for admin monitoring.
 Uses a Redis list capped at 500 entries to avoid unbounded growth.
 """
 
+from __future__ import annotations
+
 import json
 import time
 

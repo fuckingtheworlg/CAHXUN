@@ -2,6 +2,8 @@
 Admin API routes — JWT-authenticated management endpoints.
 """
 
+from __future__ import annotations
+
 from datetime import datetime, timedelta
 
 import jwt

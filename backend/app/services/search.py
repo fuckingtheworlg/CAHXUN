@@ -5,6 +5,8 @@ If a FULLTEXT INDEX exists on the content column, set USE_FULLTEXT=true
 in env to switch to MATCH ... AGAINST for better performance.
 """
 
+from __future__ import annotations
+
 from sqlalchemy import select, func, desc, text, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 

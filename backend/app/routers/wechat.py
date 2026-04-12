@@ -2,6 +2,8 @@
 WeChat login — exchange js_code for session (openid).
 """
 
+from __future__ import annotations
+
 import hashlib
 import secrets
 

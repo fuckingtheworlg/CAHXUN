@@ -2,6 +2,8 @@
 WeChat access_token manager — cached in Redis with TTL.
 """
 
+from __future__ import annotations
+
 import httpx
 from redis.asyncio import Redis
 

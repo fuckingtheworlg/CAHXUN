@@ -2,6 +2,8 @@
 WeChat content security — msgSecCheck API.
 """
 
+from __future__ import annotations
+
 import httpx
 from redis.asyncio import Redis
 

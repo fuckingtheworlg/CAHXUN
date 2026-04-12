@@ -5,6 +5,8 @@ The table name and column names are designed as a generic adapter —
 update __tablename__ and Column mappings to match the real schema.
 """
 
+from __future__ import annotations
+
 import json
 from datetime import datetime
 

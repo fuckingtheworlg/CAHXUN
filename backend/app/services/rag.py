@@ -6,6 +6,8 @@ Minimal RAG service:
   4. Stream response from DeepSeek (OpenAI-compatible API)
 """
 
+from __future__ import annotations
+
 import json
 from typing import AsyncGenerator
 
