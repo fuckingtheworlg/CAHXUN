@@ -7,7 +7,7 @@
 set -e
 
 APP_DIR="/opt/chaxun"
-REPO_URL=""  # <-- 填入你的 GitHub 仓库地址
+REPO_URL="https://github.com/fuckingtheworlg/CAHXUN.git"
 
 echo "========================================="
 echo "  校园墙查询 — 服务器部署"
