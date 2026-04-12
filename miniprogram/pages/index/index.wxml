@@ -1,0 +1,21 @@
+<view class="container">
+  <view class="header">
+    <text class="title">校园墙动态</text>
+  </view>
+
+  <block wx:if="{{posts.length > 0}}">
+    <post-card wx:for="{{posts}}" wx:key="id" post="{{item}}" />
+  </block>
+
+  <view class="empty-tip" wx:if="{{!loading && posts.length === 0}}">
+    暂无贴文
+  </view>
+
+  <view class="loading-tip" wx:if="{{loading}}">
+    加载中...
+  </view>
+
+  <view class="loading-tip" wx:if="{{noMore && posts.length > 0}}">
+    — 没有更多了 —
+  </view>
+</view>

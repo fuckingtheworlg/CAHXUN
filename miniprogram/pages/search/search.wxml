@@ -1,0 +1,42 @@
+<view class="container">
+  <view class="search-bar">
+    <view class="search-input-wrap">
+      <image class="search-icon" src="/assets/icon-search.png" mode="aspectFit" />
+      <input
+        class="search-input"
+        placeholder="输入关键词搜索贴文..."
+        value="{{keyword}}"
+        bindinput="onInput"
+        bindconfirm="onSearch"
+        confirm-type="search"
+      />
+      <view class="search-clear" wx:if="{{keyword}}" bindtap="onClear">✕</view>
+    </view>
+  </view>
+
+  <view class="search-hint" wx:if="{{!searched}}">
+    <text class="hint-text">搜索校园墙上的历史贴文</text>
+  </view>
+
+  <block wx:if="{{searched}}">
+    <view class="result-count" wx:if="{{total > 0}}">
+      找到 {{total}} 条相关贴文
+    </view>
+
+    <block wx:if="{{results.length > 0}}">
+      <post-card wx:for="{{results}}" wx:key="id" post="{{item}}" />
+    </block>
+
+    <view class="empty-tip" wx:if="{{!loading && results.length === 0}}">
+      未找到相关贴文，换个关键词试试
+    </view>
+
+    <view class="loading-tip" wx:if="{{loading}}">
+      搜索中...
+    </view>
+
+    <view class="loading-tip" wx:if="{{noMore && results.length > 0}}">
+      — 没有更多了 —
+    </view>
+  </block>
+</view>

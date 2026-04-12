@@ -1,0 +1,27 @@
+<view class="card">
+  <view class="card-body">
+    <text class="card-content">{{post.content}}</text>
+  </view>
+
+  <view class="card-images" wx:if="{{post.images && post.images.length > 0}}">
+    <image
+      wx:for="{{post.images}}"
+      wx:key="*this"
+      wx:if="{{index < 3}}"
+      class="card-img {{post.images.length === 1 ? 'single' : ''}}"
+      src="{{item}}"
+      mode="aspectFill"
+      lazy-load
+      bindtap="onPreviewImage"
+      data-url="{{item}}"
+    />
+    <view class="more-images" wx:if="{{post.images.length > 3}}">
+      +{{post.images.length - 3}}
+    </view>
+  </view>
+
+  <view class="card-footer">
+    <text class="card-time">{{post.created_at}}</text>
+    <text class="card-category" wx:if="{{post.category}}">{{post.category}}</text>
+  </view>
+</view>

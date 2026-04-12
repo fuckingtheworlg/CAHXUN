@@ -1,0 +1,9 @@
+<view class="bubble-wrap {{role === 'user' ? 'user' : 'assistant'}}">
+  <view class="avatar">
+    <text class="avatar-text">{{role === 'user' ? '我' : 'AI'}}</text>
+  </view>
+  <view class="bubble">
+    <text class="bubble-text" user-select>{{content}}</text>
+    <view class="typing-cursor" wx:if="{{typing}}"></view>
+  </view>
+</view>

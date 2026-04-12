@@ -1,0 +1,84 @@
+.bubble-wrap {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 28rpx;
+  padding: 0 16rpx;
+}
+
+.bubble-wrap.user {
+  flex-direction: row-reverse;
+}
+
+.avatar {
+  width: 68rpx;
+  height: 68rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.bubble-wrap.user .avatar {
+  background: #4A90D9;
+}
+
+.bubble-wrap.assistant .avatar {
+  background: #67C23A;
+}
+
+.avatar-text {
+  font-size: 24rpx;
+  color: #fff;
+  font-weight: 600;
+}
+
+.bubble {
+  max-width: 75%;
+  padding: 20rpx 28rpx;
+  border-radius: 20rpx;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+}
+
+.bubble-wrap.user .bubble {
+  background: #4A90D9;
+  margin-right: 16rpx;
+  border-top-right-radius: 6rpx;
+}
+
+.bubble-wrap.assistant .bubble {
+  background: #fff;
+  margin-left: 16rpx;
+  border-top-left-radius: 6rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+}
+
+.bubble-text {
+  font-size: 28rpx;
+  line-height: 1.7;
+  word-break: break-all;
+}
+
+.bubble-wrap.user .bubble-text {
+  color: #fff;
+}
+
+.bubble-wrap.assistant .bubble-text {
+  color: #333;
+}
+
+.typing-cursor {
+  width: 4rpx;
+  height: 28rpx;
+  background: #67C23A;
+  margin-left: 4rpx;
+  animation: blink 0.8s infinite;
+  flex-shrink: 0;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
