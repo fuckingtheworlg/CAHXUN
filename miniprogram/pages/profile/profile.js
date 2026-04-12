@@ -1,4 +1,4 @@
-const defaultAvatar = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI9FhqmIo6F3bHyB7A0RnU3GRPMlVc3GfEBNGiaGSKfMHNtlNbupLLcc1GO8reMZAFz62nnw/0';
+const defaultAvatar = '/assets/tab-profile.png';
 
 const genderOptions = ['未设置', '男', '女'];
 const gradeOptions = ['未设置', '大一', '大二', '大三', '大四', '研一', '研二', '研三', '博士'];

@@ -1,5 +1,5 @@
 const config = {
-  baseUrl: 'https://your-domain.com/api',
+  baseUrl: 'http://47.99.217.72/api',
 };
 
 module.exports = config;

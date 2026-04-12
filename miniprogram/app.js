@@ -9,7 +9,7 @@ App({
     const token = wx.getStorageSync('token');
     if (!token) {
       login().catch((err) => {
-        console.warn('Auto login failed:', err);
+        console.warn('Auto login skipped:', err.message || err);
       });
     }
   },

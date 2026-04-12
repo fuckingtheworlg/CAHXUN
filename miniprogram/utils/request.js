@@ -16,6 +16,7 @@ function request(options) {
       url: `${config.baseUrl}${url}`,
       method,
       data,
+      timeout: 10000,
       header: {
         'Content-Type': 'application/json',
         ...header,
@@ -42,7 +43,7 @@ function request(options) {
         resolve(res.data);
       },
       fail(err) {
-        wx.showToast({ title: '网络异常', icon: 'none' });
+        console.warn('Request failed:', url, err);
         reject(err);
       },
     });
