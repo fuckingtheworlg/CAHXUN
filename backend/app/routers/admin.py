@@ -5,12 +5,13 @@ Admin API routes — JWT-authenticated management endpoints.
 from __future__ import annotations
 
 from datetime import datetime, timedelta
+from typing import Optional, List
 
 import jwt
 from fastapi import APIRouter, Depends, HTTPException, Request, Query
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
-from sqlalchemy import select, func, desc
+from sqlalchemy import select, func, desc, delete as sa_delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import get_settings
@@ -24,9 +25,10 @@ router = APIRouter(tags=["admin"])
 
 _JWT_ALGORITHM = "HS256"
 _JWT_EXPIRY_HOURS = 24
+_SETTINGS_PREFIX = "admin:setting:"
 
 
-# --------------- Auth helpers ---------------
+# --------------- Request / Response models ---------------
 
 class AdminLoginRequest(BaseModel):
     username: str
@@ -38,7 +40,31 @@ class AdminLoginResponse(BaseModel):
     expires_at: str
 
 
-def create_admin_token() -> tuple[str, datetime]:
+class PostCreateRequest(BaseModel):
+    content: str
+    images: str = ""
+    category: str = ""
+
+
+class PostUpdateRequest(BaseModel):
+    content: Optional[str] = None
+    images: Optional[str] = None
+    category: Optional[str] = None
+
+
+class BatchDeleteRequest(BaseModel):
+    ids: List[int]
+
+
+class SettingsUpdateRequest(BaseModel):
+    rate_limit_per_minute: Optional[int] = None
+    deepseek_model: Optional[str] = None
+    deepseek_base_url: Optional[str] = None
+
+
+# --------------- Auth helpers ---------------
+
+def create_admin_token() -> tuple:
     exp = datetime.utcnow() + timedelta(hours=_JWT_EXPIRY_HOURS)
     payload = {"sub": "admin", "exp": exp}
     token = jwt.encode(payload, settings.admin_jwt_secret, algorithm=_JWT_ALGORITHM)
@@ -107,7 +133,30 @@ async def admin_stats(request: Request, db: AsyncSession = Depends(get_db)):
     }
 
 
-# --------------- Post management ---------------
+# --------------- Post CRUD ---------------
+
+@router.post("/admin/posts", dependencies=[Depends(require_admin)])
+async def admin_create_post(body: PostCreateRequest, db: AsyncSession = Depends(get_db)):
+    post = Post(
+        content=body.content,
+        images=body.images if body.images else None,
+        created_at=datetime.now(),
+        category=body.category if body.category else None,
+    )
+    db.add(post)
+    await db.commit()
+    await db.refresh(post)
+    return post.to_dict()
+
+
+@router.post("/admin/posts/batch-delete", dependencies=[Depends(require_admin)])
+async def admin_batch_delete_posts(body: BatchDeleteRequest, db: AsyncSession = Depends(get_db)):
+    if not body.ids:
+        raise HTTPException(status_code=400, detail="请选择要删除的贴文")
+    result = await db.execute(sa_delete(Post).where(Post.id.in_(body.ids)))
+    await db.commit()
+    return {"message": f"成功删除 {result.rowcount} 条贴文", "deleted": result.rowcount}
+
 
 @router.get("/admin/posts", dependencies=[Depends(require_admin)])
 async def admin_list_posts(
@@ -142,6 +191,32 @@ async def admin_get_post(post_id: int, db: AsyncSession = Depends(get_db)):
     return post.to_dict()
 
 
+@router.put("/admin/posts/{post_id}", dependencies=[Depends(require_admin)])
+async def admin_update_post(post_id: int, body: PostUpdateRequest, db: AsyncSession = Depends(get_db)):
+    post = (await db.execute(select(Post).where(Post.id == post_id))).scalar_one_or_none()
+    if not post:
+        raise HTTPException(status_code=404, detail="贴文不存在")
+    if body.content is not None:
+        post.content = body.content
+    if body.images is not None:
+        post.images = body.images if body.images else None
+    if body.category is not None:
+        post.category = body.category if body.category else None
+    await db.commit()
+    await db.refresh(post)
+    return post.to_dict()
+
+
+@router.delete("/admin/posts/{post_id}", dependencies=[Depends(require_admin)])
+async def admin_delete_post(post_id: int, db: AsyncSession = Depends(get_db)):
+    post = (await db.execute(select(Post).where(Post.id == post_id))).scalar_one_or_none()
+    if not post:
+        raise HTTPException(status_code=404, detail="贴文不存在")
+    await db.delete(post)
+    await db.commit()
+    return {"message": "删除成功"}
+
+
 # --------------- Chat logs ---------------
 
 @router.get("/admin/chat-logs", dependencies=[Depends(require_admin)])
@@ -167,14 +242,29 @@ async def admin_chat_logs(
     return {"total": total, "page": page, "page_size": page_size, "items": items}
 
 
+@router.delete("/admin/chat-logs", dependencies=[Depends(require_admin)])
+async def admin_clear_chat_logs(request: Request):
+    redis = request.app.state.redis
+    await redis.delete("chat:logs")
+    return {"message": "问答日志已清空"}
+
+
 # --------------- System settings ---------------
 
 @router.get("/admin/settings", dependencies=[Depends(require_admin)])
-async def admin_get_settings():
+async def admin_get_settings(request: Request):
+    redis = request.app.state.redis
+
+    overrides = {}
+    for key in ["rate_limit_per_minute", "deepseek_model", "deepseek_base_url"]:
+        val = await redis.get(f"{_SETTINGS_PREFIX}{key}")
+        if val is not None:
+            overrides[key] = val
+
     return {
-        "rate_limit_per_minute": settings.rate_limit_per_minute,
-        "deepseek_model": settings.deepseek_model,
-        "deepseek_base_url": settings.deepseek_base_url,
+        "rate_limit_per_minute": int(overrides.get("rate_limit_per_minute", settings.rate_limit_per_minute)),
+        "deepseek_model": overrides.get("deepseek_model", settings.deepseek_model),
+        "deepseek_base_url": overrides.get("deepseek_base_url", settings.deepseek_base_url),
         "db_host": settings.db_host,
         "db_name": settings.db_name,
         "db_table_name": settings.db_table_name,
@@ -184,11 +274,23 @@ async def admin_get_settings():
     }
 
 
+@router.put("/admin/settings", dependencies=[Depends(require_admin)])
+async def admin_update_settings(body: SettingsUpdateRequest, request: Request):
+    redis = request.app.state.redis
+    updated = {}
+    data = body.model_dump(exclude_none=True)
+    for field, value in data.items():
+        await redis.set(f"{_SETTINGS_PREFIX}{field}", str(value))
+        updated[field] = value
+    if not updated:
+        raise HTTPException(status_code=400, detail="没有需要更新的设置项")
+    return {"message": "设置已更新", "updated": updated}
+
+
 # --------------- CSV Import ---------------
 
 @router.get("/admin/import/template", dependencies=[Depends(require_admin)])
 async def download_csv_template():
-    """Return a sample CSV template for importing posts."""
     from fastapi.responses import StreamingResponse
     import io
 
@@ -210,11 +312,6 @@ async def import_csv(
     request: Request,
     db: AsyncSession = Depends(get_db),
 ):
-    """
-    Import posts from a CSV file.
-    Expected columns: content (required), images, created_at, category.
-    Encoding: UTF-8 (with or without BOM).
-    """
     import csv
     import io
 

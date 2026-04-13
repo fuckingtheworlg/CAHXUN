@@ -13,6 +13,12 @@ Page({
     this.loadPosts();
   },
 
+  onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 0 });
+    }
+  },
+
   onPullDownRefresh() {
     this.setData({ page: 1, noMore: false, posts: [] });
     this.loadPosts().then(() => {

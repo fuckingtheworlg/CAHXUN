@@ -5,10 +5,16 @@ page {
   font-size: 28rpx;
   color: #333;
   line-height: 1.6;
+  /* 与 custom-tab-bar 占位一致，避免内容被遮挡 */
+  --tab-bar-area: calc(108rpx + env(safe-area-inset-bottom));
 }
 
 .container {
   padding: 20rpx 24rpx;
+}
+
+.tab-page-pad {
+  padding-bottom: var(--tab-bar-area);
 }
 
 .empty-tip {

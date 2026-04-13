@@ -1,4 +1,4 @@
-<view class="container">
+<view class="container tab-page-pad">
   <view class="header">
     <text class="title">校园墙动态</text>
   </view>

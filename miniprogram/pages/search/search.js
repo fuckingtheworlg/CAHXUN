@@ -14,6 +14,12 @@ Page({
 
   _debounceTimer: null,
 
+  onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 1 });
+    }
+  },
+
   onInput(e) {
     const val = e.detail.value;
     this.setData({ keyword: val });

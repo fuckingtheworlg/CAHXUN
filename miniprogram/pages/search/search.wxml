@@ -1,7 +1,7 @@
-<view class="container">
+<view class="container tab-page-pad">
   <view class="search-bar">
     <view class="search-input-wrap">
-      <image class="search-icon" src="/assets/icon-search.png" mode="aspectFit" />
+      <image class="search-icon" src="/assets/tab-search.png" mode="aspectFit" />
       <input
         class="search-input"
         placeholder="输入关键词搜索贴文..."

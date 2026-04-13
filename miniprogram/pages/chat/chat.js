@@ -14,6 +14,12 @@ Page({
     scrollToId: '',
   },
 
+  onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 2 });
+    }
+  },
+
   onInputChange(e) {
     this.setData({ inputValue: e.detail.value });
   },

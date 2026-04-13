@@ -1,7 +1,7 @@
 .profile-page {
   min-height: 100vh;
   background: #f5f5f5;
-  padding-bottom: 40rpx;
+  padding-bottom: calc(40rpx + var(--tab-bar-area));
 }
 
 /* ─── Header ─── */

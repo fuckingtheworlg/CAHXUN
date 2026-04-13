@@ -13,35 +13,15 @@
     "backgroundTextStyle": "dark"
   },
   "tabBar": {
+    "custom": true,
     "color": "#999999",
     "selectedColor": "#4A90D9",
     "backgroundColor": "#ffffff",
-    "borderStyle": "black",
     "list": [
-      {
-        "pagePath": "pages/index/index",
-        "text": "首页",
-        "iconPath": "assets/tab-home.png",
-        "selectedIconPath": "assets/tab-home-active.png"
-      },
-      {
-        "pagePath": "pages/search/search",
-        "text": "搜索",
-        "iconPath": "assets/tab-search.png",
-        "selectedIconPath": "assets/tab-search-active.png"
-      },
-      {
-        "pagePath": "pages/chat/chat",
-        "text": "AI问答",
-        "iconPath": "assets/tab-chat.png",
-        "selectedIconPath": "assets/tab-chat-active.png"
-      },
-      {
-        "pagePath": "pages/profile/profile",
-        "text": "我的",
-        "iconPath": "assets/tab-profile.png",
-        "selectedIconPath": "assets/tab-profile-active.png"
-      }
+      { "pagePath": "pages/index/index", "text": "首页" },
+      { "pagePath": "pages/search/search", "text": "搜索" },
+      { "pagePath": "pages/chat/chat", "text": "AI问答" },
+      { "pagePath": "pages/profile/profile", "text": "我的" }
     ]
   },
   "sitemapLocation": "sitemap.json",
