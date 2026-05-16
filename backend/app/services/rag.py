@@ -9,7 +9,7 @@ Minimal RAG service:
 from __future__ import annotations
 
 import json
-from typing import AsyncGenerator
+from typing import AsyncGenerator, Optional
 
 import httpx
 import jieba
@@ -20,6 +20,21 @@ from app.config import get_settings
 from app.services.search import search_posts_for_rag
 
 settings = get_settings()
+
+_SETTINGS_PREFIX = "admin:setting:"
+
+
+async def _get_runtime_setting(redis, key: str, default: str) -> str:
+    """从 Redis 读取后台动态覆盖的设置，没有则返回 .env 默认值。"""
+    if redis is None:
+        return default
+    try:
+        val = await redis.get(f"{_SETTINGS_PREFIX}{key}")
+        if val is not None:
+            return val
+    except Exception:
+        pass
+    return default
 
 SYSTEM_PROMPT = (
     "你是校园墙智能助手。用户会向你提问关于校园生活的问题，"
@@ -50,6 +65,7 @@ def build_context(posts: list[dict]) -> str:
 async def stream_chat(
     db: AsyncSession,
     question: str,
+    redis=None,
 ) -> AsyncGenerator[str, None]:
     keywords = extract_keywords(question)
     posts = await search_posts_for_rag(db, keywords, limit=15)
@@ -63,13 +79,17 @@ async def stream_chat(
         },
     ]
 
-    url = f"{settings.deepseek_base_url}/v1/chat/completions"
+    api_key = await _get_runtime_setting(redis, "deepseek_api_key", settings.deepseek_api_key)
+    base_url = await _get_runtime_setting(redis, "deepseek_base_url", settings.deepseek_base_url)
+    model = await _get_runtime_setting(redis, "deepseek_model", settings.deepseek_model)
+
+    url = f"{base_url}/v1/chat/completions"
     headers = {
-        "Authorization": f"Bearer {settings.deepseek_api_key}",
+        "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json",
     }
     payload = {
-        "model": settings.deepseek_model,
+        "model": model,
         "messages": messages,
         "stream": True,
         "max_tokens": 1024,

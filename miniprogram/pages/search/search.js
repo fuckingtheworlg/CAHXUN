@@ -20,6 +20,21 @@ Page({
     }
   },
 
+  onShareAppMessage() {
+    const kw = this.data.keyword.trim();
+    return {
+      title: kw ? `校园墙搜索：${kw}` : '校园墙查询 - 快速找到你想看的贴文',
+      path: '/pages/search/search',
+    };
+  },
+
+  onShareTimeline() {
+    return {
+      title: '校园墙查询 - 校园贴文一键搜索',
+      query: '',
+    };
+  },
+
   onInput(e) {
     const val = e.detail.value;
     this.setData({ keyword: val });

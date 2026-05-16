@@ -1,3 +1,5 @@
+const { login } = require('../../utils/auth');
+
 const defaultAvatar = '/assets/tab-profile.png';
 
 const genderOptions = ['未设置', '男', '女'];
@@ -5,6 +7,8 @@ const gradeOptions = ['未设置', '大一', '大二', '大三', '大四', '研�
 
 Page({
   data: {
+    isLoggedIn: false,
+    logging: false,
     avatarUrl: defaultAvatar,
     nickname: '微信用户',
     openidShort: '***',
@@ -23,9 +27,30 @@ Page({
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 3 });
     }
+    this.checkLoginStatus();
     this.loadProfile();
     this.calcCache();
     this.loadStats();
+  },
+
+  checkLoginStatus() {
+    const token = wx.getStorageSync('token');
+    this.setData({ isLoggedIn: !!token });
+  },
+
+  onLogin() {
+    if (this.data.logging) return;
+    this.setData({ logging: true });
+    login()
+      .then(() => {
+        this.setData({ isLoggedIn: true, logging: false });
+        this.loadProfile();
+        wx.showToast({ title: '登录成功', icon: 'success' });
+      })
+      .catch(() => {
+        this.setData({ logging: false });
+        wx.showToast({ title: '登录失败，请检查网络', icon: 'none' });
+      });
   },
 
   loadProfile() {
@@ -60,7 +85,6 @@ Page({
     this.setData({ searchCount, chatCount });
   },
 
-  // ─── Avatar ───
   onChangeAvatar() {
     wx.chooseMedia({
       count: 1,
@@ -75,7 +99,6 @@ Page({
     });
   },
 
-  // ─── Nickname ───
   onEditNickname() {
     this.setData({
       showNicknameModal: true,
@@ -102,7 +125,6 @@ Page({
     wx.showToast({ title: '昵称已更新', icon: 'success' });
   },
 
-  // ─── Gender ───
   onEditGender() {
     wx.showActionSheet({
       itemList: ['男', '女'],
@@ -113,7 +135,6 @@ Page({
     });
   },
 
-  // ─── College ───
   onEditCollege() {
     const that = this;
     wx.showModal({
@@ -130,7 +151,6 @@ Page({
     });
   },
 
-  // ─── Grade ───
   onEditGrade() {
     wx.showActionSheet({
       itemList: gradeOptions.slice(1),
@@ -140,7 +160,6 @@ Page({
     });
   },
 
-  // ─── Cache ───
   calcCache() {
     try {
       const info = wx.getStorageInfoSync();
@@ -175,7 +194,35 @@ Page({
     });
   },
 
-  // ─── About ───
+  onLogout() {
+    wx.showModal({
+      title: '退出登录',
+      content: '退出后将清除登录状态，确定继续？',
+      success: (res) => {
+        if (res.confirm) {
+          wx.removeStorageSync('token');
+          wx.removeStorageSync('openid');
+          this.setData({ isLoggedIn: false });
+          wx.showToast({ title: '已退出', icon: 'success' });
+        }
+      },
+    });
+  },
+
+  onShareAppMessage() {
+    return {
+      title: '校园墙查询 - 校园动态 + AI 问答',
+      path: '/pages/index/index',
+    };
+  },
+
+  onShareTimeline() {
+    return {
+      title: '校园墙查询 - 校园动态 + AI 问答',
+      query: '',
+    };
+  },
+
   onAbout() {
     wx.showModal({
       title: '关于',

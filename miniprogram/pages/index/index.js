@@ -31,6 +31,21 @@ Page({
     this.loadPosts();
   },
 
+  onShareAppMessage() {
+    return {
+      title: '校园墙查询 - 校园动态一网打尽',
+      path: '/pages/index/index',
+      imageUrl: '',
+    };
+  },
+
+  onShareTimeline() {
+    return {
+      title: '校园墙查询 - 校园动态一网打尽',
+      query: '',
+    };
+  },
+
   loadPosts() {
     if (this.data.loading) return Promise.resolve();
     this.setData({ loading: true });

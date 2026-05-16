@@ -20,6 +20,20 @@ Page({
     }
   },
 
+  onShareAppMessage() {
+    return {
+      title: '校园墙 AI 问答 - 让 AI 帮你查校园动态',
+      path: '/pages/chat/chat',
+    };
+  },
+
+  onShareTimeline() {
+    return {
+      title: '校园墙 AI 问答 - 让 AI 帮你查校园动态',
+      query: '',
+    };
+  },
+
   onInputChange(e) {
     this.setData({ inputValue: e.detail.value });
   },
@@ -39,7 +53,16 @@ Page({
         this._doSend(question);
       })
       .catch(() => {
-        wx.showToast({ title: '登录失败，请重试', icon: 'none' });
+        wx.showModal({
+          title: '需要登录',
+          content: '使用 AI 问答功能需要先登录，是否前往登录？',
+          confirmText: '去登录',
+          success(res) {
+            if (res.confirm) {
+              wx.switchTab({ url: '/pages/profile/profile' });
+            }
+          },
+        });
       });
   },
 

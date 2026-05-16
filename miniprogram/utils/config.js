@@ -1,5 +1,5 @@
 const config = {
-  baseUrl: 'http://47.99.217.72/api',
+  baseUrl: 'https://api.ljdnet.top/api',
 };
 
 module.exports = config;

@@ -20,7 +20,16 @@
 }
 
 .welcome-icon {
-  font-size: 80rpx;
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  background: #4A90D9;
+  color: #fff;
+  font-size: 36rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 24rpx;
 }
 

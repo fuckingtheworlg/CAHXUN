@@ -7,12 +7,21 @@ App({
 
   autoLogin() {
     const token = wx.getStorageSync('token');
-    if (!token) {
-      login().catch((err) => {
-        console.warn('Auto login skipped:', err.message || err);
-      });
+    if (token) {
+      this.globalData.isLoggedIn = true;
+      return;
     }
+    login()
+      .then(() => {
+        this.globalData.isLoggedIn = true;
+      })
+      .catch((err) => {
+        console.warn('Auto login skipped:', err.message || err);
+        this.globalData.isLoggedIn = false;
+      });
   },
 
-  globalData: {},
+  globalData: {
+    isLoggedIn: false,
+  },
 });

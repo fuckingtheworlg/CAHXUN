@@ -8,7 +8,7 @@
     show-scrollbar="{{false}}"
   >
     <view class="welcome" wx:if="{{messages.length === 0}}">
-      <view class="welcome-icon">🎓</view>
+      <view class="welcome-icon">AI</view>
       <text class="welcome-title">校园墙 AI 助手</text>
       <text class="welcome-desc">我可以根据校园墙上的帖子内容回答你的问题</text>
       <view class="welcome-hints">

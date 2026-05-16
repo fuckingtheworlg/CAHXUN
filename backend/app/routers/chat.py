@@ -55,7 +55,7 @@ async def chat(
     await log_chat(redis, openid, question)
 
     async def event_generator():
-        async for chunk in stream_chat(db, question):
+        async for chunk in stream_chat(db, question, redis=redis):
             yield {"data": json.dumps({"content": chunk}, ensure_ascii=False)}
         yield {"data": "[DONE]"}
 

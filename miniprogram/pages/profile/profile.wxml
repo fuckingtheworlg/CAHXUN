@@ -1,11 +1,39 @@
-<view class="profile-page">
+<!-- ===== 未登录引导页 ===== -->
+<view class="login-page" wx:if="{{!isLoggedIn}}">
+  <view class="login-hero">
+    <view class="login-logo-text">校园墙</view>
+    <text class="login-title">校园墙查询</text>
+    <text class="login-subtitle">登录后可使用 AI 问答、保存个人偏好</text>
+  </view>
+
+  <view class="login-features">
+    <view class="feature-item">
+      <text class="feature-text">校园贴文搜索</text>
+    </view>
+    <view class="feature-item">
+      <text class="feature-text">AI 智能问答</text>
+    </view>
+    <view class="feature-item">
+      <text class="feature-text">个人资料管理</text>
+    </view>
+  </view>
+
+  <button class="wx-login-btn" bindtap="onLogin" loading="{{logging}}" disabled="{{logging}}">
+    <text wx:if="{{!logging}}">微信一键登录</text>
+    <text wx:else>登录中...</text>
+  </button>
+  <text class="login-tip">登录即表示你同意相关服务协议</text>
+</view>
+
+<!-- ===== 已登录 - 个人中心 ===== -->
+<view class="profile-page" wx:if="{{isLoggedIn}}">
 
   <!-- 头部卡片 -->
   <view class="profile-header">
     <view class="avatar-wrap" bindtap="onChangeAvatar">
       <image class="avatar" src="{{avatarUrl}}" mode="aspectFill" />
       <view class="avatar-edit">
-        <text class="edit-icon">📷</text>
+        <text class="edit-icon">+</text>
       </view>
     </view>
     <view class="nickname-wrap" bindtap="onEditNickname">
@@ -70,6 +98,13 @@
 
   <!-- 功能列表 -->
   <view class="section-card">
+    <button class="info-row info-row-btn" open-type="share" hover-class="info-row-hover">
+      <text class="info-label">分享给朋友</text>
+      <view class="info-right">
+        <text class="info-arrow">›</text>
+      </view>
+    </button>
+
     <view class="info-row" bindtap="onClearCache">
       <text class="info-label">清除缓存</text>
       <view class="info-right">
@@ -85,6 +120,13 @@
         <text class="info-arrow">›</text>
       </view>
     </view>
+
+    <view class="info-row" bindtap="onLogout">
+      <text class="info-label" style="color:#e74c3c">退出登录</text>
+      <view class="info-right">
+        <text class="info-arrow">›</text>
+      </view>
+    </view>
   </view>
 
   <!-- 底部 -->
@@ -97,9 +139,10 @@
   <view class="modal-box" catchtap="">
     <view class="modal-title">修改昵称</view>
     <input
+      type="nickname"
       class="modal-input"
       value="{{nicknameInput}}"
-      placeholder="请输入昵称"
+      placeholder="点击获取微信昵称"
       maxlength="20"
       bindinput="onNicknameInput"
       focus="{{showNicknameModal}}"

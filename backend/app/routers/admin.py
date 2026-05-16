@@ -60,6 +60,13 @@ class SettingsUpdateRequest(BaseModel):
     rate_limit_per_minute: Optional[int] = None
     deepseek_model: Optional[str] = None
     deepseek_base_url: Optional[str] = None
+    deepseek_api_key: Optional[str] = None
+
+
+class TestApiKeyRequest(BaseModel):
+    api_key: Optional[str] = None
+    base_url: Optional[str] = None
+    model: Optional[str] = None
 
 
 # --------------- Auth helpers ---------------
@@ -251,25 +258,43 @@ async def admin_clear_chat_logs(request: Request):
 
 # --------------- System settings ---------------
 
+def _mask_api_key(key: str) -> str:
+    """脱敏 API Key，前 4 位 + 末 4 位。"""
+    if not key:
+        return ""
+    if len(key) <= 12:
+        return "***"
+    return f"{key[:4]}{'*' * 8}{key[-4:]}"
+
+
 @router.get("/admin/settings", dependencies=[Depends(require_admin)])
 async def admin_get_settings(request: Request):
     redis = request.app.state.redis
 
     overrides = {}
-    for key in ["rate_limit_per_minute", "deepseek_model", "deepseek_base_url"]:
+    for key in [
+        "rate_limit_per_minute",
+        "deepseek_model",
+        "deepseek_base_url",
+        "deepseek_api_key",
+    ]:
         val = await redis.get(f"{_SETTINGS_PREFIX}{key}")
         if val is not None:
             overrides[key] = val
+
+    effective_api_key = overrides.get("deepseek_api_key", settings.deepseek_api_key)
 
     return {
         "rate_limit_per_minute": int(overrides.get("rate_limit_per_minute", settings.rate_limit_per_minute)),
         "deepseek_model": overrides.get("deepseek_model", settings.deepseek_model),
         "deepseek_base_url": overrides.get("deepseek_base_url", settings.deepseek_base_url),
+        "deepseek_api_key_mask": _mask_api_key(effective_api_key),
+        "deepseek_api_key_source": "override" if "deepseek_api_key" in overrides else "env",
         "db_host": settings.db_host,
         "db_name": settings.db_name,
         "db_table_name": settings.db_table_name,
         "wechat_appid": settings.wechat_appid,
-        "api_key_configured": bool(settings.deepseek_api_key),
+        "api_key_configured": bool(effective_api_key),
         "wechat_secret_configured": bool(settings.wechat_secret),
     }
 
@@ -280,11 +305,64 @@ async def admin_update_settings(body: SettingsUpdateRequest, request: Request):
     updated = {}
     data = body.model_dump(exclude_none=True)
     for field, value in data.items():
+        if field == "deepseek_api_key":
+            value = value.strip()
+            if not value:
+                raise HTTPException(status_code=400, detail="API Key 不能为空")
         await redis.set(f"{_SETTINGS_PREFIX}{field}", str(value))
-        updated[field] = value
+        updated[field] = "***" if field == "deepseek_api_key" else value
     if not updated:
         raise HTTPException(status_code=400, detail="没有需要更新的设置项")
     return {"message": "设置已更新", "updated": updated}
+
+
+@router.delete("/admin/settings/deepseek_api_key", dependencies=[Depends(require_admin)])
+async def admin_reset_api_key(request: Request):
+    """删除 API Key 覆盖，恢复使用 .env 中的默认 Key。"""
+    redis = request.app.state.redis
+    await redis.delete(f"{_SETTINGS_PREFIX}deepseek_api_key")
+    return {"message": "已恢复使用 .env 中的默认 API Key"}
+
+
+@router.post("/admin/settings/test-api-key", dependencies=[Depends(require_admin)])
+async def admin_test_api_key(body: TestApiKeyRequest, request: Request):
+    """实测 DeepSeek API Key 是否可用。"""
+    import httpx
+
+    redis = request.app.state.redis
+
+    async def _read(key: str, fallback: str) -> str:
+        val = await redis.get(f"{_SETTINGS_PREFIX}{key}")
+        return val if val is not None else fallback
+
+    api_key = (body.api_key or "").strip() or await _read("deepseek_api_key", settings.deepseek_api_key)
+    base_url = (body.base_url or "").strip() or await _read("deepseek_base_url", settings.deepseek_base_url)
+    model = (body.model or "").strip() or await _read("deepseek_model", settings.deepseek_model)
+
+    if not api_key:
+        raise HTTPException(status_code=400, detail="未配置 API Key")
+
+    url = f"{base_url}/v1/chat/completions"
+    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
+    payload = {
+        "model": model,
+        "messages": [{"role": "user", "content": "ping"}],
+        "max_tokens": 5,
+        "stream": False,
+    }
+
+    try:
+        async with httpx.AsyncClient(timeout=15.0) as client:
+            resp = await client.post(url, json=payload, headers=headers)
+        if resp.status_code == 200:
+            return {"ok": True, "message": "API Key 可用", "model": model}
+        try:
+            err = resp.json().get("error", {}).get("message") or resp.text
+        except Exception:
+            err = resp.text
+        return {"ok": False, "status": resp.status_code, "message": f"调用失败：{err}"}
+    except httpx.HTTPError as e:
+        return {"ok": False, "message": f"网络错误：{e}"}
 
 
 # --------------- CSV Import ---------------
