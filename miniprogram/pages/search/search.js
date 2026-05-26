@@ -10,6 +10,8 @@ Page({
     loading: false,
     noMore: false,
     searched: false,
+    hotPosts: [],
+    hotLoading: false,
   },
 
   _debounceTimer: null,
@@ -18,6 +20,31 @@ Page({
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 1 });
     }
+    if (!this.data.searched) {
+      this.loadHotPosts();
+    }
+  },
+
+  loadHotPosts() {
+    if (this.data.hotLoading) return;
+    this.setData({ hotLoading: true });
+    request({ url: '/posts/popular', data: { limit: 10 } })
+      .then((res) => {
+        this.setData({
+          hotPosts: res.items || [],
+          hotLoading: false,
+        });
+      })
+      .catch(() => {
+        this.setData({ hotLoading: false });
+      });
+  },
+
+  onHotItemTap(e) {
+    const id = e.currentTarget.dataset.id;
+    if (!id) return;
+    request({ url: `/posts/${id}/view`, method: 'POST', data: {} }).catch(() => {});
+    setTimeout(() => this.loadHotPosts(), 500);
   },
 
   onShareAppMessage() {

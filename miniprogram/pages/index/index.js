@@ -7,10 +7,26 @@ Page({
     pageSize: 20,
     loading: false,
     noMore: false,
+    totalPosts: 0,
+    greeting: '欢迎回来，校园动态尽在掌握',
+    greetingTag: 'Hi',
   },
 
   onLoad() {
+    this.updateGreeting();
     this.loadPosts();
+  },
+
+  updateGreeting() {
+    const h = new Date().getHours();
+    let g = '欢迎回来，校园动态尽在掌握';
+    let tag = 'Hi';
+    if (h < 6) { g = '夜深了，注意休息'; tag = '夜'; }
+    else if (h < 12) { g = '早上好，新的一天开始啦'; tag = '早'; }
+    else if (h < 14) { g = '中午好，吃了么'; tag = '午'; }
+    else if (h < 18) { g = '下午好，校园新鲜事'; tag = '下'; }
+    else { g = '晚上好，看看今天发生了什么'; tag = '晚'; }
+    this.setData({ greeting: g, greetingTag: tag });
   },
 
   onShow() {
@@ -67,6 +83,7 @@ Page({
           page: this.data.page + 1,
           loading: false,
           noMore,
+          totalPosts: res.total || 0,
         });
       })
       .catch(() => {

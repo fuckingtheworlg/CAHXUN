@@ -1,10 +1,16 @@
-<view class="container tab-page-pad">
+<view class="page tab-page-pad">
+  <!-- 顶部装饰 -->
+  <view class="top-deco">
+    <view class="deco-blob deco-1"></view>
+    <view class="deco-blob deco-2"></view>
+  </view>
+
   <view class="search-bar">
     <view class="search-input-wrap">
       <image class="search-icon" src="/assets/tab-search.png" mode="aspectFit" />
       <input
         class="search-input"
-        placeholder="输入关键词搜索贴文..."
+        placeholder="想找什么？输入关键词试试"
         value="{{keyword}}"
         bindinput="onInput"
         bindconfirm="onSearch"
@@ -14,29 +20,66 @@
     </view>
   </view>
 
-  <view class="search-hint" wx:if="{{!searched}}">
-    <text class="hint-text">搜索校园墙上的历史贴文</text>
-  </view>
+  <!-- 未搜索时展示热门榜 -->
+  <block wx:if="{{!searched}}">
+    <view class="hot-section">
+      <view class="hot-header">
+        <view class="hot-title-wrap">
+          <view class="fire-badge">HOT</view>
+          <text class="hot-title">热门推荐</text>
+        </view>
+        <text class="hot-subtitle">按浏览量排序</text>
+      </view>
 
+      <view class="hot-list" wx:if="{{hotPosts.length > 0}}">
+        <view
+          class="hot-item"
+          wx:for="{{hotPosts}}"
+          wx:key="id"
+          data-id="{{item.id}}"
+          bindtap="onHotItemTap"
+        >
+          <view class="hot-rank rank-{{index < 3 ? index + 1 : 'rest'}}">{{index + 1}}</view>
+          <view class="hot-content">
+            <text class="hot-text">{{item.content}}</text>
+            <view class="hot-meta">
+              <text class="hot-views">{{item.view_count}} 阅读</text>
+              <text class="hot-category" wx:if="{{item.category}}">#{{item.category}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="hot-empty" wx:if="{{!hotLoading && hotPosts.length === 0}}">
+        暂无热门贴文，点点贴文卡片即可积累人气
+      </view>
+
+      <view class="hot-loading" wx:if="{{hotLoading && hotPosts.length === 0}}">
+        正在加载热门榜...
+      </view>
+    </view>
+  </block>
+
+  <!-- 搜索结果 -->
   <block wx:if="{{searched}}">
     <view class="result-count" wx:if="{{total > 0}}">
-      找到 {{total}} 条相关贴文
+      找到 <text class="result-num">{{total}}</text> 条相关贴文
     </view>
 
-    <block wx:if="{{results.length > 0}}">
+    <view class="content-list">
       <post-card wx:for="{{results}}" wx:key="id" post="{{item}}" />
-    </block>
+    </view>
 
     <view class="empty-tip" wx:if="{{!loading && results.length === 0}}">
       未找到相关贴文，换个关键词试试
     </view>
 
-    <view class="loading-tip" wx:if="{{loading}}">
-      搜索中...
-    </view>
+    <view class="loading-tip" wx:if="{{loading}}">搜索中...</view>
 
-    <view class="loading-tip" wx:if="{{noMore && results.length > 0}}">
-      — 没有更多了 —
+    <view class="end-tip" wx:if="{{noMore && results.length > 0}}">
+      <view class="end-line"></view>
+      <text class="end-text">已经到底啦</text>
+      <view class="end-line"></view>
     </view>
   </block>
 </view>

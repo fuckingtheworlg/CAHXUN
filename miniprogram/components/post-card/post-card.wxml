@@ -1,27 +1,40 @@
-<view class="card">
-  <view class="card-body">
-    <text class="card-content">{{post.content}}</text>
-  </view>
+<view class="card {{catClass}}" bindtap="onCardTap" hover-class="card-hover">
+  <view class="card-side-bar"></view>
 
-  <view class="card-images" wx:if="{{post.images && post.images.length > 0}}">
-    <image
-      wx:for="{{post.images}}"
-      wx:key="*this"
-      wx:if="{{index < 3}}"
-      class="card-img {{post.images.length === 1 ? 'single' : ''}}"
-      src="{{item}}"
-      mode="aspectFill"
-      lazy-load
-      bindtap="onPreviewImage"
-      data-url="{{item}}"
-    />
-    <view class="more-images" wx:if="{{post.images.length > 3}}">
-      +{{post.images.length - 3}}
+  <view class="card-main">
+    <view class="card-header" wx:if="{{post.category}}">
+      <text class="card-category">#{{post.category}}</text>
     </view>
-  </view>
 
-  <view class="card-footer">
-    <text class="card-time">{{post.created_at}}</text>
-    <text class="card-category" wx:if="{{post.category}}">{{post.category}}</text>
+    <view class="card-body">
+      <text class="card-content">{{post.content}}</text>
+    </view>
+
+    <view class="card-images" wx:if="{{post.images && post.images.length > 0}}">
+      <image
+        wx:for="{{post.images}}"
+        wx:key="*this"
+        wx:if="{{index < 3}}"
+        class="card-img {{post.images.length === 1 ? 'single' : ''}}"
+        src="{{item}}"
+        mode="aspectFill"
+        lazy-load
+        catchtap="onPreviewImage"
+        data-url="{{item}}"
+      />
+      <view class="more-images" wx:if="{{post.images.length > 3}}" catchtap="onPreviewImage" data-url="{{post.images[3]}}">
+        +{{post.images.length - 3}}
+      </view>
+    </view>
+
+    <view class="card-footer">
+      <view class="card-meta">
+        <text class="card-time">{{post.created_at}}</text>
+      </view>
+      <view class="card-views" wx:if="{{post.view_count > 0}}">
+        <view class="dot"></view>
+        <text class="views-text">{{post.view_count}} 阅读</text>
+      </view>
+    </view>
   </view>
 </view>

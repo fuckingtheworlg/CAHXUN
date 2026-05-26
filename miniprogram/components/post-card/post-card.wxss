@@ -1,14 +1,48 @@
 .card {
+  position: relative;
+  display: flex;
   background: #fff;
-  border-radius: 16rpx;
-  padding: 28rpx;
-  margin-bottom: 20rpx;
-  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+  border-radius: 24rpx;
+  margin-bottom: 24rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 24rpx rgba(74, 144, 217, 0.06);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card-hover {
+  transform: translateY(2rpx);
+  box-shadow: 0 2rpx 8rpx rgba(74, 144, 217, 0.08);
+}
+
+.card-side-bar {
+  width: 8rpx;
+  background: linear-gradient(180deg, #4A90D9 0%, #6FB1FC 100%);
+  flex-shrink: 0;
+}
+
+.card-main {
+  flex: 1;
+  padding: 24rpx 28rpx 20rpx;
+  min-width: 0;
+}
+
+.card-header {
+  margin-bottom: 12rpx;
+}
+
+.card-category {
+  display: inline-block;
+  font-size: 22rpx;
+  color: #4A90D9;
+  background: linear-gradient(135deg, rgba(74,144,217,.1), rgba(111,177,252,.18));
+  padding: 4rpx 18rpx;
+  border-radius: 24rpx;
+  font-weight: 600;
 }
 
 .card-content {
   font-size: 28rpx;
-  color: #333;
+  color: #2c3e50;
   line-height: 1.7;
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -20,27 +54,29 @@
 .card-images {
   display: flex;
   flex-wrap: wrap;
-  gap: 12rpx;
-  margin-top: 20rpx;
+  gap: 10rpx;
+  margin-top: 18rpx;
   position: relative;
 }
 
 .card-img {
-  width: 210rpx;
-  height: 210rpx;
-  border-radius: 12rpx;
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: 16rpx;
+  background: #f0f2f5;
 }
 
 .card-img.single {
-  width: 400rpx;
-  height: 300rpx;
+  width: 100%;
+  max-width: 460rpx;
+  height: 320rpx;
 }
 
 .more-images {
-  width: 210rpx;
-  height: 210rpx;
-  border-radius: 12rpx;
-  background: rgba(0, 0, 0, 0.4);
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: 16rpx;
+  background: rgba(0, 0, 0, 0.5);
   color: #fff;
   display: flex;
   align-items: center;
@@ -55,18 +91,48 @@
   justify-content: space-between;
   margin-top: 20rpx;
   padding-top: 16rpx;
-  border-top: 1rpx solid #f0f0f0;
+  border-top: 1rpx dashed #eef0f3;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
 }
 
 .card-time {
-  font-size: 24rpx;
-  color: #aaa;
+  font-size: 22rpx;
+  color: #99a4b3;
 }
 
-.card-category {
-  font-size: 22rpx;
-  color: #4A90D9;
-  background: rgba(74, 144, 217, 0.1);
-  padding: 4rpx 16rpx;
-  border-radius: 20rpx;
+.card-views {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
 }
+
+.dot {
+  width: 8rpx;
+  height: 8rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff7e5f, #feb47b);
+}
+
+.views-text {
+  font-size: 22rpx;
+  color: #ff7e5f;
+  font-weight: 600;
+}
+
+/* ── 不同分类的色彩变化（基于首字符 hash） ── */
+.card.cat-a .card-side-bar { background: linear-gradient(180deg, #ff7e5f 0%, #feb47b 100%); }
+.card.cat-a .card-category { color: #e74c3c; background: linear-gradient(135deg, rgba(255,126,95,.12), rgba(254,180,123,.2)); }
+
+.card.cat-b .card-side-bar { background: linear-gradient(180deg, #43cea2 0%, #5cdb95 100%); }
+.card.cat-b .card-category { color: #1aa179; background: linear-gradient(135deg, rgba(67,206,162,.12), rgba(92,219,149,.2)); }
+
+.card.cat-c .card-side-bar { background: linear-gradient(180deg, #a18cd1 0%, #fbc2eb 100%); }
+.card.cat-c .card-category { color: #8e44ad; background: linear-gradient(135deg, rgba(161,140,209,.15), rgba(251,194,235,.25)); }
+
+.card.cat-d .card-side-bar { background: linear-gradient(180deg, #f6d365 0%, #fda085 100%); }
+.card.cat-d .card-category { color: #d68000; background: linear-gradient(135deg, rgba(246,211,101,.18), rgba(253,160,133,.2)); }

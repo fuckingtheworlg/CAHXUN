@@ -1,21 +1,55 @@
-<view class="container tab-page-pad">
-  <view class="header">
-    <text class="title">校园墙动态</text>
+<view class="page tab-page-pad">
+  <!-- 顶部装饰 hero -->
+  <view class="hero">
+    <view class="hero-blob blob-1"></view>
+    <view class="hero-blob blob-2"></view>
+    <view class="hero-blob blob-3"></view>
+
+    <view class="hero-content">
+      <view class="hero-greeting">
+        <text class="greeting-emoji-text">{{greetingTag}}</text>
+        <text class="greeting-text">{{greeting}}</text>
+      </view>
+      <text class="hero-title">校园墙动态</text>
+      <text class="hero-subtitle">看见校园里正在发生的事</text>
+
+      <view class="hero-stats">
+        <view class="stat-chip">
+          <text class="stat-num">{{totalPosts}}</text>
+          <text class="stat-label">总贴文</text>
+        </view>
+        <view class="stat-chip">
+          <text class="stat-num">{{posts.length}}</text>
+          <text class="stat-label">已加载</text>
+        </view>
+      </view>
+    </view>
   </view>
 
-  <block wx:if="{{posts.length > 0}}">
-    <post-card wx:for="{{posts}}" wx:key="id" post="{{item}}" />
-  </block>
+  <view class="content">
+    <view class="section-bar">
+      <view class="section-mark"></view>
+      <text class="section-title">最新动态</text>
+    </view>
 
-  <view class="empty-tip" wx:if="{{!loading && posts.length === 0}}">
-    暂无贴文
-  </view>
+    <block wx:if="{{posts.length > 0}}">
+      <post-card wx:for="{{posts}}" wx:key="id" post="{{item}}" />
+    </block>
 
-  <view class="loading-tip" wx:if="{{loading}}">
-    加载中...
-  </view>
+    <view class="empty-tip" wx:if="{{!loading && posts.length === 0}}">
+      暂无贴文
+    </view>
 
-  <view class="loading-tip" wx:if="{{noMore && posts.length > 0}}">
-    — 没有更多了 —
+    <view class="loading-tip" wx:if="{{loading}}">
+      <view class="loading-dot"></view>
+      <view class="loading-dot"></view>
+      <view class="loading-dot"></view>
+    </view>
+
+    <view class="end-tip" wx:if="{{noMore && posts.length > 0}}">
+      <view class="end-line"></view>
+      <text class="end-text">已经到底啦</text>
+      <view class="end-line"></view>
+    </view>
   </view>
 </view>
