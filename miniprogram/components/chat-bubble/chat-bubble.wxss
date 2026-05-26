@@ -17,42 +17,48 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.08);
 }
 
 .bubble-wrap.user .avatar {
-  background: #4A90D9;
+  background: linear-gradient(135deg, #4A90D9 0%, #357ABD 100%);
+  box-shadow: 0 4rpx 12rpx rgba(74, 144, 217, 0.35);
 }
 
 .bubble-wrap.assistant .avatar {
-  background: #67C23A;
+  background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+  box-shadow: 0 4rpx 12rpx rgba(161, 140, 209, 0.35);
 }
 
 .avatar-text {
   font-size: 24rpx;
   color: #fff;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 1rpx;
 }
 
 .bubble {
   max-width: 75%;
-  padding: 20rpx 28rpx;
-  border-radius: 20rpx;
+  padding: 22rpx 28rpx;
+  border-radius: 24rpx;
   position: relative;
   display: flex;
   align-items: flex-end;
 }
 
 .bubble-wrap.user .bubble {
-  background: #4A90D9;
+  background: linear-gradient(135deg, #4A90D9 0%, #6FB1FC 100%);
   margin-right: 16rpx;
-  border-top-right-radius: 6rpx;
+  border-top-right-radius: 8rpx;
+  box-shadow: 0 6rpx 20rpx rgba(74, 144, 217, 0.25);
 }
 
 .bubble-wrap.assistant .bubble {
   background: #fff;
   margin-left: 16rpx;
-  border-top-left-radius: 6rpx;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+  border-top-left-radius: 8rpx;
+  box-shadow: 0 4rpx 16rpx rgba(74, 144, 217, 0.08);
+  border: 1rpx solid rgba(74, 144, 217, 0.06);
 }
 
 .bubble-text {
@@ -66,13 +72,13 @@
 }
 
 .bubble-wrap.assistant .bubble-text {
-  color: #333;
+  color: #2c3e50;
 }
 
 .typing-cursor {
   width: 4rpx;
   height: 28rpx;
-  background: #67C23A;
+  background: #a18cd1;
   margin-left: 4rpx;
   animation: blink 0.8s infinite;
   flex-shrink: 0;

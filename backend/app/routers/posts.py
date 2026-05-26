@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, Query, HTTPException, Request
+from fastapi import APIRouter, Depends, Query, HTTPException, Request, Header
 from sqlalchemy import select, func, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -12,14 +12,30 @@ from app.services.view_counter import (
     get_views_for_posts,
     get_top_post_ids,
 )
+from app.services.like_counter import (
+    like_post as do_like,
+    unlike_post as do_unlike,
+    get_like_info,
+    get_likes_for_posts,
+)
+from app.services.rate_limiter import get_openid_from_token
 
 router = APIRouter(tags=["posts"])
 
 
-def _attach_views(items: list, views: dict) -> list:
+def _attach_stats(items: list, views: dict, likes: dict) -> list:
     for it in items:
         it["view_count"] = views.get(it["id"], 0)
+        it["like_count"] = likes.get(it["id"], 0)
     return items
+
+
+async def _resolve_openid(redis, authorization: str) -> str:
+    if not authorization:
+        return ""
+    token = authorization.removeprefix("Bearer ").strip()
+    openid = await get_openid_from_token(redis, token)
+    return openid or ""
 
 
 @router.get("/posts")
@@ -41,8 +57,10 @@ async def list_posts(
     items = [p.to_dict() for p in posts]
 
     redis = request.app.state.redis
-    views = await get_views_for_posts(redis, [it["id"] for it in items])
-    items = _attach_views(items, views)
+    ids = [it["id"] for it in items]
+    views = await get_views_for_posts(redis, ids)
+    likes = await get_likes_for_posts(redis, ids)
+    items = _attach_stats(items, views, likes)
 
     return {
         "total": total,
@@ -72,6 +90,7 @@ async def popular_posts(
     posts = result.scalars().all()
     by_id = {p.id: p for p in posts}
 
+    like_map = await get_likes_for_posts(redis, ids)
     items = []
     for pid in ids:
         post = by_id.get(pid)
@@ -79,6 +98,7 @@ async def popular_posts(
             continue
         d = post.to_dict()
         d["view_count"] = view_map.get(pid, 0)
+        d["like_count"] = like_map.get(pid, 0)
         items.append(d)
 
     return {"items": items}
@@ -96,9 +116,37 @@ async def search(
         raise HTTPException(status_code=400, detail="搜索关键词不能为空")
     result = await search_posts(db, q.strip(), page, page_size)
     redis = request.app.state.redis
-    views = await get_views_for_posts(redis, [it["id"] for it in result["items"]])
-    result["items"] = _attach_views(result["items"], views)
+    ids = [it["id"] for it in result["items"]]
+    views = await get_views_for_posts(redis, ids)
+    likes = await get_likes_for_posts(redis, ids)
+    result["items"] = _attach_stats(result["items"], views, likes)
     return result
+
+
+@router.get("/posts/{post_id}")
+async def get_post_detail(
+    post_id: int,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    authorization: str = Header(default=""),
+):
+    """获取单条贴文详情（含点赞数、是否已点赞、浏览量）。"""
+    post = (
+        await db.execute(select(Post).where(Post.id == post_id))
+    ).scalar_one_or_none()
+    if not post:
+        raise HTTPException(status_code=404, detail="贴文不存在")
+
+    redis = request.app.state.redis
+    openid = await _resolve_openid(redis, authorization)
+
+    data = post.to_dict()
+    like_info = await get_like_info(redis, post_id, openid)
+    views = await get_views_for_posts(redis, [post_id])
+    data["like_count"] = like_info["count"]
+    data["liked"] = like_info["liked"]
+    data["view_count"] = views.get(post_id, 0)
+    return data
 
 
 @router.post("/posts/{post_id}/view")
@@ -117,3 +165,39 @@ async def record_post_view(
 
     count = await record_view(redis, post_id)
     return {"view_count": count}
+
+
+@router.post("/posts/{post_id}/like")
+async def like_post_route(
+    post_id: int,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    authorization: str = Header(default=""),
+):
+    """点赞（需登录）。已点赞过则等同查询，幂等。"""
+    redis = request.app.state.redis
+    openid = await _resolve_openid(redis, authorization)
+    if not openid:
+        raise HTTPException(status_code=401, detail="请先登录后再点赞")
+
+    exists = (
+        await db.execute(select(Post.id).where(Post.id == post_id))
+    ).scalar_one_or_none()
+    if not exists:
+        raise HTTPException(status_code=404, detail="贴文不存在")
+
+    return await do_like(redis, post_id, openid)
+
+
+@router.delete("/posts/{post_id}/like")
+async def unlike_post_route(
+    post_id: int,
+    request: Request,
+    authorization: str = Header(default=""),
+):
+    """取消点赞（需登录）。"""
+    redis = request.app.state.redis
+    openid = await _resolve_openid(redis, authorization)
+    if not openid:
+        raise HTTPException(status_code=401, detail="请先登录")
+    return await do_unlike(redis, post_id, openid)

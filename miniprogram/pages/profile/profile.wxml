@@ -30,17 +30,24 @@
 
   <!-- 头部卡片 -->
   <view class="profile-header">
-    <view class="avatar-wrap" bindtap="onChangeAvatar">
-      <image class="avatar" src="{{avatarUrl}}" mode="aspectFill" />
-      <view class="avatar-edit">
-        <text class="edit-icon">+</text>
+    <view class="header-blob blob-1"></view>
+    <view class="header-blob blob-2"></view>
+    <view class="header-blob blob-3"></view>
+
+    <view class="header-content">
+      <view class="avatar-wrap" bindtap="onChangeAvatar">
+        <view class="avatar-ring"></view>
+        <image class="avatar" src="{{avatarUrl}}" mode="aspectFill" />
+        <view class="avatar-edit">
+          <text class="edit-icon">+</text>
+        </view>
       </view>
+      <view class="nickname-wrap" bindtap="onEditNickname">
+        <text class="nickname">{{nickname}}</text>
+        <text class="nickname-arrow">›</text>
+      </view>
+      <text class="uid">ID: {{openidShort}}</text>
     </view>
-    <view class="nickname-wrap" bindtap="onEditNickname">
-      <text class="nickname">{{nickname}}</text>
-      <text class="nickname-arrow">›</text>
-    </view>
-    <text class="uid">ID: {{openidShort}}</text>
   </view>
 
   <!-- 信息卡片 -->
@@ -81,15 +88,15 @@
   </view>
 
   <!-- 使用统计 -->
-  <view class="section-card">
-    <view class="section-title">使用统计</view>
-    <view class="stats-row">
+  <view class="stats-card">
+    <view class="stats-grid">
       <view class="stats-item">
+        <view class="stats-bg stats-bg-1"></view>
         <text class="stats-num">{{searchCount}}</text>
         <text class="stats-label">搜索次数</text>
       </view>
-      <view class="stats-divider"></view>
       <view class="stats-item">
+        <view class="stats-bg stats-bg-2"></view>
         <text class="stats-num">{{chatCount}}</text>
         <text class="stats-label">AI问答</text>
       </view>

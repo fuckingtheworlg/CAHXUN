@@ -40,11 +40,9 @@ Component({
     onCardTap() {
       const id = this.data.post && this.data.post.id;
       if (!id) return;
-      request({
-        url: `/posts/${id}/view`,
-        method: 'POST',
-        data: {},
-      }).catch(() => {});
+      wx.navigateTo({
+        url: `/pages/post-detail/post-detail?id=${id}`,
+      });
     },
 
     onPreviewImage(e) {

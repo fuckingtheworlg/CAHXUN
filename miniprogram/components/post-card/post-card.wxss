@@ -105,23 +105,42 @@
   color: #99a4b3;
 }
 
-.card-views {
+.card-stats {
   display: flex;
   align-items: center;
-  gap: 8rpx;
+  gap: 14rpx;
 }
 
-.dot {
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+}
+
+.stat-icon {
+  font-size: 22rpx;
+  color: #ff4e50;
+  line-height: 1;
+}
+
+.stat-num {
+  font-size: 22rpx;
+  font-weight: 600;
+}
+
+.stat:not(.views) .stat-num {
+  color: #ff4e50;
+}
+
+.stat.views .stat-num {
+  color: #ff7e5f;
+}
+
+.stat-dot {
   width: 8rpx;
   height: 8rpx;
   border-radius: 50%;
   background: linear-gradient(135deg, #ff7e5f, #feb47b);
-}
-
-.views-text {
-  font-size: 22rpx;
-  color: #ff7e5f;
-  font-weight: 600;
 }
 
 /* ── 不同分类的色彩变化（基于首字符 hash） ── */

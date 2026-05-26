@@ -1,4 +1,11 @@
 <view class="chat-page">
+  <!-- 顶部装饰背景 -->
+  <view class="chat-bg-deco">
+    <view class="bg-blob bg-blob-1"></view>
+    <view class="bg-blob bg-blob-2"></view>
+    <view class="bg-blob bg-blob-3"></view>
+  </view>
+
   <scroll-view
     class="chat-list"
     scroll-y
@@ -7,19 +14,34 @@
     enhanced
     show-scrollbar="{{false}}"
   >
+    <!-- 欢迎页 -->
     <view class="welcome" wx:if="{{messages.length === 0}}">
-      <view class="welcome-icon">AI</view>
-      <text class="welcome-title">校园墙 AI 助手</text>
-      <text class="welcome-desc">我可以根据校园墙上的帖子内容回答你的问题</text>
+      <view class="welcome-card">
+        <view class="welcome-icon-wrap">
+          <view class="welcome-icon-glow"></view>
+          <view class="welcome-icon">AI</view>
+        </view>
+        <text class="welcome-title">校园墙 AI 助手</text>
+        <text class="welcome-desc">基于校园墙真实贴文，给你最贴近的回答</text>
+      </view>
+
+      <view class="hints-title">
+        <view class="hints-mark"></view>
+        <text class="hints-title-text">试试这些问题</text>
+      </view>
+
       <view class="welcome-hints">
-        <view class="hint-item" bindtap="onHintTap" data-text="最近有人捡到校园卡吗？">
-          最近有人捡到校园卡吗？
+        <view class="hint-item" bindtap="onHintTap" data-text="最近有人捡到校园卡吗？" hover-class="hint-item-hover">
+          <view class="hint-tag" style="background:linear-gradient(135deg,#ff7e5f,#feb47b)">Q1</view>
+          <text class="hint-text">最近有人捡到校园卡吗？</text>
         </view>
-        <view class="hint-item" bindtap="onHintTap" data-text="食堂有什么新菜推荐？">
-          食堂有什么新菜推荐？
+        <view class="hint-item" bindtap="onHintTap" data-text="食堂有什么新菜推荐？" hover-class="hint-item-hover">
+          <view class="hint-tag" style="background:linear-gradient(135deg,#43cea2,#5cdb95)">Q2</view>
+          <text class="hint-text">食堂有什么新菜推荐？</text>
         </view>
-        <view class="hint-item" bindtap="onHintTap" data-text="最近有什么活动？">
-          最近有什么活动？
+        <view class="hint-item" bindtap="onHintTap" data-text="最近有什么活动？" hover-class="hint-item-hover">
+          <view class="hint-tag" style="background:linear-gradient(135deg,#a18cd1,#fbc2eb)">Q3</view>
+          <text class="hint-text">最近有什么活动？</text>
         </view>
       </view>
     </view>
@@ -49,7 +71,7 @@
       />
     </view>
     <view class="send-btn {{inputValue.trim() && !sending ? 'active' : ''}}" bindtap="onSend">
-      <text class="send-text">{{sending ? '...' : '发送'}}</text>
+      <text class="send-text">{{sending ? '…' : '发送'}}</text>
     </view>
   </view>
 </view>

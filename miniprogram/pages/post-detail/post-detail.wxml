@@ -1,0 +1,103 @@
+<view class="page">
+  <!-- 顶部装饰 -->
+  <view class="top-deco">
+    <view class="deco-blob deco-1"></view>
+    <view class="deco-blob deco-2"></view>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="page-loading" wx:if="{{loading}}">
+    <view class="loading-dot"></view>
+    <view class="loading-dot"></view>
+    <view class="loading-dot"></view>
+  </view>
+
+  <block wx:if="{{!loading && post}}">
+    <!-- 主卡片 -->
+    <view class="main-card">
+      <view class="post-header">
+        <view class="header-meta">
+          <text class="post-category" wx:if="{{post.category}}">#{{post.category}}</text>
+          <text class="post-time">{{post.created_at}}</text>
+        </view>
+        <view class="post-stats">
+          <view class="stat-pill">
+            <view class="stat-dot view-dot"></view>
+            <text class="stat-text">{{post.view_count}} 阅读</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="post-body">
+        <text class="post-content" user-select>{{post.content}}</text>
+      </view>
+
+      <view class="post-images" wx:if="{{post.images && post.images.length > 0}}">
+        <image
+          wx:for="{{post.images}}"
+          wx:key="*this"
+          class="detail-img"
+          src="{{item}}"
+          mode="aspectFill"
+          lazy-load
+          bindtap="onPreviewImage"
+          data-url="{{item}}"
+        />
+      </view>
+    </view>
+
+    <!-- 评论区（静态占位） -->
+    <view class="comments-card">
+      <view class="comments-header">
+        <view class="comments-title-wrap">
+          <view class="title-mark"></view>
+          <text class="comments-title">评论</text>
+          <text class="comments-count">{{comments.length}}</text>
+        </view>
+        <text class="comments-tip">UGC 待报备开放</text>
+      </view>
+
+      <view class="comments-list">
+        <view class="comment-item" wx:for="{{comments}}" wx:key="id">
+          <image class="comment-avatar" src="{{item.avatar}}" mode="aspectFill" />
+          <view class="comment-body">
+            <view class="comment-top">
+              <text class="comment-nickname">{{item.nickname}}</text>
+              <text class="comment-time">{{item.time}}</text>
+            </view>
+            <text class="comment-content">{{item.content}}</text>
+            <view class="comment-actions">
+              <text class="comment-like-text">♡ {{item.likes}}</text>
+              <text class="comment-reply-text">回复</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="comments-end">
+        <text class="comments-end-text">— 暂无更多评论 —</text>
+      </view>
+    </view>
+
+    <!-- 底部留白 -->
+    <view style="height: 180rpx;"></view>
+
+    <!-- 底部操作栏 -->
+    <view class="bottom-bar">
+      <view class="comment-input-wrap" bindtap="onCommentInputFocus">
+        <text class="comment-placeholder">说点什么...</text>
+      </view>
+      <view class="like-btn {{post.liked ? 'liked' : ''}}" bindtap="onLikeTap">
+        <view class="heart {{post.liked ? 'heart-on' : 'heart-off'}}">
+          <text class="heart-icon">{{post.liked ? '♥' : '♡'}}</text>
+        </view>
+        <text class="like-count">{{post.like_count || 0}}</text>
+      </view>
+    </view>
+
+    <!-- 评论提示 toast -->
+    <view class="comment-tip-toast {{showCommentTip ? 'show' : ''}}">
+      评论功能开发中，请期待～
+    </view>
+  </block>
+</view>

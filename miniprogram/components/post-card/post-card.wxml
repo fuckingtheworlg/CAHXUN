@@ -31,9 +31,15 @@
       <view class="card-meta">
         <text class="card-time">{{post.created_at}}</text>
       </view>
-      <view class="card-views" wx:if="{{post.view_count > 0}}">
-        <view class="dot"></view>
-        <text class="views-text">{{post.view_count}} 阅读</text>
+      <view class="card-stats">
+        <view class="stat" wx:if="{{post.like_count > 0}}">
+          <text class="stat-icon">♥</text>
+          <text class="stat-num">{{post.like_count}}</text>
+        </view>
+        <view class="stat views" wx:if="{{post.view_count > 0}}">
+          <view class="stat-dot"></view>
+          <text class="stat-num">{{post.view_count}}</text>
+        </view>
       </view>
     </view>
   </view>
