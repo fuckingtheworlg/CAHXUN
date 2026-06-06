@@ -25,6 +25,7 @@ Page(withTheme({
     showThemePicker: false,
     themeList: getThemes(),
     currentThemeName: getThemeInfo().name,
+    gradePickerOptions: gradeOptions.slice(1),
   },
 
   onOpenThemePicker() {
@@ -177,13 +178,13 @@ Page(withTheme({
     });
   },
 
-  onEditGrade() {
-    wx.showActionSheet({
-      itemList: gradeOptions.slice(1),
-      success: (res) => {
-        this.saveProfile({ grade: gradeOptions[res.tapIndex + 1] });
-      },
-    });
+  onGradeChange(e) {
+    const idx = parseInt(e.detail.value, 10);
+    const list = gradeOptions.slice(1);
+    if (idx >= 0 && idx < list.length) {
+      this.saveProfile({ grade: list[idx] });
+      wx.showToast({ title: '已更新', icon: 'success' });
+    }
   },
 
   calcCache() {
