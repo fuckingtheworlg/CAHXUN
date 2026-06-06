@@ -230,16 +230,17 @@
   width: 132rpx;
   height: 80rpx;
   border-radius: 40rpx;
-  background: #dadfe6;
+  background: linear-gradient(135deg, var(--c-primary) 0%, var(--c-primary-2) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  opacity: 0.45;
   transition: all 0.2s;
 }
 
 .send-btn.active {
-  background: linear-gradient(135deg, var(--c-primary) 0%, var(--c-primary-2) 100%);
+  opacity: 1;
   box-shadow: var(--shadow-primary);
 }
 

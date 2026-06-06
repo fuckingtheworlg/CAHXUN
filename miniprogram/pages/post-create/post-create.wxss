@@ -271,12 +271,13 @@
 }
 
 .submit-btn {
-  background: #d0d6df;
+  background: linear-gradient(135deg, var(--c-primary), var(--c-primary-2));
   color: #fff;
+  opacity: 0.45;
 }
 
 .submit-btn-active {
-  background: linear-gradient(135deg, var(--c-primary), var(--c-primary-2));
+  opacity: 1;
   box-shadow: var(--shadow-primary);
 }
 
