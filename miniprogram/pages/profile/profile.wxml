@@ -113,12 +113,13 @@
       </view>
     </view>
 
-    <button class="info-row info-row-btn" open-type="share" hover-class="info-row-hover">
+    <view class="info-row info-row-share">
       <text class="info-label">分享给朋友</text>
       <view class="info-right">
         <text class="info-arrow">›</text>
       </view>
-    </button>
+      <button class="share-overlay" open-type="share" hover-class="share-overlay-hover"></button>
+    </view>
 
     <view class="info-row" bindtap="onClearCache">
       <text class="info-label">清除缓存</text>

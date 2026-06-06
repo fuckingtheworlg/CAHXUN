@@ -11,6 +11,30 @@ Page(withTheme({
     totalPosts: 0,
     greeting: '欢迎回来，校园动态尽在掌握',
     greetingTag: 'Hi',
+    fabHidden: false,
+  },
+
+  onCreatePost() {
+    wx.navigateTo({ url: '/pages/post-create/post-create' });
+  },
+
+  onShow() {
+    const app = getApp();
+    if (app && app.globalData && app.globalData.needRefreshIndex) {
+      app.globalData.needRefreshIndex = false;
+      this.setData({ page: 1, noMore: false, posts: [] });
+      this.loadPosts();
+    }
+  },
+
+  onPageScroll() {
+    if (!this.data.fabHidden) {
+      this.setData({ fabHidden: true });
+    }
+    if (this._fabTimer) clearTimeout(this._fabTimer);
+    this._fabTimer = setTimeout(() => {
+      this.setData({ fabHidden: false });
+    }, 600);
   },
 
   onLoad() {

@@ -52,4 +52,10 @@
       <view class="end-line"></view>
     </view>
   </view>
+
+  <!-- 悬浮发帖按钮 -->
+  <view class="fab {{fabHidden ? 'fab-hidden' : ''}}" bindtap="onCreatePost">
+    <view class="fab-plus">+</view>
+    <text class="fab-text">发帖</text>
+  </view>
 </view>

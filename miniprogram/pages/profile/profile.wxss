@@ -318,25 +318,31 @@
   position: relative;
 }
 
-.info-row-btn {
-  width: 100%;
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  text-align: left;
-  font-size: 28rpx;
-  font-weight: normal;
-  line-height: normal;
-  margin: 0;
-  color: inherit;
+.info-row-share {
+  position: relative;
 }
 
-.info-row-btn::after {
-  border: none;
+.share-overlay {
+  position: absolute !important;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  line-height: normal !important;
+  z-index: 2;
 }
 
-.info-row-hover {
-  background: #f9f9f9;
+.share-overlay::after {
+  border: none !important;
+}
+
+.share-overlay-hover {
+  background: #f9f9f9 !important;
+  opacity: 0.5;
 }
 
 .info-row::after {

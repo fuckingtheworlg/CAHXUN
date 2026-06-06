@@ -1,0 +1,62 @@
+<view class="page theme-{{theme}}">
+  <view class="top-deco">
+    <view class="deco-blob deco-1"></view>
+    <view class="deco-blob deco-2"></view>
+  </view>
+
+  <view class="form-card">
+    <view class="form-section">
+      <textarea
+        class="content-input"
+        placeholder="分享点什么吧～可以是失物招领、活动通报、生活吐槽，或者任何你想说的"
+        placeholder-class="content-placeholder"
+        value="{{content}}"
+        bindinput="onInput"
+        maxlength="{{maxLen}}"
+        auto-height
+        show-confirm-bar="{{false}}"
+        cursor-spacing="20"
+      />
+      <view class="length-counter">
+        <text class="{{length > maxLen * 0.9 ? 'warn' : ''}}">{{length}}/{{maxLen}}</text>
+      </view>
+    </view>
+
+    <view class="form-divider"></view>
+
+    <view class="form-section">
+      <view class="form-label">
+        <view class="label-mark"></view>
+        <text class="label-text">选择分类</text>
+        <text class="label-tip">（可选）</text>
+      </view>
+      <view class="cat-list">
+        <view
+          wx:for="{{categories}}"
+          wx:key="*this"
+          class="cat-chip {{category === item ? 'cat-chip-active' : ''}}"
+          data-cat="{{item}}"
+          bindtap="onSelectCategory"
+        >
+          {{item}}
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="hint-card">
+    <text class="hint-icon">i</text>
+    <text class="hint-text">发布的内容将自动经过内容安全检测，请遵守社区规范，不发布违规、虚假信息。</text>
+  </view>
+
+  <!-- 底部固定操作栏 -->
+  <view class="action-bar">
+    <view class="cancel-btn" bindtap="onCancel">取消</view>
+    <view
+      class="submit-btn {{content.length >= 2 && !submitting ? 'submit-btn-active' : ''}}"
+      bindtap="onSubmit"
+    >
+      {{submitting ? '发布中...' : '发布'}}
+    </view>
+  </view>
+</view>

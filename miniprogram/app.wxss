@@ -37,34 +37,34 @@ page {
   --c-tabbar-selected-text: #6b38d4;
 }
 
-/* ========== Ethos Premium（极简学术）========== */
+/* ========== Ethos Premium（极简学术 — 清新薄荷绿版）========== */
 .theme-ethos {
-  --c-primary: #0d2c24;
-  --c-primary-2: #2f4c43;
-  --c-accent: #3a675a;
-  --c-warn: #a89f91;
-  --c-bg-base: #f8f9fa;
-  --c-bg-page: #f8f9fa;
-  --c-hero: linear-gradient(135deg, #0d2c24 0%, #2f4c43 60%, #3a675a 100%);
-  --c-hero-blob-1: radial-gradient(circle, #bceddd 0%, transparent 70%);
-  --c-hero-blob-2: radial-gradient(circle, #a89f91 0%, transparent 70%);
-  --c-hero-blob-3: radial-gradient(circle, #c8ead 0%, transparent 70%);
+  --c-primary: #3a9b85;
+  --c-primary-2: #5cb89e;
+  --c-accent: #a8e6cf;
+  --c-warn: #e8a87c;
+  --c-bg-base: #f6faf9;
+  --c-bg-page: linear-gradient(180deg, #f6faf9 0%, #eef7f3 320rpx);
+  --c-hero: linear-gradient(135deg, #5cb89e 0%, #7dc8b0 50%, #a8e6cf 100%);
+  --c-hero-blob-1: radial-gradient(circle, #c8eddf 0%, transparent 70%);
+  --c-hero-blob-2: radial-gradient(circle, #b3e0d2 0%, transparent 70%);
+  --c-hero-blob-3: radial-gradient(circle, #e8a87c 0%, transparent 70%);
   --c-card: #ffffff;
-  --c-card-soft: #f1f3f5;
-  --c-text: #191c1d;
-  --c-text-dim: #6b7374;
-  --c-divider: #e9ecef;
-  --shadow-card: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
-  --shadow-hero: 0 8rpx 20rpx rgba(13, 44, 36, 0.15);
-  --shadow-primary: 0 4rpx 12rpx rgba(13, 44, 36, 0.2);
-  --shadow-warn: 0 4rpx 12rpx rgba(168, 159, 145, 0.3);
-  --r-card: 12rpx;
-  --r-card-sm: 8rpx;
-  --r-btn: 12rpx;
+  --c-card-soft: rgba(58, 155, 133, 0.08);
+  --c-text: #2a3a36;
+  --c-text-dim: #7d8a86;
+  --c-divider: #e3ece9;
+  --shadow-card: 0 4rpx 16rpx rgba(58, 155, 133, 0.08);
+  --shadow-hero: 0 10rpx 28rpx rgba(58, 155, 133, 0.18);
+  --shadow-primary: 0 6rpx 18rpx rgba(58, 155, 133, 0.3);
+  --shadow-warn: 0 4rpx 12rpx rgba(232, 168, 124, 0.32);
+  --r-card: 16rpx;
+  --r-card-sm: 10rpx;
+  --r-btn: 14rpx;
   --r-pill: 9999rpx;
-  --c-tabbar-active-bg: rgba(13, 44, 36, 0.08);
-  --c-tabbar-active-shadow: 0 4rpx 12rpx rgba(13, 44, 36, 0.18);
-  --c-tabbar-selected-text: #0d2c24;
+  --c-tabbar-active-bg: rgba(58, 155, 133, 0.14);
+  --c-tabbar-active-shadow: 0 6rpx 16rpx rgba(58, 155, 133, 0.32), 0 2rpx 6rpx rgba(58, 155, 133, 0.18), inset 0 2rpx 6rpx rgba(255, 255, 255, 0.75);
+  --c-tabbar-selected-text: #3a9b85;
 }
 
 /* ========== Azure Vitality（海蓝活力）========== */

@@ -206,3 +206,46 @@
   font-size: 22rpx;
   color: #bbb;
 }
+
+/* ─── FAB 悬浮发帖按钮 ─── */
+.fab {
+  position: fixed;
+  right: 36rpx;
+  bottom: calc(var(--tab-bar-area) + 36rpx);
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  height: 96rpx;
+  padding: 0 32rpx 0 24rpx;
+  border-radius: 48rpx;
+  background: linear-gradient(135deg, var(--c-primary), var(--c-primary-2));
+  color: #fff;
+  box-shadow: var(--shadow-primary);
+  z-index: 100;
+  transition: transform 0.28s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 0.24s ease;
+}
+
+.fab:active {
+  transform: scale(0.94);
+}
+
+.fab-plus {
+  font-size: 44rpx;
+  font-weight: 600;
+  line-height: 1;
+  color: #fff;
+  margin-bottom: 4rpx;
+}
+
+.fab-text {
+  font-size: 26rpx;
+  font-weight: 700;
+  letter-spacing: 1rpx;
+  color: #fff;
+}
+
+.fab-hidden {
+  transform: translateX(180rpx) scale(0.9);
+  opacity: 0;
+  pointer-events: none;
+}

@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+from datetime import datetime
+
 from fastapi import APIRouter, Depends, Query, HTTPException, Request, Header
+from pydantic import BaseModel
 from sqlalchemy import select, func, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -18,7 +21,8 @@ from app.services.like_counter import (
     get_like_info,
     get_likes_for_posts,
 )
-from app.services.rate_limiter import get_openid_from_token
+from app.services.rate_limiter import get_openid_from_token, check_rate_limit
+from app.services.security import msg_sec_check
 
 router = APIRouter(tags=["posts"])
 
@@ -36,6 +40,12 @@ async def _resolve_openid(redis, authorization: str) -> str:
     token = authorization.removeprefix("Bearer ").strip()
     openid = await get_openid_from_token(redis, token)
     return openid or ""
+
+
+class PostCreateRequest(BaseModel):
+    content: str
+    category: str = ""
+    images: str = ""
 
 
 @router.get("/posts")
@@ -165,6 +175,52 @@ async def record_post_view(
 
     count = await record_view(redis, post_id)
     return {"view_count": count}
+
+
+@router.post("/posts")
+async def create_post(
+    body: PostCreateRequest,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    authorization: str = Header(default=""),
+):
+    """用户发帖（需登录、内容安全检测、限流）。"""
+    redis = request.app.state.redis
+    openid = await _resolve_openid(redis, authorization)
+    if not openid:
+        raise HTTPException(status_code=401, detail="请先登录")
+
+    content = (body.content or "").strip()
+    if len(content) < 2:
+        raise HTTPException(status_code=400, detail="内容太短啦，至少 2 个字")
+    if len(content) > 500:
+        raise HTTPException(status_code=400, detail="内容太长了，请控制在 500 字以内")
+
+    if not await check_rate_limit(redis, f"post:{openid}"):
+        raise HTTPException(status_code=429, detail="发帖太频繁，请稍后再试")
+
+    if not await msg_sec_check(redis, openid, content):
+        raise HTTPException(status_code=400, detail="内容包含违规信息，请修改后重试")
+
+    category = (body.category or "").strip()
+    if category and not await msg_sec_check(redis, openid, category):
+        raise HTTPException(status_code=400, detail="分类含违规内容")
+
+    post = Post(
+        content=content,
+        images=(body.images or "").strip() or None,
+        category=category or None,
+        created_at=datetime.now(),
+    )
+    db.add(post)
+    try:
+        await db.commit()
+        await db.refresh(post)
+    except Exception as e:
+        await db.rollback()
+        raise HTTPException(status_code=500, detail=f"发帖失败: {e}")
+
+    return post.to_dict()
 
 
 @router.post("/posts/{post_id}/like")

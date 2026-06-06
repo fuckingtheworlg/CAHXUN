@@ -41,6 +41,7 @@ Page(withTheme({
     this.setData({
       theme: key,
       currentThemeName: getThemeInfo(key).name,
+      themeList: getThemes(),
     });
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ theme: key });

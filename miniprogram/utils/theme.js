@@ -20,12 +20,12 @@ const THEMES = [
   },
   {
     key: 'ethos',
-    name: '极简学术',
-    sub: 'Ethos Premium',
-    desc: '深炭灰 + 翡翠绿、克制简洁',
-    primary: '#0d2c24',
-    accent: '#3a675a',
-    gradient: ['#0d2c24', '#2f4c43', '#3a675a'],
+    name: '清新薄荷',
+    sub: 'Ethos Mint',
+    desc: '柔和薄荷绿，清爽自然',
+    primary: '#3a9b85',
+    accent: '#a8e6cf',
+    gradient: ['#5cb89e', '#7dc8b0', '#a8e6cf'],
   },
   {
     key: 'azure',

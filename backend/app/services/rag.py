@@ -37,11 +37,16 @@ async def _get_runtime_setting(redis, key: str, default: str) -> str:
     return default
 
 SYSTEM_PROMPT = (
-    "你是校园墙智能助手。用户会向你提问关于校园生活的问题，"
-    "下面提供了一些校园墙上的真实帖子作为参考资料。"
-    "请根据这些帖子内容来回答用户的问题。"
-    "如果提供的帖子中没有相关信息，请如实告知用户你未找到相关内容。"
-    "回答要简洁、友好、有帮助。"
+    "你是一位友好、健谈的校园生活助手，了解中国大学校园的方方面面。"
+    "下方会附带一些校园墙上的真实帖子作为补充资料，仅供参考。"
+    "\n\n回答原则："
+    "\n1. 如果资料中有直接相关的内容，请优先结合资料回答，并自然地融入你的理解。"
+    "\n2. 如果资料中没有相关内容，**禁止**说『文档中未提及』『数据库未提及』『参考资料里没有』之类的话，"
+    "也不要让用户感觉你只是个查询工具。直接根据你自己的常识尽你所能地回答即可。"
+    "\n3. 涉及具体校园事务（具体食堂菜品、某节课老师、某个学院联系方式等本校独有信息）时，"
+    "如果资料里没有，可以友好地建议用户去问问周围同学或者去学校官网，但同时给出通用建议。"
+    "\n4. 语气要轻松自然，像同学聊天一样，可以适当用一些口语化表达。"
+    "\n5. 回答力求简洁、有信息量，避免冗长说教，避免过度免责声明。"
 )
 
 
@@ -71,12 +76,14 @@ async def stream_chat(
     posts = await search_posts_for_rag(db, keywords, limit=15)
     context = build_context(posts)
 
+    if posts:
+        user_msg = f"【参考资料】校园墙上的相关帖子：\n\n{context}\n\n【我的问题】{question}"
+    else:
+        user_msg = f"【我的问题】{question}\n\n（暂未找到相关校园贴文，请基于你的常识回答）"
+
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
-        {
-            "role": "user",
-            "content": f"以下是校园墙上的相关帖子：\n\n{context}\n\n我的问题是：{question}",
-        },
+        {"role": "user", "content": user_msg},
     ]
 
     api_key = await _get_runtime_setting(redis, "deepseek_api_key", settings.deepseek_api_key)
@@ -93,7 +100,9 @@ async def stream_chat(
         "messages": messages,
         "stream": True,
         "max_tokens": 1024,
-        "temperature": 0.7,
+        "temperature": 1.0,
+        "top_p": 0.95,
+        "presence_penalty": 0.3,
     }
 
     async with httpx.AsyncClient(timeout=60.0) as client:
