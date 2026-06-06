@@ -130,6 +130,43 @@
   margin-top: 4rpx;
 }
 
+/* ─── 分类筛选栏 ─── */
+.cat-bar {
+  white-space: nowrap;
+  padding: 4rpx 24rpx 8rpx;
+  margin-bottom: 8rpx;
+}
+
+.cat-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6rpx;
+  padding: 12rpx 28rpx;
+  margin-right: 16rpx;
+  font-size: 26rpx;
+  color: var(--c-text-dim);
+  background: var(--c-card);
+  border-radius: var(--r-pill);
+  box-shadow: var(--shadow-card);
+  transition: all 0.18s;
+}
+
+.cat-tab-active {
+  color: #fff;
+  background: linear-gradient(135deg, var(--c-primary), var(--c-primary-2));
+  box-shadow: var(--shadow-primary);
+  font-weight: 600;
+}
+
+.cat-count {
+  font-size: 20rpx;
+  opacity: 0.7;
+}
+
+.cat-tab-active .cat-count {
+  opacity: 0.85;
+}
+
 /* ─── Content ─── */
 .content {
   padding: 0 24rpx 20rpx;

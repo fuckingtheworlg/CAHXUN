@@ -26,10 +26,26 @@
     </view>
   </view>
 
+  <!-- 分类筛选栏 -->
+  <scroll-view class="cat-bar" scroll-x show-scrollbar="{{false}}" enhanced>
+    <view
+      class="cat-tab {{activeCategory === '' ? 'cat-tab-active' : ''}}"
+      data-cat=""
+      bindtap="onSelectCategory"
+    >全部</view>
+    <view
+      wx:for="{{categories}}"
+      wx:key="name"
+      class="cat-tab {{activeCategory === item.name ? 'cat-tab-active' : ''}}"
+      data-cat="{{item.name}}"
+      bindtap="onSelectCategory"
+    >{{item.name}}<text class="cat-count">{{item.count}}</text></view>
+  </scroll-view>
+
   <view class="content">
     <view class="section-bar">
       <view class="section-mark"></view>
-      <text class="section-title">最新动态</text>
+      <text class="section-title">{{activeCategory || '最新动态'}}</text>
     </view>
 
     <block wx:if="{{posts.length > 0}}">
@@ -37,7 +53,7 @@
     </block>
 
     <view class="empty-tip" wx:if="{{!loading && posts.length === 0}}">
-      暂无贴文
+      {{activeCategory ? '该分类下暂无贴文' : '暂无贴文'}}
     </view>
 
     <view class="loading-tip" wx:if="{{loading}}">

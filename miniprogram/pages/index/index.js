@@ -12,6 +12,29 @@ Page(withTheme({
     greeting: '欢迎回来，校园动态尽在掌握',
     greetingTag: 'Hi',
     fabHidden: false,
+    categories: [],
+    activeCategory: '',
+  },
+
+  loadCategories() {
+    request({ url: '/posts/categories' })
+      .then((res) => {
+        this.setData({ categories: res.items || [] });
+      })
+      .catch(() => {});
+  },
+
+  onSelectCategory(e) {
+    const cat = e.currentTarget.dataset.cat || '';
+    if (cat === this.data.activeCategory) return;
+    this.setData({
+      activeCategory: cat,
+      posts: [],
+      page: 1,
+      noMore: false,
+    });
+    wx.pageScrollTo({ scrollTop: 0, duration: 200 });
+    this.loadPosts();
   },
 
   onCreatePost() {
@@ -30,6 +53,7 @@ Page(withTheme({
 
   onLoad() {
     this.updateGreeting();
+    this.loadCategories();
     this.loadPosts();
   },
 
@@ -52,7 +76,8 @@ Page(withTheme({
     const app = getApp();
     if (app && app.globalData && app.globalData.needRefreshIndex) {
       app.globalData.needRefreshIndex = false;
-      this.setData({ page: 1, noMore: false, posts: [] });
+      this.setData({ page: 1, noMore: false, posts: [], activeCategory: '' });
+      this.loadCategories();
       this.loadPosts();
     }
   },
@@ -93,6 +118,7 @@ Page(withTheme({
       data: {
         page: this.data.page,
         page_size: this.data.pageSize,
+        category: this.data.activeCategory || '',
       },
     })
       .then((res) => {

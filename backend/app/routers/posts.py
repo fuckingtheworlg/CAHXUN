@@ -53,15 +53,22 @@ async def list_posts(
     request: Request,
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=50),
+    category: str = Query(default=""),
     db: AsyncSession = Depends(get_db),
 ):
     offset = (page - 1) * page_size
 
-    count_result = await db.execute(select(func.count()).select_from(Post))
-    total = count_result.scalar()
+    count_stmt = select(func.count()).select_from(Post)
+    list_stmt = select(Post)
+    if category.strip():
+        cond = Post.category == category.strip()
+        count_stmt = count_stmt.where(cond)
+        list_stmt = list_stmt.where(cond)
+
+    total = (await db.execute(count_stmt)).scalar()
 
     result = await db.execute(
-        select(Post).order_by(desc(Post.created_at)).offset(offset).limit(page_size)
+        list_stmt.order_by(desc(Post.created_at)).offset(offset).limit(page_size)
     )
     posts = result.scalars().all()
     items = [p.to_dict() for p in posts]
@@ -77,6 +84,23 @@ async def list_posts(
         "page": page,
         "page_size": page_size,
         "items": items,
+    }
+
+
+@router.get("/posts/categories")
+async def list_categories(db: AsyncSession = Depends(get_db)):
+    """返回所有出现过的分类及其贴文数量（按数量降序）。"""
+    rows = (
+        await db.execute(
+            select(Post.category, func.count().label("cnt"))
+            .where(Post.category.isnot(None))
+            .where(Post.category != "")
+            .group_by(Post.category)
+            .order_by(desc("cnt"))
+        )
+    ).all()
+    return {
+        "items": [{"name": r[0], "count": r[1]} for r in rows if r[0]],
     }
 
 
