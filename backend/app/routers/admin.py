@@ -62,6 +62,7 @@ class SettingsUpdateRequest(BaseModel):
     deepseek_base_url: Optional[str] = None
     deepseek_api_key: Optional[str] = None
     system_prompt: Optional[str] = None
+    max_context_turns: Optional[int] = None
 
 
 class TestApiKeyRequest(BaseModel):
@@ -568,6 +569,7 @@ async def admin_get_settings(request: Request):
         "deepseek_base_url",
         "deepseek_api_key",
         "system_prompt",
+        "max_context_turns",
     ]:
         val = await redis.get(f"{_SETTINGS_PREFIX}{key}")
         if val is not None:
@@ -580,6 +582,7 @@ async def admin_get_settings(request: Request):
 
     return {
         "rate_limit_per_minute": int(overrides.get("rate_limit_per_minute", settings.rate_limit_per_minute)),
+        "max_context_turns": int(overrides.get("max_context_turns", 5)),
         "deepseek_model": overrides.get("deepseek_model", settings.deepseek_model),
         "deepseek_base_url": overrides.get("deepseek_base_url", settings.deepseek_base_url),
         "deepseek_api_key_mask": _mask_api_key(effective_api_key),
@@ -611,6 +614,9 @@ async def admin_update_settings(body: SettingsUpdateRequest, request: Request):
                 raise HTTPException(status_code=400, detail="系统提示词过短，至少 5 个字符")
             if len(value) > 4000:
                 raise HTTPException(status_code=400, detail="系统提示词过长，请控制在 4000 字符以内")
+        elif field == "max_context_turns":
+            if value < 0 or value > 20:
+                raise HTTPException(status_code=400, detail="上下文轮数范围 0~20（0 表示关闭记忆）")
         await redis.set(f"{_SETTINGS_PREFIX}{field}", str(value))
         updated[field] = "***" if field == "deepseek_api_key" else (
             (value[:50] + "...") if field == "system_prompt" and len(str(value)) > 50 else value

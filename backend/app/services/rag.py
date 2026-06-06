@@ -70,10 +70,27 @@ def build_context(posts: list[dict]) -> str:
     return "\n\n".join(parts)
 
 
+def _sanitize_history(history, max_turns: int) -> list:
+    """清洗前端传来的历史消息，只保留最近 max_turns 轮（user+assistant 算一轮）。"""
+    if not history or max_turns <= 0:
+        return []
+    cleaned = []
+    for m in history:
+        if not isinstance(m, dict):
+            continue
+        role = m.get("role")
+        content = (m.get("content") or "").strip()
+        if role in ("user", "assistant") and content:
+            cleaned.append({"role": role, "content": content[:1000]})
+    # 保留最近 max_turns*2 条消息
+    return cleaned[-(max_turns * 2):]
+
+
 async def stream_chat(
     db: AsyncSession,
     question: str,
     redis=None,
+    history=None,
 ) -> AsyncGenerator[str, None]:
     keywords = extract_keywords(question)
     posts = await search_posts_for_rag(db, keywords, limit=15)
@@ -85,11 +102,15 @@ async def stream_chat(
         user_msg = f"【我的问题】{question}\n\n（暂未找到相关校园贴文，请基于你的常识回答）"
 
     system_prompt = await _get_runtime_setting(redis, "system_prompt", DEFAULT_SYSTEM_PROMPT)
+    max_turns_str = await _get_runtime_setting(redis, "max_context_turns", "5")
+    try:
+        max_turns = int(max_turns_str)
+    except (ValueError, TypeError):
+        max_turns = 5
 
-    messages = [
-        {"role": "system", "content": system_prompt},
-        {"role": "user", "content": user_msg},
-    ]
+    messages = [{"role": "system", "content": system_prompt}]
+    messages.extend(_sanitize_history(history, max_turns))
+    messages.append({"role": "user", "content": user_msg})
 
     api_key = await _get_runtime_setting(redis, "deepseek_api_key", settings.deepseek_api_key)
     base_url = await _get_runtime_setting(redis, "deepseek_base_url", settings.deepseek_base_url)

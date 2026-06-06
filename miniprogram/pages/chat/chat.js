@@ -67,9 +67,31 @@ Page(withTheme({
       });
   },
 
+  onNewChat() {
+    if (this.data.sending) {
+      wx.showToast({ title: '回答中，请稍候', icon: 'none' });
+      return;
+    }
+    if (this.data.messages.length === 0) return;
+    wx.showModal({
+      title: '开启新对话',
+      content: '将清空当前对话记录，确定吗？',
+      success: (res) => {
+        if (res.confirm) {
+          this.setData({ messages: [], inputValue: '' });
+        }
+      },
+    });
+  },
+
   _doSend(question) {
     const count = (wx.getStorageSync('stat_chat') || 0) + 1;
     wx.setStorageSync('stat_chat', count);
+
+    // 取已完成的历史消息（不含本轮、不含正在输入的占位）
+    const history = this.data.messages
+      .filter((m) => m.content && !m.typing)
+      .map((m) => ({ role: m.role, content: m.content }));
 
     const userMsg = { id: nextId(), role: 'user', content: question, typing: false };
     const aiMsg = { id: nextId(), role: 'assistant', content: '', typing: true };
@@ -84,7 +106,7 @@ Page(withTheme({
     });
 
     streamRequest(
-      { url: '/chat', data: { question } },
+      { url: '/chat', data: { question, history } },
       (chunk) => {
         const key = `messages[${aiIndex}].content`;
         this.setData({

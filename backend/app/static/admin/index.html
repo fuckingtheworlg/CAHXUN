@@ -1614,6 +1614,7 @@ async function renderSettings() {
 
     const editableKeys = [
       { key: 'rate_limit_per_minute', label: '限流策略（次/分钟）', type: 'number' },
+      { key: 'max_context_turns', label: 'AI 上下文记忆轮数（0=关闭）', type: 'number' },
       { key: 'deepseek_model', label: '大模型', type: 'text' },
       { key: 'deepseek_base_url', label: '大模型 API 地址', type: 'text' },
     ];

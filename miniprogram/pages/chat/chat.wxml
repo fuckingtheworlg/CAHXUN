@@ -57,6 +57,13 @@
     <view id="scroll-bottom" style="height: 20rpx;"></view>
   </scroll-view>
 
+  <view class="new-chat-bar" wx:if="{{messages.length > 0}}">
+    <view class="new-chat-btn" bindtap="onNewChat">
+      <text class="new-chat-icon">+</text>
+      <text>新对话</text>
+    </view>
+  </view>
+
   <view class="input-bar">
     <view class="input-wrap">
       <input

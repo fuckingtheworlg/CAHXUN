@@ -20,8 +20,14 @@ from app.services.chat_logger import log_chat
 router = APIRouter(tags=["chat"])
 
 
+class ChatMessage(BaseModel):
+    role: str
+    content: str
+
+
 class ChatRequest(BaseModel):
     question: str
+    history: list = []
 
 
 @router.post("/chat")
@@ -54,8 +60,10 @@ async def chat(
 
     await log_chat(redis, openid, question)
 
+    history = body.history or []
+
     async def event_generator():
-        async for chunk in stream_chat(db, question, redis=redis):
+        async for chunk in stream_chat(db, question, redis=redis, history=history):
             yield {"data": json.dumps({"content": chunk}, ensure_ascii=False)}
         yield {"data": "[DONE]"}
 
