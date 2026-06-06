@@ -27,6 +27,40 @@
     <view class="form-section">
       <view class="form-label">
         <view class="label-mark"></view>
+        <text class="label-text">添加图片</text>
+        <text class="label-tip">（可选，最多 {{maxImages}} 张）</text>
+      </view>
+      <view class="img-grid">
+        <view
+          wx:for="{{images}}"
+          wx:key="path"
+          class="img-cell"
+        >
+          <image
+            class="img-thumb"
+            src="{{item.path}}"
+            mode="aspectFill"
+            data-index="{{index}}"
+            bindtap="onPreviewImage"
+          />
+          <view class="img-remove" data-index="{{index}}" catchtap="onRemoveImage">×</view>
+        </view>
+        <view
+          wx:if="{{images.length < maxImages}}"
+          class="img-add"
+          bindtap="onChooseImage"
+        >
+          <view class="img-add-plus">+</view>
+          <text class="img-add-text">添加</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="form-divider"></view>
+
+    <view class="form-section">
+      <view class="form-label">
+        <view class="label-mark"></view>
         <text class="label-text">选择分类</text>
         <text class="label-tip">（可选）</text>
       </view>

@@ -18,15 +18,6 @@ Page(withTheme({
     wx.navigateTo({ url: '/pages/post-create/post-create' });
   },
 
-  onShow() {
-    const app = getApp();
-    if (app && app.globalData && app.globalData.needRefreshIndex) {
-      app.globalData.needRefreshIndex = false;
-      this.setData({ page: 1, noMore: false, posts: [] });
-      this.loadPosts();
-    }
-  },
-
   onPageScroll() {
     if (!this.data.fabHidden) {
       this.setData({ fabHidden: true });
@@ -57,6 +48,12 @@ Page(withTheme({
   onShow() {
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 0 });
+    }
+    const app = getApp();
+    if (app && app.globalData && app.globalData.needRefreshIndex) {
+      app.globalData.needRefreshIndex = false;
+      this.setData({ page: 1, noMore: false, posts: [] });
+      this.loadPosts();
     }
   },
 

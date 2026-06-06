@@ -9,7 +9,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
-from app.routers import posts, chat, wechat, admin
+from app.routers import posts, chat, wechat, admin, upload
 
 settings = get_settings()
 
@@ -36,6 +36,7 @@ app.include_router(posts.router, prefix="/api")
 app.include_router(chat.router, prefix="/api")
 app.include_router(wechat.router, prefix="/api/auth")
 app.include_router(admin.router, prefix="/api")
+app.include_router(upload.router, prefix="/api")
 
 
 @app.get("/health")
