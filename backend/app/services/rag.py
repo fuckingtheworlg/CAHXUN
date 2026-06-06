@@ -36,7 +36,7 @@ async def _get_runtime_setting(redis, key: str, default: str) -> str:
         pass
     return default
 
-SYSTEM_PROMPT = (
+DEFAULT_SYSTEM_PROMPT = (
     "你是一位友好、健谈的校园生活助手，了解中国大学校园的方方面面。"
     "下方会附带一些校园墙上的真实帖子作为补充资料，仅供参考。"
     "\n\n回答原则："
@@ -48,6 +48,9 @@ SYSTEM_PROMPT = (
     "\n4. 语气要轻松自然，像同学聊天一样，可以适当用一些口语化表达。"
     "\n5. 回答力求简洁、有信息量，避免冗长说教，避免过度免责声明。"
 )
+
+# 兼容老引用
+SYSTEM_PROMPT = DEFAULT_SYSTEM_PROMPT
 
 
 def extract_keywords(question: str, topk: int = 5) -> list[str]:
@@ -81,8 +84,10 @@ async def stream_chat(
     else:
         user_msg = f"【我的问题】{question}\n\n（暂未找到相关校园贴文，请基于你的常识回答）"
 
+    system_prompt = await _get_runtime_setting(redis, "system_prompt", DEFAULT_SYSTEM_PROMPT)
+
     messages = [
-        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "system", "content": system_prompt},
         {"role": "user", "content": user_msg},
     ]
 

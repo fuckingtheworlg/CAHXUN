@@ -61,6 +61,7 @@ class SettingsUpdateRequest(BaseModel):
     deepseek_model: Optional[str] = None
     deepseek_base_url: Optional[str] = None
     deepseek_api_key: Optional[str] = None
+    system_prompt: Optional[str] = None
 
 
 class TestApiKeyRequest(BaseModel):
@@ -159,6 +160,87 @@ async def admin_stats(request: Request, db: AsyncSession = Depends(get_db)):
         "total_users": total_users,
         "banned_users": banned_users,
         "rate_limit_per_minute": settings.rate_limit_per_minute,
+    }
+
+
+# --------------- System resources ---------------
+
+@router.get("/admin/system", dependencies=[Depends(require_admin)])
+async def admin_system_stats():
+    """服务器 CPU / 内存 / 磁盘 / 负载 / 进程 / 运行时长。"""
+    import psutil
+    import time
+    import platform
+
+    # CPU
+    cpu_percent = psutil.cpu_percent(interval=0.3)
+    cpu_count = psutil.cpu_count(logical=True)
+    cpu_freq = psutil.cpu_freq()
+    cpu_freq_mhz = round(cpu_freq.current) if cpu_freq else 0
+
+    # 内存
+    mem = psutil.virtual_memory()
+    swap = psutil.swap_memory()
+
+    # 磁盘（根分区）
+    disk = psutil.disk_usage("/")
+
+    # 系统负载（仅 Linux）
+    try:
+        load1, load5, load15 = psutil.getloadavg()
+    except Exception:
+        load1 = load5 = load15 = 0
+
+    # 网络（自启动累计）
+    net = psutil.net_io_counters()
+
+    # 进程数
+    proc_count = len(psutil.pids())
+
+    # 当前服务进程信息
+    cur_proc = psutil.Process()
+    proc_mem_mb = round(cur_proc.memory_info().rss / 1024 / 1024, 1)
+    proc_cpu = cur_proc.cpu_percent(interval=0.1)
+
+    # 系统启动时长
+    boot_ts = psutil.boot_time()
+    uptime_seconds = int(time.time() - boot_ts)
+
+    return {
+        "platform": f"{platform.system()} {platform.release()}",
+        "cpu": {
+            "percent": cpu_percent,
+            "count": cpu_count,
+            "freq_mhz": cpu_freq_mhz,
+            "load_1": round(load1, 2),
+            "load_5": round(load5, 2),
+            "load_15": round(load15, 2),
+        },
+        "memory": {
+            "total_mb": round(mem.total / 1024 / 1024),
+            "used_mb": round(mem.used / 1024 / 1024),
+            "available_mb": round(mem.available / 1024 / 1024),
+            "percent": mem.percent,
+            "swap_total_mb": round(swap.total / 1024 / 1024),
+            "swap_used_mb": round(swap.used / 1024 / 1024),
+            "swap_percent": swap.percent,
+        },
+        "disk": {
+            "total_gb": round(disk.total / 1024 / 1024 / 1024, 1),
+            "used_gb": round(disk.used / 1024 / 1024 / 1024, 1),
+            "free_gb": round(disk.free / 1024 / 1024 / 1024, 1),
+            "percent": disk.percent,
+        },
+        "network": {
+            "bytes_sent_mb": round(net.bytes_sent / 1024 / 1024, 1),
+            "bytes_recv_mb": round(net.bytes_recv / 1024 / 1024, 1),
+        },
+        "process": {
+            "total": proc_count,
+            "self_mem_mb": proc_mem_mb,
+            "self_cpu_percent": proc_cpu,
+        },
+        "uptime_seconds": uptime_seconds,
     }
 
 
@@ -451,6 +533,7 @@ async def admin_get_settings(request: Request):
         "deepseek_model",
         "deepseek_base_url",
         "deepseek_api_key",
+        "system_prompt",
     ]:
         val = await redis.get(f"{_SETTINGS_PREFIX}{key}")
         if val is not None:
@@ -458,12 +541,17 @@ async def admin_get_settings(request: Request):
 
     effective_api_key = overrides.get("deepseek_api_key", settings.deepseek_api_key)
 
+    from app.services.rag import DEFAULT_SYSTEM_PROMPT
+    effective_prompt = overrides.get("system_prompt", DEFAULT_SYSTEM_PROMPT)
+
     return {
         "rate_limit_per_minute": int(overrides.get("rate_limit_per_minute", settings.rate_limit_per_minute)),
         "deepseek_model": overrides.get("deepseek_model", settings.deepseek_model),
         "deepseek_base_url": overrides.get("deepseek_base_url", settings.deepseek_base_url),
         "deepseek_api_key_mask": _mask_api_key(effective_api_key),
         "deepseek_api_key_source": "override" if "deepseek_api_key" in overrides else "env",
+        "system_prompt": effective_prompt,
+        "system_prompt_source": "override" if "system_prompt" in overrides else "default",
         "db_host": settings.db_host,
         "db_name": settings.db_name,
         "db_table_name": settings.db_table_name,
@@ -483,8 +571,16 @@ async def admin_update_settings(body: SettingsUpdateRequest, request: Request):
             value = value.strip()
             if not value:
                 raise HTTPException(status_code=400, detail="API Key 不能为空")
+        elif field == "system_prompt":
+            value = (value or "").strip()
+            if len(value) < 5:
+                raise HTTPException(status_code=400, detail="系统提示词过短，至少 5 个字符")
+            if len(value) > 4000:
+                raise HTTPException(status_code=400, detail="系统提示词过长，请控制在 4000 字符以内")
         await redis.set(f"{_SETTINGS_PREFIX}{field}", str(value))
-        updated[field] = "***" if field == "deepseek_api_key" else value
+        updated[field] = "***" if field == "deepseek_api_key" else (
+            (value[:50] + "...") if field == "system_prompt" and len(str(value)) > 50 else value
+        )
     if not updated:
         raise HTTPException(status_code=400, detail="没有需要更新的设置项")
     return {"message": "设置已更新", "updated": updated}
@@ -496,6 +592,14 @@ async def admin_reset_api_key(request: Request):
     redis = request.app.state.redis
     await redis.delete(f"{_SETTINGS_PREFIX}deepseek_api_key")
     return {"message": "已恢复使用 .env 中的默认 API Key"}
+
+
+@router.delete("/admin/settings/system_prompt", dependencies=[Depends(require_admin)])
+async def admin_reset_system_prompt(request: Request):
+    """删除系统提示词覆盖，恢复使用代码内置的默认提示词。"""
+    redis = request.app.state.redis
+    await redis.delete(f"{_SETTINGS_PREFIX}system_prompt")
+    return {"message": "已恢复默认系统提示词"}
 
 
 @router.post("/admin/settings/test-api-key", dependencies=[Depends(require_admin)])

@@ -214,6 +214,25 @@ body {
 
 .content-area { padding: 24px 32px; }
 
+/* ─── System monitor ─── */
+.sys-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 28px; }
+.sys-card { background: var(--card-bg); border-radius: var(--radius); padding: 18px 22px; box-shadow: var(--shadow); }
+.sys-card-title { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; font-weight: 500; }
+.sys-card-meta { font-size: 11px; font-weight: 600; color: var(--accent); }
+.sys-card-value { font-size: 26px; font-weight: 700; color: var(--text); margin-bottom: 8px; line-height: 1.1; }
+.sys-card-sub { font-size: 12px; color: var(--text-secondary); }
+.sys-progress { width: 100%; height: 6px; background: #f0f1f3; border-radius: 3px; overflow: hidden; margin-top: 10px; }
+.sys-progress-bar { height: 100%; border-radius: 3px; transition: width 0.4s ease; }
+.sys-progress-bar.green { background: linear-gradient(90deg, #22c55e, #4ade80); }
+.sys-progress-bar.yellow { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+.sys-progress-bar.red { background: linear-gradient(90deg, #ef4444, #f87171); }
+.sys-progress-bar.blue { background: linear-gradient(90deg, #2d6cdf, #60a5fa); }
+
+/* ─── Section title ─── */
+.section-title-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.section-title-row h4 { font-size: 14px; font-weight: 600; color: var(--text); }
+.section-title-row .auto-refresh { font-size: 12px; color: var(--text-secondary); }
+
 /* ─── Stats ─── */
 .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 28px; }
 
@@ -864,11 +883,14 @@ function handleModalSave() {
 }
 
 /* ─────── Dashboard ─────── */
+let _sysTimer = null;
+
 async function renderDashboard() {
   const area = document.getElementById('contentArea');
   try {
     const s = await api('/admin/stats');
     area.innerHTML =
+      '<div class="section-title-row"><h4>业务统计</h4></div>' +
       '<div class="stats-grid">' +
         '<div class="stat-card"><div class="stat-label">注册用户</div><div class="stat-value">' + num(s.total_users || 0) + '</div></div>' +
         '<div class="stat-card"><div class="stat-label">贴文总数</div><div class="stat-value">' + num(s.total_posts) + '</div></div>' +
@@ -877,15 +899,90 @@ async function renderDashboard() {
         '<div class="stat-card"><div class="stat-label">活跃会话</div><div class="stat-value">' + num(s.active_sessions) + '</div></div>' +
         '<div class="stat-card"><div class="stat-label">封禁用户</div><div class="stat-value" style="color:var(--danger)">' + num(s.banned_users || 0) + '</div></div>' +
       '</div>' +
+      '<div class="section-title-row"><h4>服务器资源</h4><span class="auto-refresh" id="sysRefreshLabel">5 秒自动刷新</span></div>' +
+      '<div id="sysGrid" class="sys-grid"><div class="page-loading"><div class="spinner"></div></div></div>' +
       '<div class="card">' +
-        '<div class="card-header"><h3>系统概览</h3></div>' +
+        '<div class="card-header"><h3>运行参数</h3></div>' +
         '<table><tbody>' +
           '<tr><td style="width:200px;font-weight:500">限流设置</td><td>每用户每分钟 ' + s.rate_limit_per_minute + ' 次问答</td></tr>' +
           '<tr><td style="font-weight:500">当前状态</td><td><span class="status-dot green"></span>运行正常</td></tr>' +
         '</tbody></table>' +
       '</div>';
+
+    // 启动实时刷新
+    loadSysStats();
+    if (_sysTimer) clearInterval(_sysTimer);
+    _sysTimer = setInterval(() => {
+      if (currentPage === 'dashboard') loadSysStats();
+      else { clearInterval(_sysTimer); _sysTimer = null; }
+    }, 5000);
   } catch (e) {
     area.innerHTML = '<p style="color:var(--danger)">加载失败: ' + esc(e.message) + '</p>';
+  }
+}
+
+function pctColor(p) {
+  if (p >= 85) return 'red';
+  if (p >= 65) return 'yellow';
+  return 'green';
+}
+
+function fmtUptime(sec) {
+  const d = Math.floor(sec / 86400);
+  const h = Math.floor((sec % 86400) / 3600);
+  const m = Math.floor((sec % 3600) / 60);
+  if (d > 0) return d + ' 天 ' + h + ' 小时';
+  if (h > 0) return h + ' 小时 ' + m + ' 分';
+  return m + ' 分钟';
+}
+
+async function loadSysStats() {
+  try {
+    const s = await api('/admin/system');
+    const grid = document.getElementById('sysGrid');
+    if (!grid) return;
+    grid.innerHTML =
+      '<div class="sys-card">' +
+        '<div class="sys-card-title"><span>CPU 使用率</span><span class="sys-card-meta">' + s.cpu.count + ' 核 / ' + (s.cpu.freq_mhz || '?') + ' MHz</span></div>' +
+        '<div class="sys-card-value">' + s.cpu.percent + '%</div>' +
+        '<div class="sys-card-sub">负载 ' + s.cpu.load_1 + ' / ' + s.cpu.load_5 + ' / ' + s.cpu.load_15 + '</div>' +
+        '<div class="sys-progress"><div class="sys-progress-bar ' + pctColor(s.cpu.percent) + '" style="width:' + s.cpu.percent + '%"></div></div>' +
+      '</div>' +
+      '<div class="sys-card">' +
+        '<div class="sys-card-title"><span>内存</span><span class="sys-card-meta">' + s.memory.total_mb + ' MB 总量</span></div>' +
+        '<div class="sys-card-value">' + s.memory.percent + '%</div>' +
+        '<div class="sys-card-sub">已用 ' + s.memory.used_mb + ' MB · 可用 ' + s.memory.available_mb + ' MB</div>' +
+        '<div class="sys-progress"><div class="sys-progress-bar ' + pctColor(s.memory.percent) + '" style="width:' + s.memory.percent + '%"></div></div>' +
+      '</div>' +
+      '<div class="sys-card">' +
+        '<div class="sys-card-title"><span>磁盘</span><span class="sys-card-meta">' + s.disk.total_gb + ' GB 总量</span></div>' +
+        '<div class="sys-card-value">' + s.disk.percent + '%</div>' +
+        '<div class="sys-card-sub">已用 ' + s.disk.used_gb + ' GB · 剩余 ' + s.disk.free_gb + ' GB</div>' +
+        '<div class="sys-progress"><div class="sys-progress-bar ' + pctColor(s.disk.percent) + '" style="width:' + s.disk.percent + '%"></div></div>' +
+      '</div>' +
+      '<div class="sys-card">' +
+        '<div class="sys-card-title"><span>Swap</span><span class="sys-card-meta">' + s.memory.swap_total_mb + ' MB 总量</span></div>' +
+        '<div class="sys-card-value">' + s.memory.swap_percent + '%</div>' +
+        '<div class="sys-card-sub">已用 ' + s.memory.swap_used_mb + ' MB</div>' +
+        '<div class="sys-progress"><div class="sys-progress-bar ' + pctColor(s.memory.swap_percent) + '" style="width:' + s.memory.swap_percent + '%"></div></div>' +
+      '</div>' +
+      '<div class="sys-card">' +
+        '<div class="sys-card-title"><span>进程</span></div>' +
+        '<div class="sys-card-value">' + s.process.total + '</div>' +
+        '<div class="sys-card-sub">应用占内存 ' + s.process.self_mem_mb + ' MB · CPU ' + s.process.self_cpu_percent + '%</div>' +
+      '</div>' +
+      '<div class="sys-card">' +
+        '<div class="sys-card-title"><span>网络（累计）</span></div>' +
+        '<div class="sys-card-value" style="font-size:18px;">↑ ' + s.network.bytes_sent_mb + ' MB</div>' +
+        '<div class="sys-card-sub">↓ ' + s.network.bytes_recv_mb + ' MB</div>' +
+      '</div>' +
+      '<div class="sys-card">' +
+        '<div class="sys-card-title"><span>系统运行</span></div>' +
+        '<div class="sys-card-value" style="font-size:18px;">' + fmtUptime(s.uptime_seconds) + '</div>' +
+        '<div class="sys-card-sub">' + esc(s.platform) + '</div>' +
+      '</div>';
+  } catch (e) {
+    // 静默失败，下次刷新继续尝试
   }
 }
 
@@ -1537,6 +1634,24 @@ async function renderSettings() {
         '<div id="apikey-editor" class="hidden"></div>' +
       '</div>';
 
+    html += '<h3 style="font-size:16px;font-weight:600;margin-bottom:16px">AI 系统提示词</h3>' +
+      '<div class="setting-item" style="margin-bottom:32px">' +
+        '<div class="label">当前 System Prompt ' +
+          '<span style="font-size:11px;color:var(--text-secondary);font-weight:normal;margin-left:8px">(' + (s.system_prompt_source === 'override' ? '后台自定义' : '代码默认') + ')</span>' +
+        '</div>' +
+        '<textarea id="sysPromptInput" rows="10" oninput="document.getElementById(\'sysPromptCount\').textContent=this.value.length" style="width:100%;margin-top:8px;padding:14px 16px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;line-height:1.6;outline:none;resize:vertical;min-height:200px;box-sizing:border-box" placeholder="输入给 AI 的系统提示词...">' + esc(s.system_prompt || '') + '</textarea>' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:12px;color:var(--text-secondary)">' +
+          '<span>提示词决定 AI 的角色、风格和回答原则；保存后立即生效</span>' +
+          '<span><span id="sysPromptCount">' + (s.system_prompt || '').length + '</span> / 4000</span>' +
+        '</div>' +
+        '<div style="margin-top:14px;display:flex;gap:10px">' +
+          '<button class="btn-sm" onclick="saveSystemPrompt()">保存</button>' +
+          (s.system_prompt_source === 'override'
+            ? '<button class="btn-sm" style="background:#6b7280" onclick="resetSystemPrompt()">恢复默认</button>'
+            : '') +
+        '</div>' +
+      '</div>';
+
     html += '<h3 style="font-size:16px;font-weight:600;margin-bottom:16px">运行参数</h3>' +
       '<div class="settings-grid" style="margin-bottom:32px">';
 
@@ -1614,6 +1729,34 @@ async function resetApiKey() {
   try {
     await api('/admin/settings/deepseek_api_key', { method: 'DELETE' });
     showToast('已恢复默认 API Key');
+    renderSettings();
+  } catch (e) {
+    showToast(e.message, 'error');
+  }
+}
+
+async function saveSystemPrompt() {
+  const val = (document.getElementById('sysPromptInput').value || '').trim();
+  if (val.length < 5) { showToast('提示词过短', 'error'); return; }
+  if (val.length > 4000) { showToast('提示词过长', 'error'); return; }
+  try {
+    await api('/admin/settings', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system_prompt: val }),
+    });
+    showToast('系统提示词已更新并立即生效');
+    renderSettings();
+  } catch (e) {
+    showToast(e.message, 'error');
+  }
+}
+
+async function resetSystemPrompt() {
+  if (!confirm('确定要恢复为代码内置的默认提示词吗？当前自定义会被删除。')) return;
+  try {
+    await api('/admin/settings/system_prompt', { method: 'DELETE' });
+    showToast('已恢复默认提示词');
     renderSettings();
   } catch (e) {
     showToast(e.message, 'error');
