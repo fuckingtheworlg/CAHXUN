@@ -1,4 +1,4 @@
-<view class="page tab-page-pad">
+<view class="page tab-page-pad theme-{{theme}}">
   <!-- 顶部装饰 -->
   <view class="top-deco">
     <view class="deco-blob deco-1"></view>

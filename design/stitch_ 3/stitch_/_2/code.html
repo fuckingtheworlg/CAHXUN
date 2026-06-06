@@ -1,0 +1,234 @@
+<!DOCTYPE html><html class="light" lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>CampusPulse - Post Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#3f0300",
+                        "on-secondary-fixed": "#00201a",
+                        "on-surface-variant": "#3f4852",
+                        "on-secondary-fixed-variant": "#005144",
+                        "error-container": "#ffdad6",
+                        "on-surface": "#131b2e",
+                        "on-primary": "#ffffff",
+                        "on-secondary-container": "#007261",
+                        "inverse-surface": "#283044",
+                        "surface-variant": "#dae2fd",
+                        "on-secondary": "#ffffff",
+                        "surface-container-highest": "#dae2fd",
+                        "primary": "#00629d",
+                        "primary-container": "#00a3ff",
+                        "secondary": "#006b5b",
+                        "on-background": "#131b2e",
+                        "surface-container-low": "#f2f3ff",
+                        "surface": "#faf8ff",
+                        "tertiary-fixed-dim": "#ffb4a6",
+                        "surface-container-high": "#e2e7ff",
+                        "background": "#faf8ff",
+                        "on-primary-container": "#00375a",
+                        "tertiary-container": "#f57760",
+                        "surface-container": "#eaedff",
+                        "on-tertiary-container": "#6a1004",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed": "#ffdad4",
+                        "primary-fixed": "#cfe5ff",
+                        "secondary-fixed": "#26fedc",
+                        "surface-dim": "#d2d9f4",
+                        "secondary-fixed-dim": "#00dfc1",
+                        "surface-bright": "#faf8ff",
+                        "error": "#ba1a1a",
+                        "inverse-primary": "#98cbff",
+                        "primary-fixed-dim": "#98cbff",
+                        "surface-tint": "#00629d",
+                        "inverse-on-surface": "#eef0ff",
+                        "outline": "#6f7883",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed-variant": "#004a77",
+                        "on-primary-fixed": "#001d33",
+                        "tertiary": "#a53b29",
+                        "outline-variant": "#bec7d4",
+                        "secondary-container": "#26fedc",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#842415"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "12px",
+                        "gutter": "24px",
+                        "base": "8px",
+                        "lg": "48px",
+                        "xs": "4px",
+                        "margin-desktop": "64px",
+                        "md": "24px",
+                        "xl": "80px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "display": ["Manrope"],
+                        "body-lg": ["Manrope"],
+                        "headline-md": ["Manrope"],
+                        "headline-lg-mobile": ["Manrope"],
+                        "label-md": ["Manrope"],
+                        "label-sm": ["Manrope"],
+                        "headline-lg": ["Manrope"],
+                        "body-md": ["Manrope"]
+                    },
+                    "fontSize": {
+                        "display": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #F8FAFC; }
+        .azure-glow { box-shadow: 0 4px 12px rgba(0, 163, 255, 0.12); }
+        .glass-panel { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
+        .pb-safe-area { padding-bottom: env(safe-area-inset-bottom, 20px); }
+    </style>
+</head>
+<body class="font-body-md text-body-md text-on-surface antialiased bg-background md:bg-surface-container-low min-h-screen pb-24 md:pb-0">
+<!-- TopAppBar Semantic Shell (Transactional Page -> No Global Nav, Just Top Bar) -->
+<header class="bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-md shadow-[0_4px_12px_rgba(0,163,255,0.08)] flex justify-between items-center px-margin-mobile md:px-margin-desktop h-16 w-full z-40 docked full-width top-0 sticky">
+<button class="text-on-surface-variant hover:bg-primary-container/10 transition-colors active:scale-95 duration-200 p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold tracking-tight text-on-surface">贴文详情</h1>
+<button class="text-on-surface-variant hover:bg-primary-container/10 transition-colors active:scale-95 duration-200 p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span>
+</button>
+</header>
+<main class="max-w-3xl mx-auto md:mt-gutter px-margin-mobile md:px-0">
+<!-- Post Content Card -->
+<article class="bg-surface-container-lowest rounded-xl border border-surface-container-high azure-glow p-margin-mobile md:p-md mb-gutter mt-margin-mobile md:mt-0">
+<!-- User Info -->
+<div class="flex items-center gap-sm mb-margin-mobile">
+<img alt="User Avatar" class="w-12 h-12 rounded-full object-cover border-2 border-primary-fixed" data-alt="A portrait photograph of a young male university student with a casual, friendly expression. He is wearing a simple grey hoodie against a soft, bright white background. The lighting is bright and even, fitting a modern light-mode app aesthetic with vibrant azure UI accents nearby. The mood is approachable and energetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKASOTcvuH_tM1ryUSTrfIsqPVeCt4vGl2e6WeTituxNloII8dhwl5uIYDP9cYtP2pJJS1ksOW45KlWcuX0udJ7bVfezEsIvnekXC_gGU46lTxQIin9gHTMnjVqVbnVPMc0GqUtc1vvOgHlstwc9MAydb73bxA3rC27vg7243OgcKkblaW2NEUIs3rR9JIhTUYEmXY_vWM_ONLXP08KwoOXoF5QOJ_7zmQ3e7fu-5j_GbFxXr8YavMjoDftNKU9esZJxR7o6Z9HKPC">
+<div class="flex-1">
+<h2 class="font-label-md text-label-md text-on-surface">李明宇 <span class="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-full text-[10px] ml-1 opacity-80">大二</span></h2>
+<p class="font-label-sm text-label-sm text-outline">计算机科学系 • 2小时前</p>
+</div>
+<button class="text-primary hover:bg-primary-container/10 p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="person_add">person_add</span>
+</button>
+</div>
+<!-- Post Body -->
+<div class="mb-margin-mobile">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-sm leading-tight">南区4栋宿舍严重噪音问题，求助！</h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                    连续三天了！每天晚上过了23:30，楼上（具体不确定是哪一间，感觉像正上方）还在大声放音乐，伴随着打游戏的吼叫声。昨晚甚至持续到了凌晨两点。尝试去敲门但没人理。这已经严重影响了我的休息，明天还有早八的课。大家有没有遇到类似情况，或者知道该怎么有效投诉？
+                </p>
+</div>
+<!-- Images (Bento Grid Style) -->
+<div class="grid grid-cols-2 gap-sm mb-md">
+<div class="rounded-lg overflow-hidden bg-surface-container-low aspect-square relative group">
+<img alt="Dark dormitory hallway" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="A photograph of a dimly lit university dormitory hallway at night. The corridor is long and slightly eerie, with overhead fluorescent lights casting long shadows. The color palette features deep blues and stark whites, fitting a modern minimalist aesthetic but conveying a sense of late-night quietness disrupted by implied noise. The lighting is low-key and moody." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAI6gzCALM5RzjL1XtonfaWWIFWAwHMaHuwbWRsPJfRccB0rWmU6qYJLVyVz1qdMDhSMyvF_ysDCf8XqpsKqu-igR_zfOS3JO5jHRfUoN8QYsIe8OyhE2T-8T2hpUJKAnU4x9s7Iaq1B3Di6KBtJ45c9TVC0ne218DH5JyiwsqSxxPo4l7IAvfK1njpQgwdGxxNZtQ-6xwWGiS_BRxhyGXV2gkjfFrzTU9b4X0sIDP9SCC15muNNT4MCqn_C5Q-FF6WqWmlhe-ClgOv">
+</div>
+<div class="rounded-lg overflow-hidden bg-surface-container-low aspect-square relative group">
+<img alt="Lit room door" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="A photograph of a closed wooden door in a dormitory corridor, with bright yellow light spilling out brightly from underneath the crack. The surrounding hallway is dark, contrasting sharply with the warm, intense light escaping the room. The visual style is crisp and modern, highlighting the vibrant contrast, suggesting late-night activity inside. The mood is tense and restless." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7wgTHOpmk98iICwvPalbqXa-4UFeW5EiUlShQ_nitdwpFfsikiFIdpKyRUD__yXnjJdAmpflXN3vyFMpg9V-TTmv8vP38o_mIf-dklCqYGDO92giy6D8kRpy7d2Ez34MN92PEKNC7NVP0qEt_l3KH-9Hzxb7z0ZKu-RS_S_TTfM0Lac5tS2eVNE7dT4Y2ZrQwBqBs6Vs1LTTonzcpttBKirVUYPwks41TLETzVu-yw-bK4quHCTI4_O-UxjcJ3A3hpfOZnXy38rtb">
+</div>
+</div>
+<!-- Interaction Bar -->
+<div class="flex items-center gap-gutter border-t border-surface-container pt-sm">
+<button class="flex items-center gap-xs text-on-surface-variant hover:text-tertiary-container transition-colors group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform" data-icon="favorite">favorite</span>
+<span class="font-label-md text-label-md">124</span>
+</button>
+<button class="flex items-center gap-xs text-primary hover:text-primary-container transition-colors group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform" data-icon="chat_bubble">chat_bubble</span>
+<span class="font-label-md text-label-md">12</span>
+</button>
+<button class="flex items-center gap-xs text-on-surface-variant hover:text-primary transition-colors ml-auto group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform" data-icon="share">share</span>
+</button>
+</div>
+</article>
+<!-- Comments Section -->
+<section class="mb-32">
+<h4 class="font-headline-sm text-on-surface mb-sm px-base">评论 (12)</h4>
+<div class="flex flex-col gap-base">
+<!-- Comment Item 1 (Manager) -->
+<div class="bg-surface-container-lowest p-sm rounded-lg border border-primary/20 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-primary"></div>
+<div class="flex gap-sm">
+<img alt="Manager Avatar" class="w-10 h-10 rounded-full object-cover" data-alt="A portrait of a middle-aged woman with a warm, caring smile. She is dressed professionally in a soft blue blouse, standing against a bright, airy background. The lighting is soft and flattering, creating a trustworthy and authoritative yet approachable mood. The image perfectly suits a modern, light-mode app design with vibrant azure accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3YNNozKA28EHG41bq4ms2dWGCmC_HESypNPNvxK_zC5sGYdY3IABSzFvjdREBg_xHvYcjBCXWQKOTNmADyAtVqam3zkYN9kjbLUn9tty0dkSyYl5jKY5hujeDQeCPjPHcwOcDpIJCBMZTU9Ruktfn94KIbv1Kz_2BKyA91w9CJ5I85MhDL2YTTLuiC1iUpCuLojdPCcF2zOSckxqqn3P-7s8NQP_Bsy_wH5DM1MTd3m8WJ3p4R3Ou3bW3QpSQj7d2BjKtgsQdsWAd">
+<div class="flex-1">
+<div class="flex justify-between items-start mb-xs">
+<div>
+<span class="font-label-md text-label-md text-primary font-bold">宿管阿姨</span>
+<span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-[10px] ml-2">官方认证</span>
+</div>
+<span class="font-label-sm text-label-sm text-outline">1小时前</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-xs">同学你好，已经收到你的反馈。今晚我会特意留意南区4栋高层的情况，如果有发现会立刻制止并登记。请大家注意休息时间。</p>
+<div class="flex items-center gap-sm mt-2">
+<button class="flex items-center gap-xs text-outline hover:text-tertiary-container text-xs transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="favorite">favorite</span> 45
+                                </button>
+<button class="flex items-center gap-xs text-outline hover:text-primary text-xs transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="reply">reply</span> 回复
+                                </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Comment Item 2 -->
+<div class="bg-surface-container-lowest p-sm rounded-lg border border-surface-container-high">
+<div class="flex gap-sm">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold text-lg">王</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-xs">
+<span class="font-label-md text-label-md text-on-surface">王小鹏</span>
+<span class="font-label-sm text-label-sm text-outline">2小时前</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-xs">太感同身受了！我住3栋，昨晚也有人打游戏大喊大叫，根本睡不着。</p>
+<div class="flex items-center gap-sm mt-2">
+<button class="flex items-center gap-xs text-outline hover:text-tertiary-container text-xs transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="favorite">favorite</span> 12
+                                </button>
+<button class="flex items-center gap-xs text-outline hover:text-primary text-xs transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="reply">reply</span> 回复
+                                </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Sticky Input Bar -->
+<div class="fixed bottom-0 w-full glass-panel border-t border-surface-container-high z-50 px-margin-mobile py-sm pb-safe-area flex items-center gap-sm">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-2 rounded-full">
+<span class="material-symbols-outlined" data-icon="add_photo_alternate">add_photo_alternate</span>
+</button>
+<div class="flex-1 relative">
+<input class="w-full bg-surface-container-low border border-outline-variant focus:border-primary focus:ring-4 focus:ring-primary/20 rounded-full px-4 py-2 text-body-md text-on-surface placeholder:text-outline transition-all" placeholder="11" type="text">
+</div>
+<button class="bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container p-2 rounded-full transition-all hover:scale-105 active:scale-95 shadow-md flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="send">send</span>
+</button>
+</div>
+
+
+</body></html>

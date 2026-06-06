@@ -1,0 +1,411 @@
+<!DOCTYPE html><html class="light" lang="zh-CN" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>CampusPulse AI Chat</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#3f0300",
+                        "on-secondary-fixed": "#00201a",
+                        "on-surface-variant": "#3f4852",
+                        "on-secondary-fixed-variant": "#005144",
+                        "error-container": "#ffdad6",
+                        "on-surface": "#131b2e",
+                        "on-primary": "#ffffff",
+                        "on-secondary-container": "#007261",
+                        "inverse-surface": "#283044",
+                        "surface-variant": "#dae2fd",
+                        "on-secondary": "#ffffff",
+                        "surface-container-highest": "#dae2fd",
+                        "primary": "#00629d",
+                        "primary-container": "#00a3ff",
+                        "secondary": "#006b5b",
+                        "on-background": "#131b2e",
+                        "surface-container-low": "#f2f3ff",
+                        "surface": "#faf8ff",
+                        "tertiary-fixed-dim": "#ffb4a6",
+                        "surface-container-high": "#e2e7ff",
+                        "background": "#faf8ff",
+                        "on-primary-container": "#00375a",
+                        "tertiary-container": "#f57760",
+                        "surface-container": "#eaedff",
+                        "on-tertiary-container": "#6a1004",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed": "#ffdad4",
+                        "primary-fixed": "#cfe5ff",
+                        "secondary-fixed": "#26fedc",
+                        "surface-dim": "#d2d9f4",
+                        "secondary-fixed-dim": "#00dfc1",
+                        "surface-bright": "#faf8ff",
+                        "error": "#ba1a1a",
+                        "inverse-primary": "#98cbff",
+                        "primary-fixed-dim": "#98cbff",
+                        "surface-tint": "#00629d",
+                        "inverse-on-surface": "#eef0ff",
+                        "outline": "#6f7883",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed-variant": "#004a77",
+                        "on-primary-fixed": "#001d33",
+                        "tertiary": "#a53b29",
+                        "outline-variant": "#bec7d4",
+                        "secondary-container": "#26fedc",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#842415"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "12px",
+                        "gutter": "24px",
+                        "base": "8px",
+                        "lg": "48px",
+                        "xs": "4px",
+                        "margin-desktop": "64px",
+                        "md": "24px",
+                        "xl": "80px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "display": ["Manrope"],
+                        "body-lg": ["Manrope"],
+                        "headline-md": ["Manrope"],
+                        "headline-lg-mobile": ["Manrope"],
+                        "label-md": ["Manrope"],
+                        "label-sm": ["Manrope"],
+                        "headline-lg": ["Manrope"],
+                        "body-md": ["Manrope"]
+                    },
+                    "fontSize": {
+                        "display": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .chat-bubble-enter {
+            animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        @keyframes slideUpFade {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col overflow-hidden relative selection:bg-primary-container/30">
+<!-- TopAppBar from JSON -->
+<header class="bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-md text-primary dark:text-primary-fixed-dim font-headline-md text-headline-md docked full-width top-0 sticky bg-surface dark:bg-surface-dim shadow-[0_4px_12px_rgba(0,163,255,0.08)] flex justify-between items-center px-margin-mobile h-16 w-full z-40 transition-colors">
+<button class="hover:bg-primary-container/10 transition-colors p-2 rounded-full active:scale-95 transition-transform duration-200 flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 0;">menu</span>
+</button>
+<div class="font-display text-headline-md font-extrabold text-primary dark:text-primary-container tracking-tight text-center flex-1">
+            CampusPulse
+        </div>
+<button class="hover:bg-primary-container/10 transition-colors p-2 rounded-full active:scale-95 transition-transform duration-200 flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 0;">notifications</span>
+</button>
+</header>
+<!-- Main Chat Canvas -->
+<main class="flex-1 overflow-y-auto px-margin-mobile pt-md pb-[140px] flex flex-col relative hide-scrollbar" id="chat-container">
+<!-- Hero / Greeting Section -->
+<div class="flex flex-col items-center justify-center mt-lg mb-xl w-full max-w-md mx-auto chat-bubble-enter" style="animation-delay: 0.1s;">
+<!-- AI Avatar Container -->
+<div class="relative w-32 h-32 mb-md rounded-full bg-gradient-to-tr from-primary-fixed to-surface-variant flex items-center justify-center shadow-[0_8px_32px_rgba(0,163,255,0.2)] p-1">
+<div class="w-full h-full rounded-full overflow-hidden border-4 border-surface bg-surface relative">
+<img alt="AI Assistant Avatar" class="w-full h-full object-cover" data-alt="A friendly, modern, stylized 3D rendered robot face avatar looking directly at the viewer. The robot has sleek, minimalist white and vibrant blue (azure) components, glowing softly. The lighting is high-key studio lighting on a bright, pure background, conveying intelligence, approachability, and high-tech elegance suitable for a modern campus app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpcB4hd8ViLFDG3DUiiFcpYFp3BCtPl2k7RB6mwWEIaAbFb5gNbAK1URIbMFwa9jzA6zF3mq3e49i4ncPo-DBAGqaeJdgxIKAlt0lNTeDJSOrKhxAODHnMZqbbenmU6KIttK4mO-oVLNe09UE9yz-DnTLFMDGW_6AvCT1kichfC521SyCG_jgDItytfD4Q4sirpDfWkAHil4a3KA5hotND1TJ5HUvffISoVVWrAR-JBtUVvWK7eqs4E-tCEz2PCuLkEZg5t7GwtD8n">
+<!-- Online indicator dot -->
+<div class="absolute bottom-1 right-3 w-4 h-4 bg-secondary-container border-2 border-surface rounded-full shadow-sm z-10"></div>
+</div>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface text-center tracking-tight mb-xs">
+                你好！
+            </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant text-center">
+                我是你的校园问答助手
+            </p>
+</div>
+<!-- Chat History Area (Initially empty, fills via JS) -->
+<div class="flex flex-col gap-sm w-full max-w-2xl mx-auto mb-lg" id="chat-history">
+<!-- Messages will be appended here -->
+
+                <div class="flex justify-end chat-bubble-enter w-full">
+                    <div class="bg-primary text-on-primary rounded-2xl rounded-tr-sm px-4 py-3 max-w-[85%] shadow-sm">
+                        <p class="font-body-md text-body-md">图书馆三楼的开放时间？</p>
+                    </div>
+                </div>
+            
+                
+            
+                <div class="flex justify-end chat-bubble-enter w-full">
+                    <div class="bg-primary text-on-primary rounded-2xl rounded-tr-sm px-4 py-3 max-w-[85%] shadow-sm">
+                        <p class="font-body-md text-body-md">图书馆三楼的开放时间？</p>
+                    </div>
+                </div>
+            
+                
+            
+                <div class="flex justify-start items-end gap-2 chat-bubble-enter w-full">
+                    <div class="w-8 h-8 rounded-full bg-surface-container-high flex-shrink-0 flex items-center justify-center border border-outline-variant/30">
+                        <span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: &quot;FILL&quot; 1;">smart_toy</span>
+                    </div>
+                    <div class="bg-surface rounded-2xl rounded-tl-sm px-4 py-3 max-w-[85%] border border-surface-container-high shadow-[0_2px_8px_rgba(0,163,255,0.04)]">
+                        <p class="font-body-md text-body-md text-on-surface leading-relaxed">这是一个演示回复。作为一个设计原型，我目前无法连接到真实的后端。但我已经收到您的问题："图书馆三楼的开放时间？"。</p>
+                    </div>
+                </div>
+            
+                <div class="flex justify-start items-end gap-2 chat-bubble-enter w-full">
+                    <div class="w-8 h-8 rounded-full bg-surface-container-high flex-shrink-0 flex items-center justify-center border border-outline-variant/30">
+                        <span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: &quot;FILL&quot; 1;">smart_toy</span>
+                    </div>
+                    <div class="bg-surface rounded-2xl rounded-tl-sm px-4 py-3 max-w-[85%] border border-surface-container-high shadow-[0_2px_8px_rgba(0,163,255,0.04)]">
+                        <p class="font-body-md text-body-md text-on-surface leading-relaxed">这是一个演示回复。作为一个设计原型，我目前无法连接到真实的后端。但我已经收到您的问题："图书馆三楼的开放时间？"。</p>
+                    </div>
+                </div>
+            
+                <div class="flex justify-end chat-bubble-enter w-full">
+                    <div class="bg-primary text-on-primary rounded-2xl rounded-tr-sm px-4 py-3 max-w-[85%] shadow-sm">
+                        <p class="font-body-md text-body-md">图书馆三楼的开放时间？</p>
+                    </div>
+                </div>
+            
+                
+            
+                <div class="flex justify-start items-end gap-2 chat-bubble-enter w-full">
+                    <div class="w-8 h-8 rounded-full bg-surface-container-high flex-shrink-0 flex items-center justify-center border border-outline-variant/30">
+                        <span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+                    </div>
+                    <div class="bg-surface rounded-2xl rounded-tl-sm px-4 py-3 max-w-[85%] border border-surface-container-high shadow-[0_2px_8px_rgba(0,163,255,0.04)]">
+                        <p class="font-body-md text-body-md text-on-surface leading-relaxed">这是一个演示回复。作为一个设计原型，我目前无法连接到真实的后端。但我已经收到您的问题："图书馆三楼的开放时间？"。</p>
+                    </div>
+                </div>
+            
+                <div class="flex justify-end chat-bubble-enter w-full">
+                    <div class="bg-primary text-on-primary rounded-2xl rounded-tr-sm px-4 py-3 max-w-[85%] shadow-sm">
+                        <p class="font-body-md text-body-md">图书馆三楼的开放时间？</p>
+                    </div>
+                </div>
+            
+                
+            
+                <div class="flex justify-start items-end gap-2 chat-bubble-enter w-full">
+                    <div class="w-8 h-8 rounded-full bg-surface-container-high flex-shrink-0 flex items-center justify-center border border-outline-variant/30">
+                        <span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+                    </div>
+                    <div class="bg-surface rounded-2xl rounded-tl-sm px-4 py-3 max-w-[85%] border border-surface-container-high shadow-[0_2px_8px_rgba(0,163,255,0.04)]">
+                        <p class="font-body-md text-body-md text-on-surface leading-relaxed">这是一个演示回复。作为一个设计原型，我目前无法连接到真实的后端。但我已经收到您的问题："图书馆三楼的开放时间？"。</p>
+                    </div>
+                </div>
+            </div>
+<!-- Suggestions Section -->
+<div class="w-full max-w-2xl mx-auto mt-auto chat-bubble-enter" style="animation-delay: 0.3s;">
+<div class="flex items-center gap-2 mb-sm px-1">
+<span class="material-symbols-outlined text-primary-container text-[20px]" style="font-variation-settings: &quot;FILL&quot; 1;">lightbulb</span>
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">试试问这些问题</span>
+</div>
+<div class="flex flex-col gap-sm pb-xs w-full">
+<!-- Suggestion Card 1 -->
+<button class="flex-shrink-0 bg-surface-container hover:bg-surface-container-high border border-surface-container-high transition-all duration-300 rounded-xl p-md w-full text-left group active:scale-95 shadow-sm hover:shadow-[0_4px_12px_rgba(0,163,255,0.08)]" onclick="fillAndSend('下周有什么校园活动？')">
+<div class="w-10 h-10 rounded-full bg-primary-fixed text-primary flex items-center justify-center mb-sm group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 0;">event_upcoming</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface line-clamp-2">下周有什么校园活动？</p>
+</button>
+<!-- Suggestion Card 2 -->
+<button class="flex-shrink-0 bg-surface-container hover:bg-surface-container-high border border-surface-container-high transition-all duration-300 rounded-xl p-md w-full text-left group active:scale-95 shadow-sm hover:shadow-[0_4px_12px_rgba(0,163,255,0.08)]" onclick="fillAndSend('图书馆三楼的开放时间？')">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed text-secondary flex items-center justify-center mb-sm group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 0;">menu_book</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface line-clamp-2">图书馆三楼的开放时间？</p>
+</button>
+<!-- Suggestion Card 3 -->
+<button class="flex-shrink-0 bg-surface-container hover:bg-surface-container-high border border-surface-container-high transition-all duration-300 rounded-xl p-md w-full text-left group active:scale-95 shadow-sm hover:shadow-[0_4px_12px_rgba(0,163,255,0.08)]" onclick="fillAndSend('今天食堂有什么特价菜？')">
+<div class="w-10 h-10 rounded-full bg-tertiary-fixed text-tertiary flex items-center justify-center mb-sm group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 0;">restaurant</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface line-clamp-2">今天食堂有什么特价菜？</p>
+</button>
+</div>
+</div>
+</main>
+<!-- Fixed Chat Input Area -->
+<!-- Positioned above BottomNavBar (bottom-20 = 80px) -->
+<div class="fixed bottom-20 left-0 w-full bg-gradient-to-t from-background via-background to-transparent pt-lg pb-sm px-margin-mobile z-40">
+<div class="max-w-2xl mx-auto relative group">
+<input class="w-full bg-surface border border-outline-variant hover:border-outline focus:border-primary-container focus:ring-4 focus:ring-primary-container/20 rounded-full py-4 pl-md pr-[60px] font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/60 shadow-sm transition-all duration-300 outline-none" id="chat-input" onkeypress="handleKeyPress(event)" placeholder="11" type="text">
+<button class="absolute right-2 top-1/2 -translate-y-1/2 w-[40px] h-[40px] bg-primary text-on-primary rounded-full flex items-center justify-center hover:scale-105 active:scale-95 transition-all duration-200 shadow-md shadow-primary/20 opacity-100 cursor-pointer" id="send-btn" onclick="sendMessage()">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: &quot;FILL&quot; 1;">send</span>
+</button>
+</div>
+</div>
+<!-- BottomNavBar from JSON -->
+<!-- Active tab logic: "AI问答" maps to index 2 based on labels -->
+<nav class="bg-surface/90 dark:bg-surface-container-highest/90 backdrop-blur-lg text-primary dark:text-primary-fixed-dim font-label-sm text-label-sm-mobile md:hidden docked full-width bottom-0 rounded-t-xl bg-surface dark:bg-surface-container-highest shadow-[0_-4px_16px_rgba(0,163,255,0.12)] fixed w-full z-50 flex justify-around items-center px-4 pt-3 pb-safe-area h-20">
+<!-- Tab 0: 首页 (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 dark:text-outline-variant hover:text-primary transition-colors active:scale-90 transition-all duration-150 w-16 group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" style="font-variation-settings: &quot;FILL&quot; 0;">home</span>
+<span class="truncate w-full text-center">首页</span>
+</a>
+<!-- Tab 1: 搜索 (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 dark:text-outline-variant hover:text-primary transition-colors active:scale-90 transition-all duration-150 w-16 group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" style="font-variation-settings: &quot;FILL&quot; 0;">search</span>
+<span class="truncate w-full text-center">搜索</span>
+</a>
+<!-- Tab 2: AI问答 (ACTIVE) -->
+<a class="flex flex-col items-center justify-center text-primary dark:text-secondary-fixed scale-110 transition-transform active:scale-90 transition-all duration-150 w-16" href="#">
+<div class="relative">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: &quot;FILL&quot; 1;">smart_toy</span>
+<!-- Active Indicator dot -->
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-primary-container rounded-full border border-surface"></span>
+</div>
+<span class="font-bold truncate w-full text-center">AI问答</span>
+</a>
+<!-- Tab 3: 我的 (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 dark:text-outline-variant hover:text-primary transition-colors active:scale-90 transition-all duration-150 w-16 group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" style="font-variation-settings: &quot;FILL&quot; 0;">person</span>
+<span class="truncate w-full text-center">我的</span>
+</a>
+</nav>
+<script>
+        const inputField = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('send-btn');
+        const chatHistory = document.getElementById('chat-history');
+        const chatContainer = document.getElementById('chat-container');
+
+        // Input observer to toggle button state
+        inputField.addEventListener('input', function() {
+            if (this.value.trim().length > 0) {
+                sendBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
+                sendBtn.classList.add('opacity-100', 'cursor-pointer');
+            } else {
+                sendBtn.classList.add('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
+                sendBtn.classList.remove('opacity-100', 'cursor-pointer');
+            }
+        });
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function fillAndSend(text) {
+            inputField.value = text;
+            // trigger input event manually to update button state
+            inputField.dispatchEvent(new Event('input'));
+            setTimeout(() => {
+                sendMessage();
+            }, 150); // slight delay for visual feedback
+        }
+
+        function sendMessage() {
+            const message = inputField.value.trim();
+            if (!message) return;
+
+            // 1. Add User Message
+            appendUserMessage(message);
+            
+            // Clear input
+            inputField.value = '';
+            inputField.dispatchEvent(new Event('input')); // reset button
+
+            // 2. Simulate AI Typing Indicator
+            const typingId = 'typing-' + Date.now();
+            appendAITyping(typingId);
+            scrollToBottom();
+
+            // 3. Simulate AI Response after delay
+            setTimeout(() => {
+                removeAITyping(typingId);
+                appendAIResponse("这是一个演示回复。作为一个设计原型，我目前无法连接到真实的后端。但我已经收到您的问题：\"" + message + "\"。");
+                scrollToBottom();
+            }, 1500);
+        }
+
+        function appendUserMessage(text) {
+            const html = `
+                <div class="flex justify-end chat-bubble-enter w-full">
+                    <div class="bg-primary text-on-primary rounded-2xl rounded-tr-sm px-4 py-3 max-w-[85%] shadow-sm">
+                        <p class="font-body-md text-body-md">${text}</p>
+                    </div>
+                </div>
+            `;
+            chatHistory.insertAdjacentHTML('beforeend', html);
+        }
+
+        function appendAITyping(id) {
+            const html = `
+                <div id="${id}" class="flex justify-start items-end gap-2 chat-bubble-enter w-full">
+                    <div class="w-8 h-8 rounded-full bg-surface-container-high flex-shrink-0 flex items-center justify-center border border-outline-variant/30">
+                        <span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+                    </div>
+                    <div class="bg-surface-container rounded-2xl rounded-tl-sm px-4 py-4 max-w-[80%] flex gap-1 items-center shadow-sm border border-outline-variant/20">
+                        <div class="w-2 h-2 rounded-full bg-primary/40 animate-bounce" style="animation-delay: 0ms"></div>
+                        <div class="w-2 h-2 rounded-full bg-primary/60 animate-bounce" style="animation-delay: 150ms"></div>
+                        <div class="w-2 h-2 rounded-full bg-primary/80 animate-bounce" style="animation-delay: 300ms"></div>
+                    </div>
+                </div>
+            `;
+            chatHistory.insertAdjacentHTML('beforeend', html);
+        }
+
+        function removeAITyping(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        }
+
+        function appendAIResponse(text) {
+            const html = `
+                <div class="flex justify-start items-end gap-2 chat-bubble-enter w-full">
+                    <div class="w-8 h-8 rounded-full bg-surface-container-high flex-shrink-0 flex items-center justify-center border border-outline-variant/30">
+                        <span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+                    </div>
+                    <div class="bg-surface rounded-2xl rounded-tl-sm px-4 py-3 max-w-[85%] border border-surface-container-high shadow-[0_2px_8px_rgba(0,163,255,0.04)]">
+                        <p class="font-body-md text-body-md text-on-surface leading-relaxed">${text}</p>
+                    </div>
+                </div>
+            `;
+            chatHistory.insertAdjacentHTML('beforeend', html);
+        }
+
+        function scrollToBottom() {
+            chatContainer.scrollTo({
+                top: chatContainer.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+
+
+</body></html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html><html lang="zh"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>个人主页 - CampusPulse</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&amp;family=JetBrains+Mono:wght@500&amp;family=Manrope:wght@600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "outline": "#727975",
+                      "surface-container-high": "#e7e8e9",
+                      "inverse-surface": "#2e3132",
+                      "primary": "#001610",
+                      "outline-variant": "#c1c8c4",
+                      "error-container": "#ffdad6",
+                      "tertiary-fixed-dim": "#cfc5b6",
+                      "surface": "#f8f9fa",
+                      "on-error-container": "#93000a",
+                      "inverse-on-surface": "#f0f1f2",
+                      "secondary-fixed-dim": "#a1d0c1",
+                      "on-surface-variant": "#414845",
+                      "tertiary": "#161209",
+                      "inverse-primary": "#adcec1",
+                      "surface-variant": "#e1e3e4",
+                      "secondary": "#3a675a",
+                      "on-primary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "surface-dim": "#d9dadb",
+                      "secondary-fixed": "#bceddd",
+                      "primary-container": "#0d2c24",
+                      "on-tertiary-fixed": "#201b12",
+                      "error": "#ba1a1a",
+                      "surface-container": "#edeeef",
+                      "surface-tint": "#46645b",
+                      "on-secondary": "#ffffff",
+                      "secondary-container": "#bceddd",
+                      "tertiary-container": "#2b261c",
+                      "primary-fixed": "#c8eadd",
+                      "on-primary-fixed-variant": "#2f4c43",
+                      "on-background": "#191c1d",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "background": "#f8f9fa",
+                      "on-secondary-container": "#406d60",
+                      "on-tertiary-fixed-variant": "#4c463b",
+                      "on-surface": "#191c1d",
+                      "tertiary-fixed": "#ece1d2",
+                      "surface-bright": "#f8f9fa",
+                      "primary-fixed-dim": "#adcec1",
+                      "on-tertiary-container": "#958d7f",
+                      "surface-container-highest": "#e1e3e4",
+                      "on-secondary-fixed-variant": "#214e43",
+                      "on-primary-fixed": "#012019",
+                      "on-primary-container": "#75958a",
+                      "surface-container-low": "#f3f4f5",
+                      "on-secondary-fixed": "#002019"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "stack-sm": "8px",
+                      "stack-lg": "32px",
+                      "stack-md": "16px",
+                      "container-padding": "20px",
+                      "gutter": "16px",
+                      "unit": "4px"
+              },
+              "fontFamily": {
+                      "meta-sm": ["Inter"],
+                      "headline-md": ["Manrope"],
+                      "headline-lg-mobile": ["Manrope"],
+                      "body-lg": ["Inter"],
+                      "headline-lg": ["Manrope"],
+                      "label-caps": ["JetBrains Mono"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "meta-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                      "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body { background-color: theme('colors.surface'); }
+        /* Tonal Layer Elevatoin 1 */
+        .card-tonal {
+            background-color: theme('colors.surface-container-lowest');
+            border: 1px solid theme('colors.surface-container-highest');
+        }
+    </style>
+</head>
+<body class="text-on-surface antialiased min-h-screen pb-[88px] pt-[64px]">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface dark:bg-surface-dim bg-surface-container-low dark:bg-surface-container-lowest">
+<div class="flex items-center justify-between px-container-padding h-16 w-full max-w-7xl mx-auto">
+<button class="text-primary dark:text-primary-fixed hover:bg-surface-variant/50 transition-colors active:scale-95 duration-100 p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">CampusPulse</h1>
+<button class="text-primary dark:text-primary-fixed hover:bg-surface-variant/50 transition-colors active:scale-95 duration-100 p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="max-w-7xl mx-auto px-container-padding py-stack-lg md:px-0">
+<div class="md:px-container-padding w-full max-w-lg mx-auto flex flex-col gap-stack-lg">
+<!-- Profile Hero -->
+<section class="flex flex-col items-center justify-center pt-stack-md relative">
+<div class="relative mb-stack-md">
+<div class="w-32 h-32 rounded-full overflow-hidden border-4 border-surface-container-lowest shadow-sm relative">
+<img alt="Profile Photo" class="w-full h-full object-cover" data-alt="A high-quality, professional headshot of a young university student named Alex Rivera. The student is looking slightly off-camera with a confident, calm expression, set against a pristine, minimalist white background. The lighting is soft, high-key, and even, emphasizing a modern corporate aesthetic. Subtle hints of deep green clothing connect to a premium campus brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0Irlry7-L1nqSd3nMOZAoMSumpqR-kZK-MhmM7phGz-kyZ2UeJi8vG1Jte9bjfIDNshHyyLaWedH_0TvPMtmNIaBf4qLYb2soiVkm3KuGCiT3OsWd-EIxU16L4voaYMBqNSmTq1Lf3Gm2yTNy_JGCJFN86IN9wwV7d3m_onbetZ5qbi2QJ_Adxtkomx2uRlWyKWHheiKhwsCPYEC7EJ5G88NJOIYYc_hYJMUG7W9KcdWeJxJQ5XCbfmxtqRWahmFPyWqN-Om53H-X">
+</div>
+<button class="absolute bottom-0 right-0 w-8 h-8 bg-primary-container text-on-primary rounded-full flex items-center justify-center shadow-sm hover:scale-105 transition-transform border-2 border-surface-container-lowest">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: &quot;FILL&quot; 1;">add</span>
+</button>
+</div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary mb-unit">Alex Rivera</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">计算机科学系学生</p>
+</section>
+<!-- Stats Bento Grid -->
+<section class="grid grid-cols-2 gap-gutter">
+<div class="card-tonal rounded-xl p-container-padding flex flex-col items-center justify-center gap-unit hover:bg-surface-container-low transition-colors duration-200">
+<span class="material-symbols-outlined text-primary text-3xl mb-1" style="font-variation-settings: &quot;FILL&quot; 1;">search</span>
+<span class="font-headline-md text-headline-md text-primary">128</span>
+<span class="font-meta-sm text-meta-sm text-on-surface-variant">搜索次数</span>
+</div>
+<div class="card-tonal rounded-xl p-container-padding flex flex-col items-center justify-center gap-unit hover:bg-surface-container-low transition-colors duration-200">
+<span class="material-symbols-outlined text-secondary text-3xl mb-1" style="font-variation-settings: &quot;FILL&quot; 1;">smart_toy</span>
+<span class="font-headline-md text-headline-md text-primary">42</span>
+<span class="font-meta-sm text-meta-sm text-on-surface-variant">AI提问</span>
+</div>
+</section>
+<!-- Personal Information -->
+<section class="flex flex-col gap-stack-sm">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant px-unit">个人信息</h3>
+<div class="card-tonal rounded-xl overflow-hidden flex flex-col">
+<div class="flex justify-between items-center p-container-padding border-b border-surface-container-highest">
+<span class="font-body-md text-body-md text-on-surface-variant">昵称</span>
+<span class="font-body-md text-body-md text-primary font-medium">Alex</span>
+</div>
+<div class="flex justify-between items-center p-container-padding border-b border-surface-container-highest">
+<span class="font-body-md text-body-md text-on-surface-variant">性别</span>
+<span class="font-body-md text-body-md text-primary font-medium">男</span>
+</div>
+<div class="flex justify-between items-center p-container-padding border-b border-surface-container-highest">
+<span class="font-body-md text-body-md text-on-surface-variant">学校</span>
+<span class="font-body-md text-body-md text-primary font-medium">斯坦福大学</span>
+</div>
+<div class="flex justify-between items-center p-container-padding">
+<span class="font-body-md text-body-md text-on-surface-variant">年级</span>
+<span class="font-body-md text-body-md text-primary font-medium">大三</span>
+</div>
+</div>
+</section>
+<!-- Action Items -->
+<section class="flex flex-col gap-stack-sm">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant px-unit">设置与操作</h3>
+<div class="card-tonal rounded-xl overflow-hidden flex flex-col">
+<button class="w-full flex justify-between items-center p-container-padding border-b border-surface-container-highest hover:bg-surface-container-low transition-colors text-left group">
+<div class="flex items-center gap-stack-sm">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">share</span>
+<span class="font-body-md text-body-md text-on-surface">分享给朋友</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">chevron_right</span>
+</button>
+<button class="w-full flex justify-between items-center p-container-padding hover:bg-surface-container-low transition-colors text-left group">
+<div class="flex items-center gap-stack-sm">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">delete_sweep</span>
+<span class="font-body-md text-body-md text-on-surface">清除缓存</span>
+</div>
+<span class="font-meta-sm text-meta-sm text-on-surface-variant">12.4 MB</span>
+</button>
+</div>
+</section>
+<!-- Logout Button -->
+<section class="pt-stack-sm pb-stack-lg">
+<button class="w-full card-tonal rounded-xl p-container-padding flex justify-center items-center gap-unit hover:bg-error-container/50 transition-colors text-error active:scale-[0.98] duration-150">
+<span class="font-headline-md text-headline-md text-error">退出登录</span>
+</button>
+</section>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 bg-surface dark:bg-surface-dim shadow-sm fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 bg-surface dark:bg-surface-dim md:hidden">
+<!-- Home: Inactive -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-container-high transition-all active:scale-90 duration-150 rounded-lg" href="#">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="font-label-caps text-label-caps">首页</span>
+</a>
+<!-- Search: Inactive -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-container-high transition-all active:scale-90 duration-150 rounded-lg" href="#">
+<span class="material-symbols-outlined mb-1">search</span>
+<span class="font-label-caps text-label-caps">搜索</span>
+</a>
+<!-- AI Q&A: Inactive -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-container-high transition-all active:scale-90 duration-150 rounded-lg" href="#">
+<span class="material-symbols-outlined mb-1">smart_toy</span>
+<span class="font-label-caps text-label-caps">AI问答</span>
+</a>
+<!-- Me: Active -->
+<a class="flex flex-col items-center justify-center bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-full px-4 py-1 hover:bg-surface-container-high transition-all active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: &quot;FILL&quot; 1;">person</span>
+<span class="font-label-caps text-label-caps font-bold">我的</span>
+</a>
+</nav>
+
+
+</body></html>

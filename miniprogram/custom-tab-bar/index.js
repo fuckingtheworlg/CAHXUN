@@ -1,8 +1,10 @@
+const { getCurrent } = require('../utils/theme');
+
 Component({
   data: {
     selected: 0,
     color: '#999999',
-    selectedColor: '#4A90D9',
+    theme: 'vibrant',
     list: [
       {
         pagePath: '/pages/index/index',
@@ -25,6 +27,19 @@ Component({
         iconPath: '/assets/tab-profile.png',
       },
     ],
+  },
+
+  lifetimes: {
+    attached() {
+      this.setData({ theme: getCurrent() });
+    },
+  },
+
+  pageLifetimes: {
+    show() {
+      const cur = getCurrent();
+      if (this.data.theme !== cur) this.setData({ theme: cur });
+    },
   },
 
   methods: {

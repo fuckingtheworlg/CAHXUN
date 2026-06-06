@@ -1,7 +1,7 @@
 /* ─── Login Page ─── */
 .login-page {
   min-height: 100vh;
-  background: linear-gradient(160deg, #4A90D9 0%, #2c5f9e 50%, #1a3a66 100%);
+  background: var(--c-hero);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -105,19 +105,19 @@
 /* ─── Profile Page ─── */
 .profile-page {
   min-height: 100vh;
-  background: linear-gradient(180deg, #f0f5ff 0%, #f5f5f5 360rpx);
+  background: var(--c-bg-page);
   padding-bottom: calc(40rpx + var(--tab-bar-area));
 }
 
 /* ─── Header ─── */
 .profile-header {
   position: relative;
-  background: linear-gradient(135deg, #4A90D9 0%, #6FB1FC 60%, #a18cd1 100%);
+  background: var(--c-hero);
   padding: 70rpx 0 60rpx;
   border-radius: 0 0 40rpx 40rpx;
   margin-bottom: 24rpx;
   overflow: hidden;
-  box-shadow: 0 12rpx 32rpx rgba(74, 144, 217, 0.2);
+  box-shadow: var(--shadow-hero);
 }
 
 .header-blob {
@@ -131,7 +131,7 @@
 .blob-1 {
   width: 280rpx;
   height: 280rpx;
-  background: radial-gradient(circle, #fbc2eb 0%, transparent 70%);
+  background: var(--c-hero-blob-1);
   top: -80rpx;
   right: -60rpx;
 }
@@ -139,7 +139,7 @@
 .blob-2 {
   width: 220rpx;
   height: 220rpx;
-  background: radial-gradient(circle, #feb47b 0%, transparent 70%);
+  background: var(--c-hero-blob-2);
   bottom: -40rpx;
   left: -40rpx;
   opacity: 0.4;
@@ -148,7 +148,7 @@
 .blob-3 {
   width: 160rpx;
   height: 160rpx;
-  background: radial-gradient(circle, #5cdb95 0%, transparent 70%);
+  background: var(--c-hero-blob-3);
   top: 50%;
   left: 30%;
   opacity: 0.35;
@@ -203,7 +203,7 @@
 
 .edit-icon {
   font-size: 28rpx;
-  color: #4A90D9;
+  color: var(--c-primary);
   font-weight: 700;
   line-height: 1;
 }
@@ -238,17 +238,17 @@
 
 /* ─── Section Card ─── */
 .section-card {
-  background: #fff;
+  background: var(--c-card);
   margin: 0 24rpx 24rpx;
-  border-radius: 24rpx;
+  border-radius: var(--r-card);
   overflow: hidden;
-  box-shadow: 0 4rpx 24rpx rgba(74, 144, 217, 0.06);
+  box-shadow: var(--shadow-card);
 }
 
 .section-title {
   font-size: 26rpx;
   font-weight: 600;
-  color: #99a4b3;
+  color: var(--c-text-dim);
   padding: 24rpx 28rpx 8rpx;
   display: flex;
   align-items: center;
@@ -258,7 +258,7 @@
   content: '';
   width: 6rpx;
   height: 22rpx;
-  background: linear-gradient(180deg, #4A90D9, #a18cd1);
+  background: linear-gradient(180deg, var(--c-primary), var(--c-primary-2));
   border-radius: 3rpx;
   margin-right: 12rpx;
 }
@@ -266,9 +266,8 @@
 /* ─── Stats Card ─── */
 .stats-card {
   margin: 0 24rpx 24rpx;
-  border-radius: 24rpx;
+  border-radius: var(--r-card);
   overflow: hidden;
-  box-shadow: 0 6rpx 24rpx rgba(74, 144, 217, 0.1);
 }
 
 .stats-grid {
@@ -280,14 +279,15 @@
 
 .stats-grid .stats-item {
   position: relative;
-  background: #fff;
-  border-radius: 20rpx;
+  background: var(--c-card);
+  border-radius: var(--r-card-sm);
   padding: 36rpx 24rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10rpx;
   overflow: hidden;
+  box-shadow: var(--shadow-card);
 }
 
 .stats-bg {
@@ -303,11 +303,11 @@
 }
 
 .stats-bg-1 {
-  background: radial-gradient(circle, #4A90D9 0%, transparent 70%);
+  background: radial-gradient(circle, var(--c-primary) 0%, transparent 70%);
 }
 
 .stats-bg-2 {
-  background: radial-gradient(circle, #ff7e5f 0%, transparent 70%);
+  background: radial-gradient(circle, var(--c-warn) 0%, transparent 70%);
 }
 
 .info-row {
@@ -382,7 +382,7 @@
   position: relative;
   font-size: 52rpx;
   font-weight: 800;
-  background: linear-gradient(135deg, #4A90D9, #a18cd1);
+  background: linear-gradient(135deg, var(--c-primary), var(--c-primary-2));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -390,7 +390,7 @@
 }
 
 .stats-grid .stats-item:nth-child(2) .stats-num {
-  background: linear-gradient(135deg, #ff7e5f, #feb47b);
+  background: linear-gradient(135deg, var(--c-warn), var(--c-accent));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -399,7 +399,7 @@
 .stats-label {
   position: relative;
   font-size: 24rpx;
-  color: #99a4b3;
+  color: var(--c-text-dim);
 }
 
 /* ─── Footer ─── */
@@ -480,8 +480,129 @@
 }
 
 .modal-btn.confirm {
-  background: #4A90D9;
+  background: var(--c-primary);
   color: #fff;
+}
+
+/* ─── Theme Picker Modal ─── */
+.theme-modal {
+  width: 640rpx;
+  max-width: 90vw;
+  background: var(--c-card);
+  border-radius: var(--r-card);
+  padding: 36rpx 32rpx 24rpx;
+}
+
+.theme-modal-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--c-text);
+  text-align: center;
+  margin-bottom: 28rpx;
+}
+
+.theme-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.theme-card {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 16rpx;
+  border-radius: var(--r-card-sm);
+  border: 2rpx solid var(--c-divider);
+  transition: all 0.2s;
+}
+
+.theme-card-active {
+  border-color: var(--c-primary);
+  background: var(--c-card-soft);
+}
+
+.theme-preview {
+  position: relative;
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 24rpx;
+  flex-shrink: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,.08);
+}
+
+.theme-dot {
+  position: absolute;
+  width: 32rpx;
+  height: 32rpx;
+  border-radius: 50%;
+  border: 2rpx solid rgba(255,255,255,.7);
+}
+
+.dot-1 {
+  top: 20rpx;
+  left: 20rpx;
+}
+
+.dot-2 {
+  bottom: 20rpx;
+  right: 20rpx;
+}
+
+.theme-check {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,.35);
+  color: #fff;
+  font-size: 48rpx;
+  font-weight: 800;
+  border-radius: 24rpx;
+}
+
+.theme-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.theme-name {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: var(--c-text);
+}
+
+.theme-sub {
+  font-size: 22rpx;
+  color: var(--c-text-dim);
+  font-family: -apple-system, "Helvetica Neue", sans-serif;
+}
+
+.theme-desc {
+  font-size: 22rpx;
+  color: var(--c-text-dim);
+  margin-top: 4rpx;
+}
+
+.theme-modal-close {
+  margin-top: 28rpx;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--c-primary);
+  color: #fff;
+  border-radius: var(--r-btn);
+  font-size: 28rpx;
+  font-weight: 600;
 }
 
 .modal-btn:active {

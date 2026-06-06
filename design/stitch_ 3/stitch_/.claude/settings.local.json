@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"D:\\\\project\\\\wall design\\\\stitch_ 3\\\\stitch_\" -Directory)",
+      "Bash(Select-Object Name)"
+    ]
+  }
+}

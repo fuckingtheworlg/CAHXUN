@@ -1,6 +1,7 @@
 const { request } = require('../../utils/request');
+const { withTheme } = require('../../utils/theme');
 
-Page({
+Page(withTheme({
   data: {
     keyword: '',
     results: [],
@@ -135,4 +136,4 @@ Page({
         this.setData({ loading: false, searched: true });
       });
   },
-});
+}));

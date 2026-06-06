@@ -1,5 +1,6 @@
 const { request } = require('../../utils/request');
 const { ensureLogin } = require('../../utils/auth');
+const { withTheme } = require('../../utils/theme');
 
 // 假评论数据（微信小程序 UGC 评论功能需要类目报备，先用静态数据占位）
 const MOCK_COMMENTS = [
@@ -29,7 +30,7 @@ const MOCK_COMMENTS = [
   },
 ];
 
-Page({
+Page(withTheme({
   data: {
     post: null,
     loading: true,
@@ -123,4 +124,4 @@ Page({
       query: `id=${this.postId}`,
     };
   },
-});
+}));

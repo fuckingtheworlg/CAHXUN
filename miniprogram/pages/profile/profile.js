@@ -1,11 +1,12 @@
 const { login } = require('../../utils/auth');
+const { withTheme, getThemes, setCurrent, getThemeInfo } = require('../../utils/theme');
 
 const defaultAvatar = '/assets/tab-profile.png';
 
 const genderOptions = ['未设置', '男', '女'];
 const gradeOptions = ['未设置', '大一', '大二', '大三', '大四', '研一', '研二', '研三', '博士'];
 
-Page({
+Page(withTheme({
   data: {
     isLoggedIn: false,
     logging: false,
@@ -21,6 +22,30 @@ Page({
     cacheSize: '0 KB',
     showNicknameModal: false,
     nicknameInput: '',
+    showThemePicker: false,
+    themeList: getThemes(),
+    currentThemeName: getThemeInfo().name,
+  },
+
+  onOpenThemePicker() {
+    this.setData({ showThemePicker: true });
+  },
+
+  onCloseThemePicker() {
+    this.setData({ showThemePicker: false });
+  },
+
+  onSelectTheme(e) {
+    const key = e.currentTarget.dataset.key;
+    setCurrent(key);
+    this.setData({
+      theme: key,
+      currentThemeName: getThemeInfo(key).name,
+    });
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ theme: key });
+    }
+    wx.showToast({ title: '主题已切换', icon: 'success', duration: 1200 });
   },
 
   onShow() {
@@ -231,4 +256,4 @@ Page({
       confirmText: '知道了',
     });
   },
-});
+}));

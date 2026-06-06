@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>校园脉动 - AI 问答</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-background": "#1d1a23",
+                    "primary-fixed-dim": "#d0bcff",
+                    "tertiary-fixed-dim": "#e2c62d",
+                    "tertiary": "#6d5e00",
+                    "on-primary-container": "#fffbff",
+                    "secondary": "#006877",
+                    "on-primary-fixed": "#23005c",
+                    "error-container": "#ffdad6",
+                    "on-error": "#ffffff",
+                    "surface-bright": "#fef7ff",
+                    "outline-variant": "#cbc3d7",
+                    "on-primary": "#ffffff",
+                    "inverse-on-surface": "#f5eefb",
+                    "on-tertiary-container": "#4a3f00",
+                    "primary-container": "#8455ef",
+                    "on-secondary-fixed-variant": "#004e5a",
+                    "surface-tint": "#6d3bd7",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-dim": "#ded7e4",
+                    "on-primary-fixed-variant": "#5516be",
+                    "surface-container-high": "#ede5f3",
+                    "tertiary-fixed": "#ffe24c",
+                    "surface-container-low": "#f8f1fe",
+                    "surface-container": "#f3ebf8",
+                    "on-secondary-fixed": "#001f25",
+                    "on-secondary-container": "#00616f",
+                    "inverse-surface": "#322f39",
+                    "error": "#ba1a1a",
+                    "surface": "#fef7ff",
+                    "on-tertiary-fixed": "#211b00",
+                    "secondary-fixed": "#a2eeff",
+                    "on-tertiary": "#ffffff",
+                    "primary": "#6b38d4",
+                    "on-surface-variant": "#494454",
+                    "secondary-fixed-dim": "#2fd9f4",
+                    "secondary-container": "#3fe1fd",
+                    "outline": "#7b7486",
+                    "tertiary-container": "#c4ab01",
+                    "background": "#fef7ff",
+                    "primary-fixed": "#e9ddff",
+                    "on-surface": "#1d1a23",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed-variant": "#524600",
+                    "surface-variant": "#e7e0ed",
+                    "on-secondary": "#ffffff",
+                    "inverse-primary": "#d0bcff",
+                    "surface-container-highest": "#e7e0ed"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "16px",
+                    "container-margin": "24px",
+                    "base": "8px",
+                    "stack-sm": "12px",
+                    "stack-lg": "48px",
+                    "stack-md": "24px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Be Vietnam Pro"],
+                    "headline-lg-mobile": ["Plus Jakarta Sans"],
+                    "display-lg": ["Plus Jakarta Sans"],
+                    "body-md": ["Be Vietnam Pro"],
+                    "body-lg": ["Be Vietnam Pro"],
+                    "title-md": ["Plus Jakarta Sans"],
+                    "headline-lg": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .mesh-bg {
+            background-color: #fef7ff;
+            background-image: 
+                radial-gradient(at 80% 0%, hsla(267,83%,75%,0.4) 0px, transparent 50%),
+                radial-gradient(at 0% 50%, hsla(190,83%,75%,0.4) 0px, transparent 50%),
+                radial-gradient(at 80% 100%, hsla(267,83%,75%,0.4) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 0.5px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 20px 40px rgba(107, 56, 212, 0.08);
+        }
+        .bounce-hover:hover {
+            transform: translateY(-4px);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .bounce-active:active {
+            transform: scale(0.95);
+        }
+        /* Hide scrollbar for clean UI */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="mesh-bg text-on-surface min-h-screen flex flex-col font-body-md pb-[100px] pt-[72px]">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-xl border-b border-white/20 dark:border-inverse-surface/20 shadow-[0_8px_30px_rgb(107,56,212,0.12)]">
+<div class="flex justify-between items-center px-container-margin py-stack-sm w-full">
+<button class="text-primary dark:text-primary-fixed-dim hover:scale-110 hover:bg-surface-container-high transition-transform active:scale-95 duration-200 ease-out p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-display-lg text-title-md tracking-tight text-primary dark:text-primary-fixed-dim">
+                校园脉动
+            </h1>
+<button class="text-primary dark:text-primary-fixed-dim hover:scale-110 hover:bg-surface-container-high transition-transform active:scale-95 duration-200 ease-out p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col px-container-margin py-stack-md gap-stack-md max-w-md mx-auto w-full">
+<!-- Header Section -->
+<section class="flex flex-col items-center text-center mt-stack-md animate-fade-in-up">
+<div class="relative w-32 h-32 mb-stack-sm bounce-hover">
+<div class="absolute inset-0 bg-primary/20 rounded-full blur-xl animate-pulse"></div>
+<img alt="A vibrant, glowing abstract AI avatar sphere floating in a bright modern space." class="w-full h-full rounded-full object-cover border-4 border-white shadow-2xl z-10 relative" data-alt="A vibrant, glowing abstract AI avatar sphere floating in a bright modern space. The sphere is composed of smooth, glossy glass-like material reflecting a bubbly mix of violet, cyan, and magenta gradients. The lighting is soft and ethereal, creating a lighthearted, approachable, and futuristic mood suitable for a campus app in light mode." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJQ527_NMOTgqMJsV5Xq7amGH_qBErhG1d9ytjWeGheUtpkMQMk2QtUo-dkqu4h79b9NVetN1DMS6qI2koxprNxgEUpI7MBzDtpB2O0IPtPKkV7PLxJjzZaQM6rMsqCTy6POK7lFmHP8BI4IfO-iT3W1u1xFPthm47V99zdYNitJa2qOlRIZRsvrwbBGA4IKNq24UPVspLVIH0UsGtDNFCLJZS9WsPlgKpnuqPpK7G4qdPETWEG-eAlJOtFQ-jvbcTTQthr-QBnEyx"/>
+</div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary mb-2">校园墙 AI 助手</h2>
+<p class="font-body-md text-on-surface-variant">基于校园墙真实贴文，给你最贴近的回答</p>
+</section>
+<!-- Suggestions Section -->
+<section class="flex flex-col gap-stack-sm mt-stack-sm">
+<h3 class="font-title-md text-title-md text-primary pl-base">试试这些问题</h3>
+<div class="flex flex-col gap-base">
+<!-- Card 1 -->
+<button class="glass-card rounded-xl p-5 flex items-center gap-4 text-left bounce-hover bounce-active group w-full">
+<div class="w-10 h-10 rounded-full bg-secondary-container/50 flex items-center justify-center text-on-secondary-container group-hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined" data-icon="credit_card">credit_card</span>
+</div>
+<span class="font-body-md text-on-surface font-semibold flex-1">最近有人捡到校园卡吗？</span>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<!-- Card 2 -->
+<button class="glass-card rounded-xl p-5 flex items-center gap-4 text-left bounce-hover bounce-active group w-full">
+<div class="w-10 h-10 rounded-full bg-tertiary-container/50 flex items-center justify-center text-on-tertiary-container group-hover:bg-tertiary-container transition-colors">
+<span class="material-symbols-outlined" data-icon="restaurant">restaurant</span>
+</div>
+<span class="font-body-md text-on-surface font-semibold flex-1">食堂有什么新菜推荐？</span>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<!-- Card 3 -->
+<button class="glass-card rounded-xl p-5 flex items-center gap-4 text-left bounce-hover bounce-active group w-full">
+<div class="w-10 h-10 rounded-full bg-primary-container/30 flex items-center justify-center text-primary group-hover:bg-primary-container/60 transition-colors">
+<span class="material-symbols-outlined" data-icon="celebration">celebration</span>
+</div>
+<span class="font-body-md text-on-surface font-semibold flex-1">最近有什么活动？</span>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</section>
+</main>
+<!-- Chat Input Section (Fixed above BottomNav) -->
+<div class="fixed bottom-[112px] w-full px-container-margin max-w-md left-1/2 -translate-x-1/2 z-40">
+<div class="glass-card rounded-full p-2 flex items-center shadow-[0_10px_30px_rgba(107,56,212,0.15)]">
+<input class="flex-1 bg-transparent border-none focus:ring-0 font-body-md text-on-surface placeholder-outline px-4" placeholder="问点关于校园的..." type="text"/>
+<button class="px-5 h-12 rounded-full bg-primary text-on-primary flex items-center justify-center bounce-hover bounce-active shadow-[0_4px_12px_rgba(107,56,212,0.4)] whitespace-nowrap font-body-md font-semibold">
+发送
+</button>
+</div>
+</div>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-lg bg-surface/90 dark:bg-surface-dim/90 backdrop-blur-2xl shadow-[0_-10px_40px_rgb(107,56,212,0.1)] shadow-xl md:hidden">
+<div class="flex justify-around items-center w-full pb-8 pt-4 px-gutter">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-2 hover:text-primary dark:hover:text-primary-fixed active:scale-90 transition-all bounce group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm">首页</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-2 hover:text-primary dark:hover:text-primary-fixed active:scale-90 transition-all bounce group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" data-icon="search">search</span>
+<span class="font-label-sm text-label-sm">搜索</span>
+</a>
+<!-- Active Tab -->
+<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary-fixed-dim text-on-primary-container dark:text-on-primary-fixed-variant rounded-full px-5 py-2 transition-all duration-300 active:scale-90 bounce shadow-[0_4px_12px_rgba(132,85,239,0.3)]" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="smart_toy" data-weight="fill" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+<span class="font-label-sm text-label-sm">AI问答</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-2 hover:text-primary dark:hover:text-primary-fixed active:scale-90 transition-all bounce group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">我的</span>
+</a>
+</div>
+</nav>
+<style>
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+</body></html>

@@ -1,22 +1,22 @@
 .card {
   position: relative;
   display: flex;
-  background: #fff;
-  border-radius: 24rpx;
+  background: var(--c-card);
+  border-radius: var(--r-card);
   margin-bottom: 24rpx;
   overflow: hidden;
-  box-shadow: 0 4rpx 24rpx rgba(74, 144, 217, 0.06);
+  box-shadow: var(--shadow-card);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .card-hover {
   transform: translateY(2rpx);
-  box-shadow: 0 2rpx 8rpx rgba(74, 144, 217, 0.08);
+  box-shadow: 0 2rpx 8rpx var(--c-card-soft);
 }
 
 .card-side-bar {
   width: 8rpx;
-  background: linear-gradient(180deg, #4A90D9 0%, #6FB1FC 100%);
+  background: linear-gradient(180deg, var(--c-primary) 0%, var(--c-primary-2) 100%);
   flex-shrink: 0;
 }
 
@@ -33,8 +33,8 @@
 .card-category {
   display: inline-block;
   font-size: 22rpx;
-  color: #4A90D9;
-  background: linear-gradient(135deg, rgba(74,144,217,.1), rgba(111,177,252,.18));
+  color: var(--c-primary);
+  background: var(--c-card-soft);
   padding: 4rpx 18rpx;
   border-radius: 24rpx;
   font-weight: 600;
@@ -42,7 +42,7 @@
 
 .card-content {
   font-size: 28rpx;
-  color: #2c3e50;
+  color: var(--c-text);
   line-height: 1.7;
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -91,7 +91,7 @@
   justify-content: space-between;
   margin-top: 20rpx;
   padding-top: 16rpx;
-  border-top: 1rpx dashed #eef0f3;
+  border-top: 1rpx dashed var(--c-divider);
 }
 
 .card-meta {
@@ -102,7 +102,7 @@
 
 .card-time {
   font-size: 22rpx;
-  color: #99a4b3;
+  color: var(--c-text-dim);
 }
 
 .card-stats {
@@ -119,7 +119,7 @@
 
 .stat-icon {
   font-size: 22rpx;
-  color: #ff4e50;
+  color: var(--c-warn);
   line-height: 1;
 }
 
@@ -129,18 +129,18 @@
 }
 
 .stat:not(.views) .stat-num {
-  color: #ff4e50;
+  color: var(--c-warn);
 }
 
 .stat.views .stat-num {
-  color: #ff7e5f;
+  color: var(--c-warn);
 }
 
 .stat-dot {
   width: 8rpx;
   height: 8rpx;
   border-radius: 50%;
-  background: linear-gradient(135deg, #ff7e5f, #feb47b);
+  background: var(--c-warn);
 }
 
 /* ── 不同分类的色彩变化（基于首字符 hash） ── */

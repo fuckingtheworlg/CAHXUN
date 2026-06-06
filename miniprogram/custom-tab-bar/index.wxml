@@ -1,4 +1,4 @@
-<view class="tab-bar">
+<view class="tab-bar theme-{{theme}}">
   <view
     class="tab-bar-item"
     wx:for="{{list}}"
@@ -10,9 +10,6 @@
     <view class="tab-bar-icon-wrap {{selected === index ? 'tab-bar-icon-wrap--active' : ''}}">
       <image class="tab-bar-icon" src="{{item.iconPath}}" mode="aspectFit" />
     </view>
-    <text
-      class="tab-bar-text"
-      style="color: {{selected === index ? selectedColor : color}}"
-    >{{item.text}}</text>
+    <text class="tab-bar-text {{selected === index ? 'tab-bar-text--active' : ''}}">{{item.text}}</text>
   </view>
 </view>

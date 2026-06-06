@@ -1,0 +1,224 @@
+<!DOCTYPE html><html class="light" lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Post Details - CampusPulse</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#727975",
+                        "surface-container-high": "#e7e8e9",
+                        "inverse-surface": "#2e3132",
+                        "primary": "#001610",
+                        "outline-variant": "#c1c8c4",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#cfc5b6",
+                        "surface": "#f8f9fa",
+                        "on-error-container": "#93000a",
+                        "inverse-on-surface": "#f0f1f2",
+                        "secondary-fixed-dim": "#a1d0c1",
+                        "on-surface-variant": "#414845",
+                        "tertiary": "#161209",
+                        "inverse-primary": "#adcec1",
+                        "surface-variant": "#e1e3e4",
+                        "secondary": "#3a675a",
+                        "on-primary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#d9dadb",
+                        "secondary-fixed": "#bceddd",
+                        "primary-container": "#0d2c24",
+                        "on-tertiary-fixed": "#201b12",
+                        "error": "#ba1a1a",
+                        "surface-container": "#edeeef",
+                        "surface-tint": "#46645b",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#bceddd",
+                        "tertiary-container": "#2b261c",
+                        "primary-fixed": "#c8eadd",
+                        "on-primary-fixed-variant": "#2f4c43",
+                        "on-background": "#191c1d",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "background": "#f8f9fa",
+                        "on-secondary-container": "#406d60",
+                        "on-tertiary-fixed-variant": "#4c463b",
+                        "on-surface": "#191c1d",
+                        "tertiary-fixed": "#ece1d2",
+                        "surface-bright": "#f8f9fa",
+                        "primary-fixed-dim": "#adcec1",
+                        "on-tertiary-container": "#958d7f",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-secondary-fixed-variant": "#214e43",
+                        "on-primary-fixed": "#012019",
+                        "on-primary-container": "#75958a",
+                        "surface-container-low": "#f3f4f5",
+                        "on-secondary-fixed": "#002019"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack-sm": "8px",
+                        "stack-lg": "32px",
+                        "stack-md": "16px",
+                        "container-padding": "20px",
+                        "gutter": "16px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "meta-sm": ["Inter"],
+                        "headline-md": ["Manrope"],
+                        "headline-lg-mobile": ["Manrope"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Manrope"],
+                        "label-caps": ["JetBrains Mono"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "meta-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface border-b border-surface-container-highest">
+<div class="flex items-center justify-between px-container-padding h-16 w-full max-w-7xl mx-auto">
+<button class="p-2 -ml-2 text-primary hover:bg-surface-variant/50 rounded-full transition-colors active:scale-95 duration-100 flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">CampusPulse</h1>
+<button class="p-2 -mr-2 text-primary hover:bg-surface-variant/50 rounded-full transition-colors active:scale-95 duration-100 flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</header>
+<main class="max-w-2xl mx-auto pt-20 px-container-padding">
+<!-- Main Post Content -->
+<article class="bg-surface-container-lowest border border-surface-container-high rounded-xl p-container-padding mb-stack-lg shadow-sm">
+<div class="flex items-start justify-between mb-stack-md">
+<div class="flex items-center gap-3">
+<img alt="张同学" class="w-10 h-10 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAN-zSnQ5ikE-zbGhVYlL61pNumOCsUde_T9C24YCoc47e3yTj1mS3BIOzZT1nqnXf0kM5ks_l9W-tgWh5ZLrEP_bm8BfT2kb8PioRJFkcw5uHmUhUmZJTwfnXGV2aA2x-bPqa8Ozk2G6ivXTFBMPkzDQL3i4b7t-syOnmz0qT5QwrfKKPbsAT-ZnLdvXx-Aouudyg0erUr1pCpGdY1GeuFMkqOBuo_JPnrTC2MV2e2SEA6QXS8015WjAUSZawGP_E4f-ystCvkCF0n">
+<div>
+<div class="font-body-md text-body-md font-medium text-on-surface">张同学</div>
+<div class="font-meta-sm text-meta-sm text-on-surface-variant">2小时前</div>
+</div>
+</div>
+<span class="inline-flex items-center px-2 py-1 rounded bg-surface-container-low text-on-surface font-label-caps text-label-caps">
+                    #Complaint
+                </span>
+</div>
+<h2 class="font-headline-md text-headline-md text-primary mb-stack-sm">宿舍噪音问题严重影响休息</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-stack-md">
+                最近几周，特别是到了晚上11点以后，南区3栋的噪音问题越来越严重了。走廊里经常有人大声喧哗，还有房间似乎在开party，音乐声隔着门都听得一清二楚。这已经严重影响了我的正常休息和第二天的学习状态。希望宿管阿姨或者相关部门能管管，给大家一个安静的住宿环境。
+            </p>
+<div class="grid grid-cols-2 gap-2 mb-stack-md">
+<div class="aspect-video bg-surface-container-low rounded-lg overflow-hidden">
+<img alt="A messy dormitory room interior at night, showing a cluttered desk with a glowing computer monitor, empty snack wrappers, and unmade beds. The room is illuminated only by the harsh blue light of the screen and a dim desk lamp, conveying a late-night, noisy atmosphere. The overall style is realistic photography with slightly muted colors." class="w-full h-full object-cover" data-alt="A messy dormitory room interior at night, showing a cluttered desk with a glowing computer monitor, empty snack wrappers, and unmade beds. The room is illuminated only by the harsh blue light of the screen and a dim desk lamp, conveying a late-night, noisy atmosphere. The overall style is realistic photography with slightly muted colors." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrfmTFBylKzlP0Oes4vP7pJfhWYVr2ds7SjWQOh0gB_-N86_4M2FWnENzZas_J0oS-nHapW931_hLF3nY4J-dzFF4ftloce2ksMXkSXVhV0M4dIyaznBo5dHcVMinEkIEholMQFFYIVNQHMk5xdcxfTNv6vbeIF4Tyarrs0yUTrlkBTocG8uqtWSelfeXm86pUu6NO14dPj3NlSMoQ7a2lvlhfJT9kroj36oIo6eTkNy4r9lr27WtLwPrg9uDnXpl_afQXljOYWKlF">
+</div>
+<div class="aspect-video bg-surface-container-low rounded-lg overflow-hidden">
+<img alt="An exterior shot of a university dormitory building at night, with several brightly lit windows suggesting ongoing activity. The building is a modern, blocky structure, and the street level is dark and quiet, contrasting with the illuminated rooms above. The mood is tense, highlighting the disturbance within a normally peaceful setting. Shot in a documentary photography style." class="w-full h-full object-cover" data-alt="An exterior shot of a university dormitory building at night, with several brightly lit windows suggesting ongoing activity. The building is a modern, blocky structure, and the street level is dark and quiet, contrasting with the illuminated rooms above. The mood is tense, highlighting the disturbance within a normally peaceful setting. Shot in a documentary photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjgje7Yn9p5oQZ-M4tDK49LIbfKRauWu_doTWI_b4t6sA4CVk51Sbxh2Tr8EjxJUeL3qqAhEOIBT0fQZK0gyZTemPcZ8gqkYOs0X3uX5FywITKv3z0gpBCHa8xhoajZN5k4PIAPkdBo4aSsOZ1inUyhL8bjmVr5TsdxT-jmXxvTHkFXt-Fmd7HGMNj7INDOJNsVyksx7LRflrLIYysDKzRXEsOZWDrDTdxEWKhpOHNof2vLBYxjk5ZPt9dHkZjD6JmwyfGhoJs60cV">
+</div>
+</div>
+<div class="flex items-center justify-between border-t border-surface-variant pt-stack-sm mt-stack-sm">
+<div class="flex gap-4">
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="thumb_up">thumb_up</span>
+<span class="font-meta-sm text-meta-sm">45</span>
+</button>
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="chat_bubble_outline">chat_bubble_outline</span>
+<span class="font-meta-sm text-meta-sm">12</span>
+</button>
+</div>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="share">share</span>
+</button>
+</div>
+</article>
+<!-- Comments Section -->
+<section>
+<h3 class="font-headline-md text-headline-md text-primary mb-stack-md">评论 (12)</h3>
+<div class="space-y-stack-md">
+<!-- Comment 1 -->
+<div class="flex gap-3">
+<img alt="李四" class="w-8 h-8 rounded-full flex-shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoWCaKLkFIfLDAGRDXC_GkRzzVr4M0dauJS5k0TfotiAkHZRaXlbV97thnhjUyscxzslIUPvZUeXWQGR4ce2Ibj3Ub2Kzb_C9cP9NsU8V3Q7FZ44uDWghOKaGFk4GnrCDrRG5T9IT9pm7maeTKzK_XFmAUOFaYD66eGnOPYft4gZgzSbBnTyZEhBQr_KKIrqIOB6DShrWopZH1Sugi4USv74scJNYr_cLawnWVxVYbuwpHVoYaf-WAwI18BjZLS2SDLHmLasv0Bls1">
+<div class="flex-1 bg-surface-container-low rounded-lg p-3">
+<div class="flex justify-between items-baseline mb-1">
+<span class="font-body-md text-body-md font-medium text-on-surface">李四</span>
+<span class="font-meta-sm text-meta-sm text-on-surface-variant">1小时前</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-2">
+                            深有同感！昨晚也是被吵醒好几次，这到底是谁在搞鬼啊？
+                        </p>
+<div class="flex gap-4">
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="thumb_up">thumb_up</span>
+<span class="font-meta-sm text-meta-sm">8</span>
+</button>
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="font-meta-sm text-meta-sm">回复</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Comment 2 -->
+<div class="flex gap-3">
+<img alt="王五" class="w-8 h-8 rounded-full flex-shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbh3xnlQF8mM2Lzwne9uY8bxlr7RS579Q5WBQ5ydITaCUx9Mhmma2pzCEFj6RQpWho7FUJmiGzDSn-0XeA1YielouOiPW1GRIWcqSAbE7rgpGfueoLOnXP0KSJT07wu-nySMExZIH0MdZ44PN22kHMrhl2AFmuzEfW9PDPsGQbNhJ1MmKLU469CYs6DXK70q8D6DFl6p8jqHqFLXxFhqrAOyTS7LqL0fIOSWhc6H6SqJL0IZaNEYTTgQdqamCnEt2HJDBHe82wXSB-">
+<div class="flex-1 bg-surface-container-low rounded-lg p-3">
+<div class="flex justify-between items-baseline mb-1">
+<span class="font-body-md text-body-md font-medium text-on-surface">王五</span>
+<span class="font-meta-sm text-meta-sm text-on-surface-variant">45分钟前</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-2">
+                            我已经跟辅导员反映了，希望能尽快解决。大家实在受不了可以直接去敲门提醒一下。
+                        </p>
+<div class="flex gap-4">
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="thumb_up">thumb_up</span>
+<span class="font-meta-sm text-meta-sm">3</span>
+</button>
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="font-meta-sm text-meta-sm">回复</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Floating Bottom Bar (Interaction) -->
+<div class="fixed bottom-0 left-0 w-full bg-surface border-t border-surface-container-highest px-container-padding py-3 shadow-sm z-50">
+<div class="max-w-2xl mx-auto flex gap-3 items-center">
+<div class="flex-1 relative">
+<input class="w-full bg-surface-container-low border-none rounded-full py-2 pl-4 pr-10 text-body-md font-body-md text-on-surface focus:ring-1 focus:ring-primary focus:bg-surface-container-lowest transition-colors placeholder-on-surface-variant/70" placeholder="说点什么..." type="text">
+<button class="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-primary hover:bg-surface-variant/50 rounded-full transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]" data-icon="send">send</span>
+</button>
+</div>
+<button class="flex items-center justify-center gap-1 bg-surface-container-low hover:bg-surface-variant text-on-surface px-4 py-2 rounded-full transition-colors font-label-caps text-label-caps">
+<span class="material-symbols-outlined" data-icon="favorite_border">favorite_border</span>
+<span class="">45</span>
+</button>
+</div>
+</div>
+
+
+</body></html>

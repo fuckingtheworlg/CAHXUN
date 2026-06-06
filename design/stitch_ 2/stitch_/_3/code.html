@@ -1,0 +1,298 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>CampusPulse - 搜索与热点</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=JetBrains+Mono:wght@500&amp;family=Manrope:wght@600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#727975",
+                        "surface-container-high": "#e7e8e9",
+                        "inverse-surface": "#2e3132",
+                        "primary": "#001610",
+                        "outline-variant": "#c1c8c4",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#cfc5b6",
+                        "surface": "#f8f9fa",
+                        "on-error-container": "#93000a",
+                        "inverse-on-surface": "#f0f1f2",
+                        "secondary-fixed-dim": "#a1d0c1",
+                        "on-surface-variant": "#414845",
+                        "tertiary": "#161209",
+                        "inverse-primary": "#adcec1",
+                        "surface-variant": "#e1e3e4",
+                        "secondary": "#3a675a",
+                        "on-primary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#d9dadb",
+                        "secondary-fixed": "#bceddd",
+                        "primary-container": "#0d2c24",
+                        "on-tertiary-fixed": "#201b12",
+                        "error": "#ba1a1a",
+                        "surface-container": "#edeeef",
+                        "surface-tint": "#46645b",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#bceddd",
+                        "tertiary-container": "#2b261c",
+                        "primary-fixed": "#c8eadd",
+                        "on-primary-fixed-variant": "#2f4c43",
+                        "on-background": "#191c1d",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "background": "#f8f9fa",
+                        "on-secondary-container": "#406d60",
+                        "on-tertiary-fixed-variant": "#4c463b",
+                        "on-surface": "#191c1d",
+                        "tertiary-fixed": "#ece1d2",
+                        "surface-bright": "#f8f9fa",
+                        "primary-fixed-dim": "#adcec1",
+                        "on-tertiary-container": "#958d7f",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-secondary-fixed-variant": "#214e43",
+                        "on-primary-fixed": "#012019",
+                        "on-primary-container": "#75958a",
+                        "surface-container-low": "#f3f4f5",
+                        "on-secondary-fixed": "#002019"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack-sm": "8px",
+                        "stack-lg": "32px",
+                        "stack-md": "16px",
+                        "container-padding": "20px",
+                        "gutter": "16px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "meta-sm": ["Inter"],
+                        "headline-md": ["Manrope"],
+                        "headline-lg-mobile": ["Manrope"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Manrope"],
+                        "label-caps": ["JetBrains Mono"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "meta-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            -webkit-tap-highlight-color: transparent;
+        }
+        .tonal-elevation-1 {
+            border: 1px solid #E9ECEF;
+            background-color: #ffffff;
+        }
+        .tonal-elevation-2 {
+            border: 1px solid #E9ECEF;
+            background-color: #ffffff;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.12);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-20 md:pb-0">
+<!-- TopAppBar (Web) -->
+<header class="hidden md:flex items-center justify-between px-container-padding h-16 w-full max-w-7xl mx-auto fixed top-0 z-50 bg-surface dark:bg-surface-dim bg-surface-container-low dark:bg-surface-container-lowest text-primary dark:text-primary-fixed">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary hover:bg-surface-variant/50 transition-colors active:scale-95 duration-100 rounded-full p-2">menu</button>
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">CampusPulse</span>
+</div>
+<nav class="flex gap-6">
+<a class="font-label-caps text-label-caps text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant/50 transition-colors active:scale-95 duration-100 px-3 py-2 rounded-md" href="#">Home</a>
+<a class="font-label-caps text-label-caps text-on-surface dark:text-on-surface font-bold hover:bg-surface-variant/50 transition-colors active:scale-95 duration-100 px-3 py-2 rounded-md" href="#">Search</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant/50 transition-colors active:scale-95 duration-100 px-3 py-2 rounded-md" href="#">AI Q&amp;A</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant/50 transition-colors active:scale-95 duration-100 px-3 py-2 rounded-md" href="#">Me</a>
+</nav>
+<button class="material-symbols-outlined text-primary hover:bg-surface-variant/50 transition-colors active:scale-95 duration-100 rounded-full p-2">notifications</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="w-full max-w-3xl mx-auto px-container-padding pt-6 md:pt-24 flex flex-col gap-stack-lg">
+<!-- Search Section -->
+<section class="flex flex-col gap-stack-sm">
+<div class="relative w-full group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant z-10 pointer-events-none">search</span>
+<input class="w-full pl-12 pr-12 py-3 bg-[#F1F3F5] text-on-surface border-none rounded-xl font-body-md text-body-md focus:bg-on-primary focus:ring-1 focus:ring-primary focus:outline-none transition-all placeholder:text-on-surface-variant" placeholder="搜索帖子、用户或板块..." type="text">
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-primary hover:text-secondary transition-colors">
+<span class="material-symbols-outlined">mic</span>
+</button>
+</div>
+<div class="flex gap-2 flex-wrap mt-2">
+<span class="font-label-caps text-label-caps px-3 py-1 bg-surface-container-high text-on-surface rounded-full cursor-pointer hover:bg-outline-variant transition-colors">#二手书交易</span>
+<span class="font-label-caps text-label-caps px-3 py-1 bg-surface-container-high text-on-surface rounded-full cursor-pointer hover:bg-outline-variant transition-colors">#期末冲刺</span>
+<span class="font-label-caps text-label-caps px-3 py-1 bg-surface-container-high text-on-surface rounded-full cursor-pointer hover:bg-outline-variant transition-colors">#社团招新</span>
+</div>
+</section>
+<!-- Hot Recommendations -->
+<section class="flex flex-col gap-stack-md">
+<h2 class="font-headline-md text-headline-md text-primary">热门推荐</h2>
+<div class="tonal-elevation-1 rounded-xl overflow-hidden group cursor-pointer">
+<div class="h-48 w-full bg-surface-variant relative overflow-hidden" data-alt="A vibrant digital illustration of a spring music festival on a university campus. The scene features a modern, abstract stage with dynamic light beams and stylized silhouettes of students dancing. The color palette is minimal but energetic, using deep forest greens, crisp whites, and subtle hints of warm gold to reflect a premium, academic yet festive atmosphere. High-resolution, clean lines.">
+<img alt="Spring Festival" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOW2Qc_nvH8R6EXooYRInAd9O-DmUKIGnW4eaD9PK-HgK8qCCf5BIVGhaadoimkpqGnS-165pL9NyJxPEuCOIaCqskbjHwGrvu3l4SuGvc2-pmyY-dGy3DnDXdMZGG_CroiiwkByGYc7I3rQCGqMBn_QSDsV_5YJGU5i9ltp-xQ54zTLYzU4hqgWtDVBaJmu1RVVb_5eRf4321lGkvYeX3y1VI4OMA4QzFVoAsSSfhyqe-2xx0FhpQ7EchowJnzHdDdYlWIoouMPLV">
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent"></div>
+<div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+<div>
+<span class="font-label-caps text-label-caps px-2 py-0.5 bg-on-primary text-primary rounded-sm mb-2 inline-block">官方活动</span>
+<h3 class="font-headline-md text-headline-md text-on-primary">校园春季音乐节门票开售</h3>
+</div>
+</div>
+</div>
+<div class="p-container-padding flex justify-between items-center bg-on-primary">
+<p class="font-body-md text-body-md text-on-surface-variant max-w-[70%]">本周五晚大礼堂，独立乐队与校园十佳歌手同台献唱，限量早鸟票发售中。</p>
+<button class="bg-primary-container text-on-primary font-label-caps text-label-caps px-4 py-2 rounded-lg hover:bg-secondary transition-colors whitespace-nowrap">立即抢票</button>
+</div>
+</div>
+</section>
+<!-- Trending Topics List -->
+<section class="flex flex-col gap-stack-md">
+<h2 class="font-headline-md text-headline-md text-primary">全站热榜</h2>
+<div class="tonal-elevation-1 rounded-xl bg-on-primary flex flex-col">
+<!-- Rank 1 -->
+<div class="flex gap-4 p-4 border-b border-surface-container-high hover:bg-surface-container-low transition-colors cursor-pointer group">
+<div class="font-headline-md text-headline-md text-error min-w-[24px] text-center">1</div>
+<div class="flex-1 flex flex-col gap-1">
+<h4 class="font-body-lg text-body-lg text-on-surface group-hover:text-primary transition-colors">南区三食堂新开的轻食窗口测评</h4>
+<div class="flex flex-wrap gap-2 items-center">
+<span class="font-label-caps text-label-caps px-2 py-0.5 bg-[#ffdad6] text-[#93000a] rounded-sm">热</span>
+<span class="font-label-caps text-label-caps px-2 py-0.5 bg-surface-container text-on-surface-variant rounded-sm">美食探店</span>
+<div class="ml-auto flex items-center gap-3 text-on-surface-variant">
+<span class="flex items-center gap-1 font-meta-sm text-meta-sm"><span class="material-symbols-outlined text-[16px]">visibility</span> 12.5k</span>
+<span class="flex items-center gap-1 font-meta-sm text-meta-sm"><span class="material-symbols-outlined text-[16px]">chat_bubble</span> 342</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Rank 2 -->
+<div class="flex gap-4 p-4 border-b border-surface-container-high hover:bg-surface-container-low transition-colors cursor-pointer group">
+<div class="font-headline-md text-headline-md text-[#d97706] min-w-[24px] text-center">2</div>
+<div class="flex-1 flex flex-col gap-1">
+<h4 class="font-body-lg text-body-lg text-on-surface group-hover:text-primary transition-colors">图书馆占座现象什么时候能管管？</h4>
+<div class="flex flex-wrap gap-2 items-center">
+<span class="font-label-caps text-label-caps px-2 py-0.5 bg-surface-container text-on-surface-variant rounded-sm">校园生活</span>
+<span class="font-label-caps text-label-caps px-2 py-0.5 bg-surface-container text-on-surface-variant rounded-sm">吐槽</span>
+<div class="ml-auto flex items-center gap-3 text-on-surface-variant">
+<span class="flex items-center gap-1 font-meta-sm text-meta-sm"><span class="material-symbols-outlined text-[16px]">visibility</span> 8.2k</span>
+<span class="flex items-center gap-1 font-meta-sm text-meta-sm"><span class="material-symbols-outlined text-[16px]">chat_bubble</span> 512</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Rank 3 -->
+<div class="flex gap-4 p-4 border-b border-surface-container-high hover:bg-surface-container-low transition-colors cursor-pointer group">
+<div class="font-headline-md text-headline-md text-[#d97706] min-w-[24px] text-center">3</div>
+<div class="flex-1 flex flex-col gap-1">
+<h4 class="font-body-lg text-body-lg text-on-surface group-hover:text-primary transition-colors">找室友：北校区校外租房，限女生</h4>
+<div class="flex flex-wrap gap-2 items-center">
+<span class="font-label-caps text-label-caps px-2 py-0.5 bg-surface-container text-on-surface-variant rounded-sm">租房求租</span>
+<div class="ml-auto flex items-center gap-3 text-on-surface-variant">
+<span class="flex items-center gap-1 font-meta-sm text-meta-sm"><span class="material-symbols-outlined text-[16px]">visibility</span> 5.1k</span>
+<span class="flex items-center gap-1 font-meta-sm text-meta-sm"><span class="material-symbols-outlined text-[16px]">chat_bubble</span> 89</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Rank 4 -->
+<div class="flex gap-4 p-4 border-b border-surface-container-high hover:bg-surface-container-low transition-colors cursor-pointer group">
+<div class="font-headline-md text-headline-md text-outline min-w-[24px] text-center">4</div>
+<div class="flex-1 flex flex-col gap-1">
+<h4 class="font-body-lg text-body-lg text-on-surface group-hover:text-primary transition-colors">计算机院大三选修课推荐指南</h4>
+<div class="flex flex-wrap gap-2 items-center">
+<span class="font-label-caps text-label-caps px-2 py-0.5 bg-[#bceddd] text-[#002019] rounded-sm">干货</span>
+<span class="font-label-caps text-label-caps px-2 py-0.5 bg-surface-container text-on-surface-variant rounded-sm">学习交流</span>
+<div class="ml-auto flex items-center gap-3 text-on-surface-variant">
+<span class="flex items-center gap-1 font-meta-sm text-meta-sm"><span class="material-symbols-outlined text-[16px]">visibility</span> 4.8k</span>
+<span class="flex items-center gap-1 font-meta-sm text-meta-sm"><span class="material-symbols-outlined text-[16px]">bookmark</span> 1.2k</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Rank 5 -->
+<div class="flex gap-4 p-4 border-b border-surface-container-high hover:bg-surface-container-low transition-colors cursor-pointer group">
+<div class="font-headline-md text-headline-md text-outline min-w-[24px] text-center">5</div>
+<div class="flex-1 flex flex-col gap-1">
+<h4 class="font-body-lg text-body-lg text-on-surface group-hover:text-primary transition-colors">失物招领：昨天在羽毛球馆捡到一张校园卡</h4>
+<div class="flex flex-wrap gap-2 items-center">
+<span class="font-label-caps text-label-caps px-2 py-0.5 bg-surface-container text-on-surface-variant rounded-sm">互助</span>
+<div class="ml-auto flex items-center gap-3 text-on-surface-variant">
+<span class="flex items-center gap-1 font-meta-sm text-meta-sm"><span class="material-symbols-outlined text-[16px]">visibility</span> 3.2k</span>
+<span class="flex items-center gap-1 font-meta-sm text-meta-sm"><span class="material-symbols-outlined text-[16px]">chat_bubble</span> 21</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Rank 6 -->
+<div class="flex gap-4 p-4 border-b border-surface-container-high hover:bg-surface-container-low transition-colors cursor-pointer group">
+<div class="font-headline-md text-headline-md text-outline min-w-[24px] text-center">6</div>
+<div class="flex-1 flex flex-col gap-1">
+<h4 class="font-body-lg text-body-lg text-on-surface group-hover:text-primary transition-colors">校猫"橘子"今天在主楼前晒太阳（多图）</h4>
+<div class="flex flex-wrap gap-2 items-center">
+<span class="font-label-caps text-label-caps px-2 py-0.5 bg-surface-container text-on-surface-variant rounded-sm">校园日常</span>
+<span class="font-label-caps text-label-caps px-2 py-0.5 bg-surface-container text-on-surface-variant rounded-sm">萌宠</span>
+<div class="ml-auto flex items-center gap-3 text-on-surface-variant">
+<span class="flex items-center gap-1 font-meta-sm text-meta-sm"><span class="material-symbols-outlined text-[16px]">visibility</span> 2.9k</span>
+<span class="flex items-center gap-1 font-meta-sm text-meta-sm"><span class="material-symbols-outlined text-[16px]">favorite</span> 456</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Rank 7 -->
+<div class="flex gap-4 p-4 hover:bg-surface-container-low transition-colors cursor-pointer group">
+<div class="font-headline-md text-headline-md text-outline min-w-[24px] text-center">7</div>
+<div class="flex-1 flex flex-col gap-1">
+<h4 class="font-body-lg text-body-lg text-on-surface group-hover:text-primary transition-colors">秋招第一份offer拿到了，还愿！</h4>
+<div class="flex flex-wrap gap-2 items-center">
+<span class="font-label-caps text-label-caps px-2 py-0.5 bg-surface-container text-on-surface-variant rounded-sm">求职就业</span>
+<div class="ml-auto flex items-center gap-3 text-on-surface-variant">
+<span class="flex items-center gap-1 font-meta-sm text-meta-sm"><span class="material-symbols-outlined text-[16px]">visibility</span> 2.1k</span>
+<span class="flex items-center gap-1 font-meta-sm text-meta-sm"><span class="material-symbols-outlined text-[16px]">chat_bubble</span> 128</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 bg-surface dark:bg-surface-dim bg-surface dark:bg-surface-dim shadow-sm font-label-caps text-label-caps z-50 border-t border-surface-container-high">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-container-high transition-all active:scale-90 duration-150 rounded-lg" href="#">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="">首页</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-full px-4 py-1 hover:bg-surface-container-high transition-all active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">search</span>
+<span class="">搜索</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-container-high transition-all active:scale-90 duration-150 rounded-lg" href="#">
+<span class="material-symbols-outlined mb-1">smart_toy</span>
+<span class="">AI问答</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-container-high transition-all active:scale-90 duration-150 rounded-lg" href="#">
+<span class="material-symbols-outlined mb-1">person</span>
+<span class="">我的</span>
+</a>
+</nav>
+
+
+</body></html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CampusPulse - 我的</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&amp;family=Be+Vietnam+Pro:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "outline": "#7b7486",
+                    "inverse-primary": "#d0bcff",
+                    "surface": "#fef7ff",
+                    "on-primary-container": "#fffbff",
+                    "secondary-fixed-dim": "#2fd9f4",
+                    "on-secondary": "#ffffff",
+                    "surface-container-high": "#ede5f3",
+                    "error": "#ba1a1a",
+                    "tertiary-container": "#c4ab01",
+                    "on-secondary-container": "#00616f",
+                    "primary-container": "#8455ef",
+                    "surface-variant": "#e7e0ed",
+                    "background": "#fef7ff",
+                    "secondary": "#006877",
+                    "inverse-surface": "#322f39",
+                    "surface-bright": "#fef7ff",
+                    "surface-dim": "#ded7e4",
+                    "surface-container-highest": "#e7e0ed",
+                    "outline-variant": "#cbc3d7",
+                    "surface-tint": "#6d3bd7",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-low": "#f8f1fe",
+                    "secondary-container": "#3fe1fd",
+                    "on-error-container": "#93000a",
+                    "on-secondary-fixed-variant": "#004e5a",
+                    "on-primary": "#ffffff",
+                    "on-surface-variant": "#494454",
+                    "on-tertiary": "#ffffff",
+                    "primary-fixed-dim": "#d0bcff",
+                    "on-error": "#ffffff",
+                    "on-background": "#1d1a23",
+                    "tertiary-fixed": "#ffe24c",
+                    "primary-fixed": "#e9ddff",
+                    "on-primary-fixed-variant": "#5516be",
+                    "tertiary": "#6d5e00",
+                    "on-tertiary-container": "#4a3f00",
+                    "on-surface": "#1d1a23",
+                    "on-primary-fixed": "#23005c",
+                    "surface-container": "#f3ebf8",
+                    "secondary-fixed": "#a2eeff",
+                    "on-tertiary-fixed-variant": "#524600",
+                    "inverse-on-surface": "#f5eefb",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed-dim": "#e2c62d",
+                    "primary": "#6b38d4",
+                    "on-secondary-fixed": "#001f25",
+                    "on-tertiary-fixed": "#211b00"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-margin": "24px",
+                    "stack-lg": "48px",
+                    "base": "8px",
+                    "stack-sm": "12px",
+                    "gutter": "16px",
+                    "stack-md": "24px"
+            },
+            "fontFamily": {
+                    "body-md": ["Be Vietnam Pro"],
+                    "display-lg": ["Plus Jakarta Sans"],
+                    "headline-lg-mobile": ["Plus Jakarta Sans"],
+                    "body-lg": ["Be Vietnam Pro"],
+                    "label-sm": ["Be Vietnam Pro"],
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "title-md": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      body {
+        -webkit-tap-highlight-color: transparent;
+        scroll-behavior: smooth;
+      }
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .bounce:active {
+        transform: scale(0.92);
+      }
+      .mesh-bg {
+        background: radial-gradient(circle at 0% 0%, #e9ddff 0%, transparent 50%),
+                    radial-gradient(circle at 100% 0%, #a2eeff 0%, transparent 50%),
+                    radial-gradient(circle at 100% 100%, #ffe24c44 0%, transparent 50%),
+                    radial-gradient(circle at 0% 100%, #8455ef22 0%, transparent 50%);
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary-container selection:text-on-primary-container min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-xl border-b border-white/20 dark:border-inverse-surface/20 shadow-[0_8px_30px_rgb(107,56,212,0.12)]">
+<div class="flex justify-between items-center px-container-margin py-stack-sm w-full">
+<button class="material-symbols-outlined text-primary dark:text-primary-fixed-dim hover:scale-110 hover:bg-surface-container-high transition-transform active:scale-95 duration-200 ease-out p-2 rounded-full" data-icon="menu">menu</button>
+<h1 class="font-display-lg text-title-md tracking-tight text-primary dark:text-primary-fixed-dim">CampusPulse</h1>
+<button class="material-symbols-outlined text-primary dark:text-primary-fixed-dim hover:scale-110 hover:bg-surface-container-high transition-transform active:scale-95 duration-200 ease-out p-2 rounded-full" data-icon="notifications">notifications</button>
+</div>
+</header>
+<main class="pt-20">
+<!-- Hero Profile Section -->
+<section class="mesh-bg relative px-container-margin pt-12 pb-24 rounded-b-[4rem] mb-[-4rem]">
+<div class="flex flex-col items-center gap-stack-md">
+<div class="relative">
+<div class="w-32 h-32 rounded-full border-4 border-white shadow-xl overflow-hidden bg-surface-container-highest">
+<img alt="Profile Picture" class="w-full h-full object-cover" data-alt="A close-up portrait of a cheerful university student with curly hair, smiling warmly in a bright campus setting. The lighting is golden hour, casting a soft, optimistic glow across the scene. The image uses a vibrant, high-key palette with soft purples and cyans in the background bokeh to match a playful, bubbly design aesthetic. The style is modern, professional photography with a focus on youthful energy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcr1MDMKsQMaah_N9q-KaS1rhYSb8Q8eqUtFm1uEmA2l-PDuWKKXjO8KRgXTVZQTaivVqPj-ve1Kc_n02zCl-uCx7nB2unfbwJnkL3LYBKgJvjzAtfffXGMHZfsHzDef5_6TFKC0vfmNOTFQleN9VyaEp7fcuUnLA1yHQ6-6gmWfm87RLMAsHsLkVlfADTweRNSOw1cykn_Cv-pHm7CGE91rJ47RXDgIWzGemy0CJL6JIQsoM7_tWoQ7z_66m_COuLFifiEj-XXVeS"/>
+</div>
+<button class="absolute bottom-0 right-0 bg-primary text-on-primary w-10 h-10 rounded-full flex items-center justify-center shadow-lg hover:scale-110 active:scale-90 transition-all border-2 border-white">
+<span class="material-symbols-outlined" data-icon="add" style="font-variation-settings: 'wght' 700;">add</span>
+</button>
+</div>
+<div class="text-center">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Alex Rivera</h2>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mt-1">2025届</p>
+</div>
+</div>
+</section>
+<!-- Stats Grid (Bento Style) -->
+<section class="px-container-margin grid grid-cols-2 gap-gutter relative z-10 mb-stack-lg">
+<div class="glass-card p-6 rounded-xl shadow-[0_15px_30px_rgba(107,56,212,0.08)] flex flex-col items-center justify-center transition-transform hover:-translate-y-1">
+<div class="bg-primary-container/20 p-3 rounded-full mb-3">
+<span class="material-symbols-outlined text-primary" data-icon="search">search</span>
+</div>
+<span class="font-display-lg text-title-md text-primary">128</span>
+<span class="font-label-sm text-label-sm text-outline">搜索次数</span>
+</div>
+<div class="glass-card p-6 rounded-xl shadow-[0_15px_30px_rgba(107,56,212,0.08)] flex flex-col items-center justify-center transition-transform hover:-translate-y-1">
+<div class="bg-secondary-container/20 p-3 rounded-full mb-3">
+<span class="material-symbols-outlined text-secondary" data-icon="smart_toy">smart_toy</span>
+</div>
+<span class="font-display-lg text-title-md text-secondary">42</span>
+<span class="font-label-sm text-label-sm text-outline">AI 问答</span>
+</div>
+</section>
+<!-- Profile Details Card -->
+<section class="px-container-margin mb-stack-lg">
+<div class="bg-white rounded-xl p-8 shadow-[0_20px_40px_rgba(107,56,212,0.06)] border border-surface-container-high">
+<h3 class="font-title-md text-title-md mb-6 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="person">person</span>
+                    个人信息
+                </h3>
+<div class="space-y-6">
+<div class="flex items-center justify-between border-b border-surface-container py-3">
+<span class="text-on-surface-variant font-body-md">昵称</span>
+<span class="font-title-md text-on-surface">Alex.Pulse</span>
+</div>
+<div class="flex items-center justify-between border-b border-surface-container py-3">
+<span class="text-on-surface-variant font-body-md">性别</span>
+<span class="font-title-md text-on-surface">非二元性别</span>
+</div>
+<div class="flex items-center justify-between border-b border-surface-container py-3">
+<span class="text-on-surface-variant font-body-md">学院</span>
+<span class="font-title-md text-on-surface">科技艺术大学</span>
+</div>
+<div class="flex items-center justify-between py-3">
+<span class="text-on-surface-variant font-body-md">年级</span>
+<span class="font-title-md text-on-surface">大四</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Action Links -->
+<section class="px-container-margin flex flex-col gap-4">
+<button class="bg-surface-container-low hover:bg-surface-container-high transition-colors w-full p-5 rounded-lg flex items-center justify-between group active:scale-[0.98]">
+<div class="flex items-center gap-4">
+<div class="bg-primary-container text-on-primary-container w-10 h-10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[20px]" data-icon="share">share</span>
+</div>
+<span class="font-title-md text-on-surface">分享给朋友</span>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</button>
+<button class="bg-surface-container-low hover:bg-surface-container-high transition-colors w-full p-5 rounded-lg flex items-center justify-between group active:scale-[0.98]">
+<div class="flex items-center gap-4">
+<div class="bg-tertiary-container text-on-tertiary-container w-10 h-10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[20px]" data-icon="delete_sweep">delete_sweep</span>
+</div>
+<span class="font-title-md text-on-surface">清除缓存</span>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</button>
+<button class="bg-error-container/30 hover:bg-error-container/50 transition-colors w-full p-5 rounded-lg flex items-center justify-between group active:scale-[0.98] mt-4">
+<div class="flex items-center gap-4">
+<div class="bg-error text-on-error w-10 h-10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[20px]" data-icon="logout">logout</span>
+</div>
+<span class="font-title-md text-error">退出登录</span>
+</div>
+</button>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-lg bg-surface/90 dark:bg-surface-dim/90 backdrop-blur-2xl shadow-[0_-10px_40px_rgb(107,56,212,0.1)]">
+<div class="flex justify-around items-center w-full pb-8 pt-4 px-gutter">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-2 hover:text-primary dark:hover:text-primary-fixed active:scale-90 transition-all bounce" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm">首页</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-2 hover:text-primary dark:hover:text-primary-fixed active:scale-90 transition-all bounce" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="search">search</span>
+<span class="font-label-sm text-label-sm">搜索</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-2 hover:text-primary dark:hover:text-primary-fixed active:scale-90 transition-all bounce" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="smart_toy">smart_toy</span>
+<span class="font-label-sm text-label-sm">AI 问答</span>
+</a>
+<!-- Active State: Me -->
+<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary-fixed-dim text-on-primary-container dark:text-on-primary-fixed-variant rounded-full px-5 py-2 transition-all duration-300 active:scale-90 bounce" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="person" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-sm text-label-sm">我的</span>
+</a>
+</div>
+</nav>
+<script>
+      // Subtle parallax effect on profile image hover
+      const profileContainer = document.querySelector('.w-32.h-32');
+      if (profileContainer) {
+        profileContainer.addEventListener('mousemove', (e) => {
+          const { left, top, width, height } = profileContainer.getBoundingClientRect();
+          const x = (e.clientX - left) / width - 0.5;
+          const y = (e.clientY - top) / height - 0.5;
+          
+          profileContainer.querySelector('img').style.transform = `scale(1.1) translate(${x * 10}px, ${y * 10}px)`;
+        });
+        
+        profileContainer.addEventListener('mouseleave', () => {
+          profileContainer.querySelector('img').style.transform = `scale(1) translate(0, 0)`;
+        });
+      }
+
+      // Ripple-like effect for action buttons
+      document.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          const ripple = document.createElement('div');
+          ripple.classList.add('absolute', 'bg-white/30', 'rounded-full', 'pointer-events-none');
+          ripple.style.width = ripple.style.height = '10px';
+          const rect = this.getBoundingClientRect();
+          ripple.style.left = `${e.clientX - rect.left}px`;
+          ripple.style.top = `${e.clientY - rect.top}px`;
+          ripple.style.transform = 'scale(0)';
+          ripple.style.transition = 'transform 0.5s ease-out, opacity 0.5s';
+          this.style.position = 'relative';
+          this.style.overflow = 'hidden';
+          this.appendChild(ripple);
+          
+          requestAnimationFrame(() => {
+            ripple.style.transform = 'scale(20)';
+            ripple.style.opacity = '0';
+          });
+          
+          setTimeout(() => ripple.remove(), 500);
+        });
+      });
+    </script>
+</body></html>

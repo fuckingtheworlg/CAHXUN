@@ -1,7 +1,9 @@
 const { login } = require('./utils/auth');
+const { getCurrent } = require('./utils/theme');
 
 App({
   onLaunch() {
+    this.globalData.theme = getCurrent();
     this.autoLogin();
   },
 
@@ -23,5 +25,6 @@ App({
 
   globalData: {
     isLoggedIn: false,
+    theme: 'vibrant',
   },
 });

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>贴文详情 - Bubbly Theme</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#8B5CF6", // Lilac Violet
+                        secondary: "#3B82F6", // Energy Blue
+                        "background-light": "#F8F9FE",
+                        "background-dark": "#0F172A",
+                    },
+                    fontFamily: {
+                        display: ["PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "1.5rem",
+                    },
+                },
+            },
+        };
+    </script>
+<style>
+        body {
+            font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .bubbly-gradient {
+            background: linear-gradient(135deg, #E0E7FF 0%, #F5F3FF 100%);
+        }
+        .dark .bubbly-gradient {
+            background: linear-gradient(135deg, #1E1B4B 0%, #2E1065 100%);
+        }
+        .bubbly-card {
+            box-shadow: 0 10px 25px -5px rgba(139, 92, 246, 0.1), 0 8px 10px -6px rgba(139, 92, 246, 0.1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen text-slate-800 dark:text-slate-200">
+<header class="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md px-4 h-16 flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-icons text-slate-600 dark:text-slate-300">chevron_left</span>
+</button>
+<h1 class="text-lg font-bold">贴文详情</h1>
+</div>
+<div class="flex items-center gap-2">
+<div class="bg-slate-100 dark:bg-slate-800 rounded-full px-3 py-1 flex items-center gap-3">
+<span class="material-icons text-sm">more_horiz</span>
+<div class="w-[1px] h-3 bg-slate-300 dark:bg-slate-600"></div>
+<span class="material-icons text-sm">radio_button_checked</span>
+</div>
+</div>
+</header>
+<main class="p-4 space-y-4">
+<div class="bg-white dark:bg-slate-900 rounded-[2rem] p-6 bubbly-card border border-white dark:border-slate-800">
+<div class="flex items-center justify-between mb-4">
+<span class="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-500 dark:text-blue-300 text-xs font-medium">
+                    #吐槽灌水
+                </span>
+<span class="text-xs text-orange-400 bg-orange-50 dark:bg-orange-900/20 px-2 py-0.5 rounded-full flex items-center gap-1">
+<span class="w-1 h-1 bg-orange-400 rounded-full"></span> 27 阅读
+                </span>
+</div>
+<p class="text-xs text-slate-400 dark:text-slate-500 mb-4">2026-04-12 11:16:13</p>
+<h2 class="text-lg font-semibold leading-relaxed mb-6">
+                宿舍隔壁打游戏打到凌晨3点，声音巨大，有什么好办法治吗
+            </h2>
+<div class="grid grid-cols-2 gap-3 mb-4">
+<div class="aspect-square rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800">
+<img alt="Office window view" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCO3kHFUToXzXKwsLPXCQPErUwlCZM-M0Yehm37VzRYJWNrjFh1JzAKIkCl22du6pUmKnyeVL8v0znGVWnpu47TTisjzVu-2u4tSe_zS-Pei5sdJif2w2SC1vwZob7WFcv0Buc0jN_09PlDyLP3QuEOlmAQHn9mllJC6zPFF_h1Oq_-NDm8pf8BAFr_jEYp0ChWI7z7eKGsyq1iinJrvHg7O5etxFWpOyo49cRVkxgGybt1oY98rpjj4A5PfnRdtEoUY0WcK32SXhgb"/>
+</div>
+<div class="aspect-square rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800">
+<img alt="Mountain road view" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhQqxv7PnglVuFk2UUV7GULUJ3r_KVt2HoWcM1L6rB_IxIHMe3GYAfT_QPmqrvJbhaCoth1IXZAjo9TtRZYklZ_-9t302Pp8X-8QlX8qyG4Sk3UsOKW83uNqfh9Z05cVQ3QKHdQ1VuS_cFcKVTDysG-QmLWxV8nKhiGMJ781hGHi-oPqkHupreG0vhvFD5xVDjd-gsiyjiW9Tj0bV4_4ueOOfOVKiAbwlEPheynIx_m3xKoZ78WGSd4gYGLGNGGXlHsRf0L5n2ytKE"/>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 rounded-[2rem] p-6 bubbly-card border border-white dark:border-slate-800">
+<div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-50 dark:border-slate-800">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-4 bg-primary rounded-full"></div>
+<h3 class="font-bold">评论</h3>
+<span class="bg-slate-100 dark:bg-slate-800 text-slate-500 px-2 py-0.5 rounded-lg text-xs">3</span>
+</div>
+<span class="text-[10px] text-slate-300 dark:text-slate-600 uppercase tracking-wider">UGC 待报备开放</span>
+</div>
+<div class="space-y-8">
+<div class="flex gap-3">
+<div class="w-10 h-10 rounded-full bg-blue-100 overflow-hidden flex-shrink-0">
+<img alt="User 小赵" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUonBpc0gv10OqpskDMEjgWX0RUZ0jgAR4NmEgcOnJq-AR0a0UlK5B_NlNgrueOmPDgqvJApdennXZItCQmgK7spOtlKi3y1avBXDB_xvkEtN13_zK_RJHC2q8t_wg1nGfdM7mbCRLVagh_CUdiII7cynIdfUBiF-rJ8k-Bubhuj6X9JolyvJML1eEsd3mCKEyoVgEecBQ2Ni5av2nobob7K5tKKWlcrvv3KzLs3kIjnvneVsQXPVkepYOgwXPANStpvCE2e1_K2RO"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<h4 class="text-sm font-bold text-slate-700 dark:text-slate-300">小赵</h4>
+<span class="text-xs text-slate-400">2 小时前</span>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-3">这个挺有用的，感谢分享！</p>
+<div class="flex items-center gap-4 text-slate-400">
+<button class="flex items-center gap-1 text-xs hover:text-primary transition-colors">
+<span class="material-icons text-sm">favorite_border</span> 3
+                            </button>
+<button class="text-xs hover:text-primary transition-colors">回复</button>
+</div>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="w-10 h-10 rounded-full bg-orange-100 overflow-hidden flex-shrink-0">
+<img alt="User 小钱" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxRztylMLsG0VR2CK6WPj45K7N5s8BX5qu7Jbq9mHDEUasvx6V3lJaYbcUhrXbUBfXHv-qWl_ncyuT37XwMNoMxhl_znDYjm4QcSvSGze19sogUQzUTpFYhRazLwi1Pq2tG2POaA3xdym1tPX0iceOZeXCgWS1BVUCVaZ8J33aktYYGL8SLCYHZyK-XKYRyzp0SjHb2hCSdgZIMZcoBUwpVBA8USCIhKnGztvwBghQ4MhCdH6o9uU-7cTWQbEJj0AFdaE9er8Y9iJT"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<h4 class="text-sm font-bold text-slate-700 dark:text-slate-300">小钱</h4>
+<span class="text-xs text-slate-400">5 小时前</span>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-3">我也遇到过类似情况，确实是这样～</p>
+<div class="flex items-center gap-4 text-slate-400">
+<button class="flex items-center gap-1 text-xs hover:text-primary transition-colors">
+<span class="material-icons text-sm">favorite_border</span> 1
+                            </button>
+<button class="text-xs hover:text-primary transition-colors">回复</button>
+</div>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="w-10 h-10 rounded-full bg-green-100 overflow-hidden flex-shrink-0">
+<img alt="User 小孙" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbpXASe2O3zMPTio5tMalUDd49OEf_sA95CA-qiYjdYzvpR1ii-0yGE9y9Vyo0n19V4DcbVOohzxaLPLEUWwNpASDnhCsjTrlmGTMRyDVMBkrQf5t3qlYoNTv2m-egQew0BW9YldrXlmZmMZDJLTt1P8xBRiErpDaN-dWR8ByZ2UeXMDlpEvpNmgHnVTKcXMha464zuTLe22nntr1wNCPIjWLR_1Spr-Aed7vVIovbfnrZzNeSwAcw-cgBqDTwYFfio6Y4YY_PGhIc"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<h4 class="text-sm font-bold text-slate-700 dark:text-slate-300">小孙</h4>
+<span class="text-xs text-slate-400">昨天</span>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-3">收藏了 +1</p>
+<div class="flex items-center gap-4 text-slate-400">
+<button class="flex items-center gap-1 text-xs hover:text-primary transition-colors">
+<span class="material-icons text-sm">favorite_border</span> 0
+                            </button>
+<button class="text-xs hover:text-primary transition-colors">回复</button>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-10 py-4 flex items-center justify-center gap-4 text-slate-300 dark:text-slate-700">
+<div class="h-[1px] w-12 bg-slate-100 dark:bg-slate-800"></div>
+<span class="text-xs">暂无更多评论</span>
+<div class="h-[1px] w-12 bg-slate-100 dark:bg-slate-800"></div>
+</div>
+</div>
+<div class="h-20"></div> 
+</main>
+<footer class="fixed bottom-0 inset-x-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-t border-slate-100 dark:border-slate-800 px-4 py-3 flex items-center gap-3 safe-area-bottom">
+<div class="flex-1 bg-slate-100 dark:bg-slate-800 rounded-full px-4 py-2.5">
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full text-slate-600 dark:text-slate-300" placeholder="说点什么..." type="text"/>
+</div>
+<button class="flex items-center justify-center gap-2 bg-rose-500 text-white px-5 py-2.5 rounded-full font-bold shadow-lg shadow-rose-500/20 active:scale-95 transition-transform">
+<span class="material-icons text-lg">favorite</span>
+<span class="text-sm">1</span>
+</button>
+</footer>
+<style>
+        .safe-area-bottom {
+            padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
+        }
+    </style>
+
+</body></html>

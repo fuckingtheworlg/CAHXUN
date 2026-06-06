@@ -1,12 +1,13 @@
 const { streamRequest } = require('../../utils/request');
 const { ensureLogin } = require('../../utils/auth');
+const { withTheme } = require('../../utils/theme');
 
 let _msgId = 0;
 function nextId() {
   return 'msg-' + ++_msgId;
 }
 
-Page({
+Page(withTheme({
   data: {
     messages: [],
     inputValue: '',
@@ -110,4 +111,4 @@ Page({
       }
     );
   },
-});
+}));

@@ -1,4 +1,4 @@
-<view class="chat-page">
+<view class="chat-page theme-{{theme}}">
   <!-- 顶部装饰背景 -->
   <view class="chat-bg-deco">
     <view class="bg-blob bg-blob-1"></view>

@@ -35,11 +35,8 @@
 }
 
 .tab-bar-icon-wrap--active {
-  background: rgba(74, 144, 217, 0.16);
-  box-shadow:
-    0 6rpx 18rpx rgba(74, 144, 217, 0.38),
-    0 2rpx 6rpx rgba(74, 144, 217, 0.22),
-    inset 0 2rpx 6rpx rgba(255, 255, 255, 0.75);
+  background: var(--c-tabbar-active-bg);
+  box-shadow: var(--c-tabbar-active-shadow);
   transform: scale(1.08);
 }
 
@@ -52,4 +49,10 @@
   margin-top: 4rpx;
   font-size: 20rpx;
   line-height: 1.2;
+  color: #999999;
+}
+
+.tab-bar-text--active {
+  color: var(--c-tabbar-selected-text);
+  font-weight: 600;
 }

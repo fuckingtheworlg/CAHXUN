@@ -1,6 +1,7 @@
 const { request } = require('../../utils/request');
+const { withTheme } = require('../../utils/theme');
 
-Page({
+Page(withTheme({
   data: {
     posts: [],
     page: 1,
@@ -90,4 +91,4 @@ Page({
         this.setData({ loading: false });
       });
   },
-});
+}));

@@ -1,4 +1,4 @@
-<view class="page tab-page-pad">
+<view class="page tab-page-pad theme-{{theme}}">
   <!-- 顶部装饰 hero -->
   <view class="hero">
     <view class="hero-blob blob-1"></view>

@@ -1,5 +1,5 @@
 <!-- ===== 未登录引导页 ===== -->
-<view class="login-page" wx:if="{{!isLoggedIn}}">
+<view class="login-page theme-{{theme}}" wx:if="{{!isLoggedIn}}">
   <view class="login-hero">
     <view class="login-logo-text">校园墙</view>
     <text class="login-title">校园墙查询</text>
@@ -26,7 +26,7 @@
 </view>
 
 <!-- ===== 已登录 - 个人中心 ===== -->
-<view class="profile-page" wx:if="{{isLoggedIn}}">
+<view class="profile-page theme-{{theme}}" wx:if="{{isLoggedIn}}">
 
   <!-- 头部卡片 -->
   <view class="profile-header">
@@ -105,6 +105,14 @@
 
   <!-- 功能列表 -->
   <view class="section-card">
+    <view class="info-row" bindtap="onOpenThemePicker">
+      <text class="info-label">外观主题</text>
+      <view class="info-right">
+        <text class="info-value">{{currentThemeName}}</text>
+        <text class="info-arrow">›</text>
+      </view>
+    </view>
+
     <button class="info-row info-row-btn" open-type="share" hover-class="info-row-hover">
       <text class="info-label">分享给朋友</text>
       <view class="info-right">
@@ -139,6 +147,37 @@
   <!-- 底部 -->
   <view class="footer-text">校园墙查询 · 仅供校内使用</view>
 
+</view>
+
+<!-- 主题选择弹窗 -->
+<view class="modal-mask" wx:if="{{showThemePicker}}" bindtap="onCloseThemePicker">
+  <view class="theme-modal" catchtap="">
+    <view class="theme-modal-title">选择外观主题</view>
+    <view class="theme-list">
+      <view
+        wx:for="{{themeList}}"
+        wx:key="key"
+        class="theme-card {{theme === item.key ? 'theme-card-active' : ''}}"
+        data-key="{{item.key}}"
+        bindtap="onSelectTheme"
+      >
+        <view
+          class="theme-preview"
+          style="background: linear-gradient(135deg, {{item.gradient[0]}} 0%, {{item.gradient[1]}} 50%, {{item.gradient[2]}} 100%);"
+        >
+          <view class="theme-dot dot-1" style="background: {{item.primary}}"></view>
+          <view class="theme-dot dot-2" style="background: {{item.accent}}"></view>
+          <view class="theme-check" wx:if="{{theme === item.key}}">✓</view>
+        </view>
+        <view class="theme-info">
+          <text class="theme-name">{{item.name}}</text>
+          <text class="theme-sub">{{item.sub}}</text>
+          <text class="theme-desc">{{item.desc}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="theme-modal-close" bindtap="onCloseThemePicker">完成</view>
+  </view>
 </view>
 
 <!-- 编辑昵称弹窗 -->
