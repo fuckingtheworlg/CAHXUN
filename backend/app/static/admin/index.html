@@ -670,6 +670,9 @@ tbody tr:hover { background: #f9fafb; }
       <div class="nav-item" data-page="posts" onclick="navigate('posts')">
         <div class="nav-icon">📝</div><span>贴文管理</span>
       </div>
+      <div class="nav-item" data-page="users" onclick="navigate('users')">
+        <div class="nav-icon">👥</div><span>用户管理</span>
+      </div>
       <div class="nav-item" data-page="chatlogs" onclick="navigate('chatlogs')">
         <div class="nav-icon">💬</div><span>问答日志</span>
       </div>
@@ -725,6 +728,7 @@ let editingPostId = null;
 const pageTitles = {
   dashboard: '仪表盘',
   posts: '贴文管理',
+  users: '用户管理',
   chatlogs: '问答日志',
   import: '数据导入',
   settings: '系统设置',
@@ -829,6 +833,7 @@ function renderPage() {
   switch (currentPage) {
     case 'dashboard': renderDashboard(); break;
     case 'posts': renderPosts(1); break;
+    case 'users': renderUsers(1); break;
     case 'chatlogs': renderChatLogs(1); break;
     case 'import': renderImport(); break;
     case 'settings': renderSettings(); break;
@@ -865,10 +870,12 @@ async function renderDashboard() {
     const s = await api('/admin/stats');
     area.innerHTML =
       '<div class="stats-grid">' +
+        '<div class="stat-card"><div class="stat-label">注册用户</div><div class="stat-value">' + num(s.total_users || 0) + '</div></div>' +
         '<div class="stat-card"><div class="stat-label">贴文总数</div><div class="stat-value">' + num(s.total_posts) + '</div></div>' +
         '<div class="stat-card"><div class="stat-label">今日新增贴文</div><div class="stat-value">' + num(s.today_posts) + '</div></div>' +
         '<div class="stat-card"><div class="stat-label">今日 AI 问答</div><div class="stat-value">' + num(s.today_chats) + '</div></div>' +
         '<div class="stat-card"><div class="stat-label">活跃会话</div><div class="stat-value">' + num(s.active_sessions) + '</div></div>' +
+        '<div class="stat-card"><div class="stat-label">封禁用户</div><div class="stat-value" style="color:var(--danger)">' + num(s.banned_users || 0) + '</div></div>' +
       '</div>' +
       '<div class="card">' +
         '<div class="card-header"><h3>系统概览</h3></div>' +
@@ -1121,6 +1128,177 @@ function postFormHtml(content, images, category) {
       '<label>分类标签</label>' +
       '<input class="form-input" id="formCategory" value="' + esc(category) + '" placeholder="如: 失物招领、二手交易">' +
     '</div>';
+}
+
+/* ─────── User Management ─────── */
+let usersSearch = '';
+let usersStatus = '';
+
+async function renderUsers(page) {
+  const area = document.getElementById('contentArea');
+  try {
+    const qs = (usersSearch ? '&q=' + encodeURIComponent(usersSearch) : '') +
+               (usersStatus ? '&status=' + usersStatus : '');
+    const d = await api('/admin/users?page=' + page + '&page_size=15' + qs);
+    const totalPages = Math.ceil(d.total / d.page_size) || 1;
+
+    let rows = '';
+    for (const u of d.items) {
+      const last = u.last_seen_at ? u.last_seen_at.replace('T',' ').slice(0,19) : '-';
+      const created = u.created_at ? u.created_at.replace('T',' ').slice(0,10) : '-';
+      const statusBadge = u.is_banned
+        ? '<span class="badge" style="background:#fef2f2;color:#dc2626">已封禁</span>'
+        : '<span class="badge badge-green">正常</span>';
+      rows += '<tr>' +
+        '<td><code style="font-size:12px;background:#f3f4f6;padding:2px 6px;border-radius:4px">' + esc(u.openid_short || '-') + '</code></td>' +
+        '<td>' + esc(u.nickname || '-') + '</td>' +
+        '<td style="white-space:nowrap">' + statusBadge + '</td>' +
+        '<td>' + u.login_count + '</td>' +
+        '<td style="white-space:nowrap">' + esc(last) + '</td>' +
+        '<td style="white-space:nowrap">' + esc(created) + '</td>' +
+        '<td><div class="action-links">' +
+          '<a class="action-link-primary" onclick="viewUser(\'' + esc(u.openid) + '\')">详情</a>' +
+          (u.is_banned
+            ? '<a class="action-link-primary" onclick="unbanUser(\'' + esc(u.openid) + '\')">解封</a>'
+            : '<a class="action-link-danger" onclick="banUser(\'' + esc(u.openid) + '\')">封禁</a>') +
+        '</div></td>' +
+      '</tr>';
+    }
+
+    area.innerHTML =
+      '<div class="card">' +
+        '<div class="card-header">' +
+          '<h3>用户列表 (' + d.total + ')</h3>' +
+          '<div class="card-header-actions">' +
+            '<select onchange="onUsersStatusChange(this.value)" style="padding:7px 12px;border:1px solid var(--border);border-radius:6px;font-size:13px;outline:none">' +
+              '<option value="" ' + (usersStatus === '' ? 'selected' : '') + '>全部状态</option>' +
+              '<option value="active" ' + (usersStatus === 'active' ? 'selected' : '') + '>正常</option>' +
+              '<option value="banned" ' + (usersStatus === 'banned' ? 'selected' : '') + '>已封禁</option>' +
+            '</select>' +
+            '<div class="search-box">' +
+              '<input id="usersSearchInput" placeholder="搜索 openid / 昵称 / 备注..." value="' + esc(usersSearch) + '" onkeydown="if(event.key===\'Enter\')searchUsers()">' +
+              '<button class="btn-sm" onclick="searchUsers()">搜索</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div style="overflow-x:auto">' +
+          '<table>' +
+            '<thead><tr><th>OpenID</th><th>昵称</th><th>状态</th><th>登录次数</th><th>最后活跃</th><th>注册时间</th><th>操作</th></tr></thead>' +
+            '<tbody>' + (rows || '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-secondary)">暂无数据</td></tr>') + '</tbody>' +
+          '</table>' +
+        '</div>' +
+        '<div class="pagination">' +
+          '<span>第 ' + d.page + ' / ' + totalPages + ' 页，共 ' + d.total + ' 条</span>' +
+          '<div class="pagination-btns">' +
+            '<button ' + (d.page <= 1 ? 'disabled' : '') + ' onclick="renderUsers(' + (d.page - 1) + ')">上一页</button>' +
+            '<button ' + (d.page >= totalPages ? 'disabled' : '') + ' onclick="renderUsers(' + (d.page + 1) + ')">下一页</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+  } catch (e) {
+    area.innerHTML = '<p style="color:var(--danger)">加载失败: ' + esc(e.message) + '</p>';
+  }
+}
+
+function searchUsers() {
+  usersSearch = document.getElementById('usersSearchInput').value.trim();
+  renderUsers(1);
+}
+
+function onUsersStatusChange(v) {
+  usersStatus = v;
+  renderUsers(1);
+}
+
+async function viewUser(openid) {
+  try {
+    const u = await api('/admin/users/' + encodeURIComponent(openid));
+    const fmt = (dt) => dt ? dt.replace('T',' ').slice(0,19) : '-';
+    const body =
+      '<div style="display:grid;grid-template-columns:max-content 1fr;gap:10px 16px;font-size:13px;line-height:1.8">' +
+        '<div style="color:var(--text-secondary)">OpenID</div>' +
+        '<div><code style="font-size:12px;background:#f3f4f6;padding:2px 8px;border-radius:4px">' + esc(u.openid) + '</code></div>' +
+        '<div style="color:var(--text-secondary)">昵称</div><div>' + esc(u.nickname || '未设置') + '</div>' +
+        '<div style="color:var(--text-secondary)">状态</div><div>' +
+          (u.is_banned
+            ? '<span class="badge" style="background:#fef2f2;color:#dc2626">已封禁</span> ' + esc(u.ban_reason || '')
+            : '<span class="badge badge-green">正常</span>') +
+        '</div>' +
+        '<div style="color:var(--text-secondary)">登录次数</div><div>' + u.login_count + '</div>' +
+        '<div style="color:var(--text-secondary)">注册时间</div><div>' + fmt(u.created_at) + '</div>' +
+        '<div style="color:var(--text-secondary)">最后登录</div><div>' + fmt(u.last_login_at) + '</div>' +
+        '<div style="color:var(--text-secondary)">最后活跃</div><div>' + fmt(u.last_seen_at) + '</div>' +
+        '<div style="color:var(--text-secondary)">活跃会话</div><div>' + (u.active_sessions || 0) + '</div>' +
+        '<div style="color:var(--text-secondary)">近一分钟提问</div><div>' + (u.recent_chat_count || 0) + '</div>' +
+        '<div style="color:var(--text-secondary)">管理员备注</div>' +
+        '<div>' +
+          '<input id="userNoteInput" value="' + esc(u.note || '') + '" placeholder="给该用户加个备注..." style="width:100%;padding:6px 12px;border:1px solid var(--border);border-radius:6px;font-size:13px;outline:none">' +
+        '</div>' +
+      '</div>' +
+      '<div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">' +
+        '<button class="btn-sm" onclick="saveUserNote(\'' + esc(u.openid) + '\')">保存备注</button>' +
+        '<button class="btn-sm" style="background:#6b7280" onclick="kickUser(\'' + esc(u.openid) + '\')">强制下线</button>' +
+        (u.is_banned
+          ? '<button class="btn-sm" style="background:var(--success)" onclick="unbanUser(\'' + esc(u.openid) + '\', true)">解除封禁</button>'
+          : '<button class="btn-sm" style="background:var(--danger)" onclick="banUser(\'' + esc(u.openid) + '\', true)">封禁用户</button>') +
+      '</div>';
+    openModal('用户 ' + esc(u.openid_short || ''), body, 'view', false);
+  } catch (e) {
+    showToast('加载失败: ' + e.message, 'error');
+  }
+}
+
+async function saveUserNote(openid) {
+  const note = document.getElementById('userNoteInput').value.trim();
+  try {
+    await api('/admin/users/' + encodeURIComponent(openid) + '/note', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ note }),
+    });
+    showToast('备注已保存');
+  } catch (e) {
+    showToast(e.message, 'error');
+  }
+}
+
+async function banUser(openid, fromDetail) {
+  const reason = prompt('请输入封禁原因（可留空）：', '');
+  if (reason === null) return;
+  try {
+    const res = await api('/admin/users/' + encodeURIComponent(openid) + '/ban', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ reason }),
+    });
+    showToast(res.message || '已封禁');
+    if (fromDetail) closeModal();
+    renderUsers(1);
+  } catch (e) {
+    showToast(e.message, 'error');
+  }
+}
+
+async function unbanUser(openid, fromDetail) {
+  if (!confirm('确定要解封该用户吗？')) return;
+  try {
+    await api('/admin/users/' + encodeURIComponent(openid) + '/unban', { method: 'POST' });
+    showToast('已解封');
+    if (fromDetail) closeModal();
+    renderUsers(1);
+  } catch (e) {
+    showToast(e.message, 'error');
+  }
+}
+
+async function kickUser(openid) {
+  if (!confirm('确定要强制该用户所有端下线吗？（不影响账号）')) return;
+  try {
+    const res = await api('/admin/users/' + encodeURIComponent(openid) + '/sessions', { method: 'DELETE' });
+    showToast(res.message || '已下线');
+  } catch (e) {
+    showToast(e.message, 'error');
+  }
 }
 
 /* ─────── Chat Logs ─────── */

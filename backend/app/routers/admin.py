@@ -16,7 +16,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import get_settings
 from app.database import get_db
-from app.models import Post
+from app.models import Post, User
 from app.services.search import search_posts
 from app.services.chat_logger import get_chat_logs, get_today_chat_count
 
@@ -67,6 +67,14 @@ class TestApiKeyRequest(BaseModel):
     api_key: Optional[str] = None
     base_url: Optional[str] = None
     model: Optional[str] = None
+
+
+class BanRequest(BaseModel):
+    reason: Optional[str] = ""
+
+
+class NoteRequest(BaseModel):
+    note: Optional[str] = ""
 
 
 # --------------- Auth helpers ---------------
@@ -131,11 +139,25 @@ async def admin_stats(request: Request, db: AsyncSession = Depends(get_db)):
             break
     active_sessions = len(session_keys)
 
+    total_users = 0
+    banned_users = 0
+    try:
+        total_users = (await db.execute(select(func.count()).select_from(User))).scalar() or 0
+        banned_users = (
+            await db.execute(
+                select(func.count()).select_from(User).where(User.is_banned == True)  # noqa: E712
+            )
+        ).scalar() or 0
+    except Exception:
+        pass
+
     return {
         "total_posts": total_posts,
         "today_posts": today_posts,
         "today_chats": today_chats,
         "active_sessions": active_sessions,
+        "total_users": total_users,
+        "banned_users": banned_users,
         "rate_limit_per_minute": settings.rate_limit_per_minute,
     }
 
@@ -222,6 +244,158 @@ async def admin_delete_post(post_id: int, db: AsyncSession = Depends(get_db)):
     await db.delete(post)
     await db.commit()
     return {"message": "删除成功"}
+
+
+# --------------- User management ---------------
+
+@router.get("/admin/users", dependencies=[Depends(require_admin)])
+async def admin_list_users(
+    page: int = Query(1, ge=1),
+    page_size: int = Query(20, ge=1, le=100),
+    q: str = Query(default=""),
+    status: str = Query(default="", description="all|banned|active"),
+    db: AsyncSession = Depends(get_db),
+):
+    base = select(User)
+    count_base = select(func.count()).select_from(User)
+
+    if q.strip():
+        kw = f"%{q.strip()}%"
+        cond = (User.openid.like(kw)) | (User.nickname.like(kw)) | (User.note.like(kw))
+        base = base.where(cond)
+        count_base = count_base.where(cond)
+
+    if status == "banned":
+        base = base.where(User.is_banned == True)  # noqa: E712
+        count_base = count_base.where(User.is_banned == True)  # noqa: E712
+    elif status == "active":
+        base = base.where(User.is_banned == False)  # noqa: E712
+        count_base = count_base.where(User.is_banned == False)  # noqa: E712
+
+    total = (await db.execute(count_base)).scalar() or 0
+    offset = (page - 1) * page_size
+    rows = (
+        await db.execute(
+            base.order_by(desc(User.last_seen_at)).offset(offset).limit(page_size)
+        )
+    ).scalars().all()
+
+    return {
+        "total": total,
+        "page": page,
+        "page_size": page_size,
+        "items": [r.to_dict() for r in rows],
+    }
+
+
+@router.get("/admin/users/{openid}", dependencies=[Depends(require_admin)])
+async def admin_get_user(openid: str, request: Request, db: AsyncSession = Depends(get_db)):
+    user = (
+        await db.execute(select(User).where(User.openid == openid))
+    ).scalar_one_or_none()
+    if not user:
+        raise HTTPException(status_code=404, detail="用户不存在")
+
+    redis = request.app.state.redis
+
+    # 当前会话数（同一用户可能多端登录）
+    session_count = 0
+    cursor = "0"
+    while True:
+        cursor, keys = await redis.scan(cursor=cursor, match="session:*", count=200)
+        for k in keys:
+            if (await redis.get(k)) == openid:
+                session_count += 1
+        if cursor == 0 or cursor == "0":
+            break
+
+    # 当前限流计数（一分钟内问答次数）
+    rl_count = 0
+    try:
+        rl_count = await redis.zcard(f"ratelimit:{openid}")
+    except Exception:
+        pass
+
+    data = user.to_dict()
+    data["active_sessions"] = session_count
+    data["recent_chat_count"] = rl_count
+    return data
+
+
+@router.post("/admin/users/{openid}/ban", dependencies=[Depends(require_admin)])
+async def admin_ban_user(
+    openid: str,
+    body: BanRequest,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+):
+    user = (
+        await db.execute(select(User).where(User.openid == openid))
+    ).scalar_one_or_none()
+    if not user:
+        raise HTTPException(status_code=404, detail="用户不存在")
+    user.is_banned = True
+    user.ban_reason = (body.reason or "").strip() or "违规行为"
+    await db.commit()
+
+    # 同时强制下线该用户所有 session
+    redis = request.app.state.redis
+    cursor = "0"
+    killed = 0
+    while True:
+        cursor, keys = await redis.scan(cursor=cursor, match="session:*", count=200)
+        for k in keys:
+            if (await redis.get(k)) == openid:
+                await redis.delete(k)
+                killed += 1
+        if cursor == 0 or cursor == "0":
+            break
+
+    return {"message": f"已封禁，并踢下线 {killed} 个会话", "user": user.to_dict()}
+
+
+@router.post("/admin/users/{openid}/unban", dependencies=[Depends(require_admin)])
+async def admin_unban_user(openid: str, db: AsyncSession = Depends(get_db)):
+    user = (
+        await db.execute(select(User).where(User.openid == openid))
+    ).scalar_one_or_none()
+    if not user:
+        raise HTTPException(status_code=404, detail="用户不存在")
+    user.is_banned = False
+    user.ban_reason = None
+    await db.commit()
+    return {"message": "已解封", "user": user.to_dict()}
+
+
+@router.put("/admin/users/{openid}/note", dependencies=[Depends(require_admin)])
+async def admin_update_user_note(
+    openid: str, body: NoteRequest, db: AsyncSession = Depends(get_db)
+):
+    user = (
+        await db.execute(select(User).where(User.openid == openid))
+    ).scalar_one_or_none()
+    if not user:
+        raise HTTPException(status_code=404, detail="用户不存在")
+    user.note = (body.note or "").strip() or None
+    await db.commit()
+    return {"message": "备注已更新", "user": user.to_dict()}
+
+
+@router.delete("/admin/users/{openid}/sessions", dependencies=[Depends(require_admin)])
+async def admin_kick_user(openid: str, request: Request):
+    """强制该用户所有端下线（不改用户表，仅清除 session）。"""
+    redis = request.app.state.redis
+    cursor = "0"
+    killed = 0
+    while True:
+        cursor, keys = await redis.scan(cursor=cursor, match="session:*", count=200)
+        for k in keys:
+            if (await redis.get(k)) == openid:
+                await redis.delete(k)
+                killed += 1
+        if cursor == 0 or cursor == "0":
+            break
+    return {"message": f"已强制下线 {killed} 个会话"}
 
 
 # --------------- Chat logs ---------------
