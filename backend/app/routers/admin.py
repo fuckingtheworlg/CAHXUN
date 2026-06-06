@@ -184,6 +184,20 @@ async def admin_system_stats():
 
     # 磁盘（根分区）
     disk = psutil.disk_usage("/")
+    # 可通过环境变量 DISK_TOTAL_GB 覆盖显示的磁盘总量（如云盘扩容后展示）
+    import os as _os
+    _disk_total_gb = round(disk.total / 1024 / 1024 / 1024, 1)
+    _disk_used_gb = round(disk.used / 1024 / 1024 / 1024, 1)
+    _disk_free_gb = round(disk.free / 1024 / 1024 / 1024, 1)
+    _disk_percent = disk.percent
+    _override = _os.environ.get("DISK_TOTAL_GB")
+    if _override:
+        try:
+            _disk_total_gb = float(_override)
+            _disk_free_gb = round(_disk_total_gb - _disk_used_gb, 1)
+            _disk_percent = round(_disk_used_gb / _disk_total_gb * 100, 1) if _disk_total_gb else 0
+        except ValueError:
+            pass
 
     # 系统负载（仅 Linux）
     try:
@@ -226,10 +240,10 @@ async def admin_system_stats():
             "swap_percent": swap.percent,
         },
         "disk": {
-            "total_gb": round(disk.total / 1024 / 1024 / 1024, 1),
-            "used_gb": round(disk.used / 1024 / 1024 / 1024, 1),
-            "free_gb": round(disk.free / 1024 / 1024 / 1024, 1),
-            "percent": disk.percent,
+            "total_gb": _disk_total_gb,
+            "used_gb": _disk_used_gb,
+            "free_gb": _disk_free_gb,
+            "percent": _disk_percent,
         },
         "network": {
             "bytes_sent_mb": round(net.bytes_sent / 1024 / 1024, 1),
@@ -354,13 +368,33 @@ async def admin_list_users(
         base = base.where(User.is_banned == False)  # noqa: E712
         count_base = count_base.where(User.is_banned == False)  # noqa: E712
 
-    total = (await db.execute(count_base)).scalar() or 0
-    offset = (page - 1) * page_size
-    rows = (
-        await db.execute(
-            base.order_by(desc(User.last_seen_at)).offset(offset).limit(page_size)
-        )
-    ).scalars().all()
+    try:
+        total = (await db.execute(count_base)).scalar() or 0
+        offset = (page - 1) * page_size
+        rows = (
+            await db.execute(
+                base.order_by(desc(User.last_seen_at)).offset(offset).limit(page_size)
+            )
+        ).scalars().all()
+    except Exception as e:
+        msg = str(e).lower()
+        if "doesn't exist" in msg or "1146" in msg:
+            return {
+                "total": 0, "page": page, "page_size": page_size, "items": [],
+                "_error": "users 表尚未创建，请联系管理员执行建表 SQL",
+                "_setup_sql": (
+                    "CREATE TABLE users ("
+                    "openid VARCHAR(64) PRIMARY KEY, "
+                    "nickname VARCHAR(64), avatar_url VARCHAR(500), "
+                    "created_at DATETIME DEFAULT CURRENT_TIMESTAMP, "
+                    "last_login_at DATETIME, last_seen_at DATETIME, "
+                    "login_count INT DEFAULT 1, is_banned TINYINT(1) DEFAULT 0, "
+                    "ban_reason VARCHAR(255), note VARCHAR(255), "
+                    "INDEX idx_last_seen(last_seen_at), INDEX idx_is_banned(is_banned)"
+                    ") DEFAULT CHARSET=utf8mb4;"
+                ),
+            }
+        raise
 
     return {
         "total": total,

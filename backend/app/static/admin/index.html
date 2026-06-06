@@ -303,7 +303,7 @@ thead th {
   border-bottom: 1px solid var(--border);
 }
 
-tbody td { padding: 14px 16px; border-bottom: 1px solid var(--border); vertical-align: top; }
+tbody td { padding: 14px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
 tbody tr:hover { background: #f9fafb; }
 
 .text-wrap-cell {
@@ -1005,7 +1005,7 @@ async function renderPosts(page) {
         '<tr>' +
           '<td><input type="checkbox" class="row-checkbox" data-id="' + p.id + '" onchange="toggleSelectPost(' + p.id + ', this.checked)"></td>' +
           '<td>' + p.id + '</td>' +
-          '<td class="text-wrap-cell">' + esc(p.content) + '</td>' +
+          '<td><div class="text-wrap-cell">' + esc(p.content) + '</div></td>' +
           '<td>' + (p.images && p.images.length ? '<span class="badge badge-blue">' + p.images.length + ' 张</span>' : '-') + '</td>' +
           '<td style="white-space:nowrap">' + (p.created_at ? p.created_at.replace('T', ' ').slice(0,19) : '-') + '</td>' +
           '<td>' + (p.category ? '<span class="badge badge-green">' + esc(p.category) + '</span>' : '-') + '</td>' +
@@ -1237,6 +1237,18 @@ async function renderUsers(page) {
     const qs = (usersSearch ? '&q=' + encodeURIComponent(usersSearch) : '') +
                (usersStatus ? '&status=' + usersStatus : '');
     const d = await api('/admin/users?page=' + page + '&page_size=15' + qs);
+
+    if (d._error) {
+      area.innerHTML =
+        '<div class="card" style="padding:32px;text-align:center">' +
+          '<div style="font-size:48px;margin-bottom:16px">⚠</div>' +
+          '<h3 style="font-size:16px;margin-bottom:8px;color:var(--danger)">' + esc(d._error) + '</h3>' +
+          '<p style="color:var(--text-secondary);font-size:13px;margin-bottom:20px">在 MySQL 中执行以下 SQL（需要 root 或拥有 CREATE 权限的账号）：</p>' +
+          '<pre style="text-align:left;background:#1a1d23;color:#a8d4ff;padding:16px;border-radius:8px;font-size:12px;overflow-x:auto;line-height:1.6">' + esc(d._setup_sql) + '</pre>' +
+        '</div>';
+      return;
+    }
+
     const totalPages = Math.ceil(d.total / d.page_size) || 1;
 
     let rows = '';
@@ -1411,7 +1423,7 @@ async function renderChatLogs(page) {
         '<tr>' +
           '<td style="white-space:nowrap">' + esc(c.time || '-') + '</td>' +
           '<td><code style="font-size:12px;background:#f3f4f6;padding:2px 6px;border-radius:4px">' + esc(c.openid_short || '-') + '</code></td>' +
-          '<td class="text-wrap-cell">' + esc(c.question || '') + '</td>' +
+          '<td><div class="text-wrap-cell">' + esc(c.question || '') + '</div></td>' +
         '</tr>';
     }
 
