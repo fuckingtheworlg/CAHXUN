@@ -44,8 +44,7 @@ Page(withTheme({
   onHotItemTap(e) {
     const id = e.currentTarget.dataset.id;
     if (!id) return;
-    request({ url: `/posts/${id}/view`, method: 'POST', data: {} }).catch(() => {});
-    setTimeout(() => this.loadHotPosts(), 500);
+    wx.navigateTo({ url: `/pages/post-detail/post-detail?id=${id}` });
   },
 
   onShareAppMessage() {
