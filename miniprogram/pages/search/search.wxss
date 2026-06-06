@@ -2,7 +2,9 @@
   position: relative;
   min-height: 100vh;
   background: var(--c-bg-page);
-  padding: 0 24rpx;
+  padding-left: 24rpx;
+  padding-right: 24rpx;
+  padding-bottom: calc(var(--tab-bar-area) + 40rpx);
   overflow-x: hidden;
 }
 
