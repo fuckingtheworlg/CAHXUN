@@ -63,8 +63,11 @@ async def chat(
     history = body.history or []
 
     async def event_generator():
-        async for chunk in stream_chat(db, question, redis=redis, history=history):
-            yield {"data": json.dumps({"content": chunk}, ensure_ascii=False)}
+        async for evt in stream_chat(db, question, redis=redis, history=history):
+            if evt["type"] == "sources":
+                yield {"data": json.dumps({"sources": evt["data"]}, ensure_ascii=False)}
+            else:
+                yield {"data": json.dumps({"content": evt["data"]}, ensure_ascii=False)}
         yield {"data": "[DONE]"}
 
     return EventSourceResponse(event_generator())

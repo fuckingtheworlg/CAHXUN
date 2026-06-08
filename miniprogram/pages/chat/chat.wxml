@@ -51,6 +51,8 @@
         role="{{item.role}}"
         content="{{item.content}}"
         typing="{{item.typing}}"
+        sources="{{item.sources}}"
+        bindsourcetap="onSourceTap"
       />
     </block>
 

@@ -39,6 +39,12 @@ Page(withTheme({
     this.setData({ inputValue: e.detail.value });
   },
 
+  onSourceTap(e) {
+    const id = e.currentTarget.dataset.id;
+    if (!id) return;
+    wx.navigateTo({ url: `/pages/post-detail/post-detail?id=${id}` });
+  },
+
   onHintTap(e) {
     const text = e.currentTarget.dataset.text;
     this.setData({ inputValue: text });
@@ -94,7 +100,7 @@ Page(withTheme({
       .map((m) => ({ role: m.role, content: m.content }));
 
     const userMsg = { id: nextId(), role: 'user', content: question, typing: false };
-    const aiMsg = { id: nextId(), role: 'assistant', content: '', typing: true };
+    const aiMsg = { id: nextId(), role: 'assistant', content: '', typing: true, sources: [] };
     const messages = [...this.data.messages, userMsg, aiMsg];
     const aiIndex = messages.length - 1;
 
@@ -107,7 +113,13 @@ Page(withTheme({
 
     streamRequest(
       { url: '/chat', data: { question, history } },
-      (chunk) => {
+      (chunk, parsed) => {
+        if (parsed && parsed.sources) {
+          this.setData({
+            [`messages[${aiIndex}].sources`]: parsed.sources || [],
+          });
+          return;
+        }
         const key = `messages[${aiIndex}].content`;
         this.setData({
           [key]: this.data.messages[aiIndex].content + chunk,

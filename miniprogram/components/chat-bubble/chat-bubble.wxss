@@ -37,8 +37,22 @@
   letter-spacing: 1rpx;
 }
 
+.bubble-col {
+  display: flex;
+  flex-direction: column;
+  max-width: 78%;
+}
+
+.bubble-wrap.user .bubble-col {
+  align-items: flex-end;
+}
+
+.bubble-wrap.assistant .bubble-col {
+  align-items: flex-start;
+}
+
 .bubble {
-  max-width: 75%;
+  max-width: 100%;
   padding: 22rpx 28rpx;
   border-radius: 24rpx;
   position: relative;
@@ -82,6 +96,84 @@
   margin-left: 4rpx;
   animation: blink 0.8s infinite;
   flex-shrink: 0;
+}
+
+/* ─── 信息源 ─── */
+.sources {
+  margin-left: 16rpx;
+  margin-top: 14rpx;
+  width: 100%;
+}
+
+.sources-title {
+  margin-bottom: 10rpx;
+}
+
+.sources-title-text {
+  font-size: 22rpx;
+  color: var(--c-text-dim);
+}
+
+.source-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14rpx;
+  background: var(--c-card);
+  border: 1rpx solid var(--c-divider);
+  border-radius: 16rpx;
+  padding: 16rpx 20rpx;
+  margin-bottom: 12rpx;
+  box-shadow: var(--shadow-card);
+}
+
+.source-item:active {
+  opacity: 0.7;
+}
+
+.source-idx {
+  flex-shrink: 0;
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 10rpx;
+  background: linear-gradient(135deg, var(--c-primary), var(--c-primary-2));
+  color: #fff;
+  font-size: 22rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.source-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.source-summary {
+  font-size: 25rpx;
+  color: var(--c-text);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.source-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6rpx;
+}
+
+.source-cat {
+  font-size: 20rpx;
+  color: var(--c-primary);
+}
+
+.source-arrow {
+  font-size: 20rpx;
+  color: var(--c-text-dim);
 }
 
 @keyframes blink {

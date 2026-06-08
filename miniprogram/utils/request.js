@@ -95,7 +95,9 @@ function streamRequest(options, onChunk, onDone) {
       try {
         const parsed = JSON.parse(payload);
         if (parsed.content && onChunk) {
-          onChunk(parsed.content);
+          onChunk(parsed.content, parsed);
+        } else if (parsed.sources && onChunk) {
+          onChunk('', parsed);
         }
       } catch (e) {
         // skip malformed chunk

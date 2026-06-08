@@ -2,8 +2,32 @@
   <view class="avatar">
     <text class="avatar-text">{{role === 'user' ? '我' : 'AI'}}</text>
   </view>
-  <view class="bubble">
-    <text class="bubble-text" user-select>{{content}}</text>
-    <view class="typing-cursor" wx:if="{{typing}}"></view>
+  <view class="bubble-col">
+    <view class="bubble">
+      <text class="bubble-text" user-select>{{content}}</text>
+      <view class="typing-cursor" wx:if="{{typing}}"></view>
+    </view>
+
+    <view class="sources" wx:if="{{role === 'assistant' && !typing && sources.length > 0}}">
+      <view class="sources-title">
+        <text class="sources-title-text">参考了 {{sources.length}} 条校园墙贴文</text>
+      </view>
+      <view
+        class="source-item"
+        wx:for="{{sources}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="onSourceTap"
+      >
+        <view class="source-idx">{{index + 1}}</view>
+        <view class="source-body">
+          <text class="source-summary">{{item.summary}}</text>
+          <view class="source-meta">
+            <text class="source-cat" wx:if="{{item.category}}">#{{item.category}}</text>
+            <text class="source-arrow">查看 ›</text>
+          </view>
+        </view>
+      </view>
+    </view>
   </view>
 </view>
