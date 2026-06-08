@@ -69,11 +69,17 @@ DEFAULT_SYSTEM_PROMPT = (
 SYSTEM_PROMPT = DEFAULT_SYSTEM_PROMPT
 
 
-def extract_keywords(question: str, topk: int = 5) -> list[str]:
-    keywords = jieba.analyse.extract_tags(question, topK=topk)
-    if not keywords:
-        keywords = [w for w in jieba.cut(question) if len(w) >= 2]
-    return keywords[:topk]
+def extract_keywords(question: str, topk: int = 8) -> list[str]:
+    """TF-IDF 关键词 + 全分词兜底，去重后返回。"""
+    tags = jieba.analyse.extract_tags(question, topK=topk)
+    # 补充全分词中长度>=2 的词，提高召回（去掉纯标点/停用噪声）
+    cut_words = [w for w in jieba.cut(question) if len(w) >= 2]
+    merged = []
+    for w in list(tags) + cut_words:
+        w = w.strip()
+        if w and w not in merged:
+            merged.append(w)
+    return merged[:topk]
 
 
 def build_context(posts: list[dict]) -> str:
@@ -127,7 +133,7 @@ async def stream_chat(
 ) -> AsyncGenerator[dict, None]:
     """以结构化事件流式输出：先 {"type":"sources"}，再多条 {"type":"content"}。"""
     keywords = extract_keywords(question)
-    posts = await search_posts_for_rag(db, keywords, limit=15)
+    posts = await search_posts_for_rag(db, keywords, limit=15, full_query=question)
     context = build_context(posts)
 
     # 先把信息源推给前端

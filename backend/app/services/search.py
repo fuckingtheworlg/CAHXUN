@@ -54,17 +54,51 @@ async def search_posts_for_rag(
     db: AsyncSession,
     keywords: list[str],
     limit: int = 15,
+    full_query: str = "",
 ) -> list[dict]:
-    """Retrieve posts matching any of the given keywords, for RAG context."""
+    """
+    召回 + 相关性打分排序（方案 A）。
+
+    打分规则：
+      - 每命中一个不同关键词 +2
+      - 关键词在内容中出现的总次数，每次 +0.3（封顶 +3）
+      - 命中完整问题串（去空格后）额外 +5
+      - 同分时按发布时间新的优先
+    召回阶段多取候选（limit*4），打分后截断到 limit。
+    """
     if not keywords:
         return []
 
     conditions = [Post.content.like(f"%{kw}%") for kw in keywords]
-    q = (
+    candidate_q = (
         select(Post)
         .where(or_(*conditions))
         .order_by(desc(Post.created_at))
-        .limit(limit)
+        .limit(limit * 4)
     )
-    rows = (await db.execute(q)).scalars().all()
-    return [r.to_dict() for r in rows]
+    rows = (await db.execute(candidate_q)).scalars().all()
+
+    cleaned_query = (full_query or "").replace(" ", "").strip()
+
+    def score(post) -> float:
+        content = post.content or ""
+        s = 0.0
+        for kw in keywords:
+            if not kw:
+                continue
+            cnt = content.count(kw)
+            if cnt > 0:
+                s += 2.0                       # 命中该关键词
+                s += min(cnt * 0.3, 3.0)       # 出现频次（封顶）
+        if cleaned_query and len(cleaned_query) >= 3 and cleaned_query in content.replace(" ", ""):
+            s += 5.0                            # 命中完整问题串
+        return s
+
+    def ts(post) -> float:
+        try:
+            return post.created_at.timestamp() if post.created_at else 0.0
+        except Exception:
+            return 0.0
+
+    ranked = sorted(rows, key=lambda p: (score(p), ts(p)), reverse=True)
+    return [r.to_dict() for r in ranked[:limit]]
