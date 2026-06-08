@@ -40,7 +40,7 @@ Page(withTheme({
   },
 
   onSourceTap(e) {
-    const id = e.currentTarget.dataset.id;
+    const id = (e.detail && e.detail.id) || e.currentTarget.dataset.id;
     if (!id) return;
     wx.navigateTo({ url: `/pages/post-detail/post-detail?id=${id}` });
   },
